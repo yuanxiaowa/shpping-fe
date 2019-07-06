@@ -1,7 +1,10 @@
 <template>
   <div>
     <el-collapse v-model="activeNames">
-      <el-collapse-item title="领券下单" name="1">
+      <el-collapse-item
+        title="领券下单"
+        name="1"
+      >
         <el-form>
           <el-form-item label="平台">
             <el-radio-group v-model="platform">
@@ -11,7 +14,10 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="文本">
-            <el-input type="textarea" v-model="text"></el-input>
+            <el-input
+              type="textarea"
+              v-model="text"
+            ></el-input>
           </el-form-item>
           <el-row>
             <el-col :span="12">
@@ -21,18 +27,34 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="日期">
-                <el-date-picker type="datetime" v-model="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker
+                  type="datetime"
+                  v-model="datetime"
+                  format="yyyy-MM-dd HH:mm:ss"
+                ></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
           <el-form-item>
-            <el-button type="primary" @click="qiangdan">抢单</el-button>
-            <el-button type="warning" @click="qiangquan">抢券</el-button>
-            <el-button type="danger" @click="coudan">凑单</el-button>
+            <el-button
+              type="primary"
+              @click="qiangdan"
+            >抢单</el-button>
+            <el-button
+              type="warning"
+              @click="qiangquan"
+            >抢券</el-button>
+            <el-button
+              type="danger"
+              @click="coudan"
+            >凑单</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
-      <el-collapse-item title="购物车" name="2">
+      <el-collapse-item
+        title="购物车"
+        name="2"
+      >
         <el-form>
           <el-form-item>
             <el-radio-group v-model="platform2">
@@ -41,14 +63,28 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="pullCartData()">拉取</el-button>
+            <el-button
+              type="primary"
+              @click="pullCartData()"
+            >拉取</el-button>
             <el-form-item label="日期">
-              <el-date-picker type="datetime" v-model="datetime2" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              <el-date-picker
+                type="datetime"
+                v-model="datetime2"
+                format="yyyy-MM-dd HH:mm:ss"
+              ></el-date-picker>
             </el-form-item>
-            <el-button type="danger" :disabled="checkedLength===0" @click="submit">提交订单</el-button>
+            <el-button
+              type="danger"
+              :disabled="checkedLength===0"
+              @click="submit"
+            >提交订单</el-button>
           </el-form-item>
         </el-form>
-        <cart-table :value="tableData" @update-checked="updateChecked"></cart-table>
+        <cart-table
+          :value="tableData"
+          @update-checked="updateChecked"
+        ></cart-table>
       </el-collapse-item>
     </el-collapse>
     <div>
@@ -56,7 +92,10 @@
       <el-button @click="evalFile">执行文件</el-button>
     </div>
     <div>
-      <el-input v-model="code" type="textarea"></el-input>
+      <el-input
+        v-model="code"
+        type="textarea"
+      ></el-input>
       <el-button @click="evalCode">运行代码</el-button>
     </div>
   </div>
@@ -65,30 +104,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import CartTable from "./components/CartTable.vue";
-
-const handlers = {
-  jingdong: {
-    resolveUrls: jingdongResolveUrls,
-    qiangdan: jingdongQiangdan,
-    qiangquan: jingdongQiangquan,
-    coudan: jingdongCoudan,
-    getCartInfo: jingdongGetCartInfo,
-    cartBuy: jingdongCartBuy,
-    directBuy: jingdongDirectBuy,
-    toggleCart: jingdongToggleCart
-  },
-  taobao: {
-    resolveUrls: taobaoResolveUrls,
-    qiangdan: taobaoQiangdan,
-    qiangquan: taobaoQiangquan,
-    coudan: taobaoCoudan,
-    getCartInfo: taobaoGetCartInfo,
-    cartBuy: taobaoCartBuy,
-    directBuy: taobaoDirectBuy,
-    toggleCart: taobaoToggleCart
-  }
-};
-type Platform = "taobao" | "jingdong";
+import handlers, { Platform } from "./handlers";
 
 @Component({
   components: {
@@ -100,9 +116,7 @@ export default class App extends Vue {
 迪彩舒爽嫩肤香薰沐浴露
 ￥XguhYgbyPC2￥`; */
   // text = 'https://u.jd.com/xCgA3q';
-  text = `楼兰蜜语新疆灰枣1斤
-前3000名4.45
-￥RGsrYggaQwH￥`;
+  text = ``;
   datetime = "";
   activeNames = ["2"];
   num = 1;
@@ -162,32 +176,7 @@ export default class App extends Vue {
     }
     var items: any = [];
     if (this.platform2 === "taobao") {
-      items = data.list.map((item: any) => {
-        var vendor = {
-          title: item.title,
-          id: item.sellerId,
-          shopId: item.shopId,
-          url: item.url,
-          items: item.bundles[0].orders.map((subitem: any) => ({
-            id: subitem.id,
-            cartId: subitem.cartId,
-            amount: subitem.amount.now,
-            isValid: subitem.isValid,
-            sellerId: subitem.sellerId,
-            shopId: subitem.shopId,
-            skuId: subitem.skuId,
-            itemId: subitem.itemId,
-            url: subitem.url,
-            img: subitem.pic,
-            title: subitem.title,
-            price: subitem.price.now / 100,
-            attr: subitem.attr,
-            checked: subitem.checked,
-            createTime: subitem.createTime
-          }))
-        };
-        return vendor;
-      });
+      items = data;
     } else {
       this.root = {
         areaId: data.areaId,
@@ -236,7 +225,7 @@ export default class App extends Vue {
       item.polyType === "1" ? "" : item.itemId,
       item.polyType
     ]);
-    var r = await handlers.jingdong.toggleCart(data, item.checked);
+    var r = await handlers.jingdong.toggleCart(data, item.checked, 0);
     if (r.errId === "0") {
       this.pullCartData(r);
     } else {
@@ -256,29 +245,17 @@ export default class App extends Vue {
     );
   }
   submit() {
+    var items: any[] = [];
     if (this.platform2 === "taobao") {
-      var items: any[] = [];
       this.tableData.forEach(item => {
         item.items.forEach((subitem: any) => {
           if (subitem.checked) {
-            items.push({
-              sellerId: subitem.sellerId,
-              cartId: subitem.cartId,
-              skuId: subitem.skuId,
-              itemId: subitem.itemId,
-              amount: {
-                now: subitem.amount
-              },
-              createTime: subitem.createTime,
-              attr: subitem.attr
-            });
+            items.push(subitem);
           }
         });
       });
-      handlers[this.platform2].cartBuy(this.datetime2, items);
-    } else {
-      handlers[this.platform2].cartBuy(this.datetime2);
     }
+    handlers[this.platform2].cartBuy(this.datetime2, items);
   }
 }
 </script>
