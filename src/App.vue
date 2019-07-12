@@ -99,7 +99,7 @@ export default class App extends Vue {
     }
     var urls = await resolveUrls(
       {
-        text: this.text
+        data: this.text
       },
       this.realPlatform
     );
