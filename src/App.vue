@@ -1,10 +1,7 @@
 <template>
   <div>
     <el-collapse v-model="activeNames">
-      <el-collapse-item
-        title="领券下单"
-        name="1"
-      >
+      <el-collapse-item title="领券下单" name="1">
         <el-form>
           <el-form-item label="平台">
             <el-radio-group v-model="platform">
@@ -14,10 +11,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="文本">
-            <el-input
-              type="textarea"
-              v-model="text"
-            ></el-input>
+            <el-input type="textarea" v-model="text"></el-input>
           </el-form-item>
           <el-row>
             <el-col :span="12">
@@ -27,34 +21,18 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="日期">
-                <el-date-picker
-                  type="datetime"
-                  v-model="datetime"
-                  format="yyyy-MM-dd HH:mm:ss"
-                ></el-date-picker>
+                <el-date-picker type="datetime" v-model="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
           <el-form-item>
-            <el-button
-              type="primary"
-              @click="qiangdan"
-            >抢单</el-button>
-            <el-button
-              type="warning"
-              @click="qiangquan"
-            >抢券</el-button>
-            <el-button
-              type="danger"
-              @click="coudan"
-            >凑单</el-button>
+            <el-button type="primary" @click="qiangdan">抢单</el-button>
+            <el-button type="warning" @click="qiangquan">抢券</el-button>
+            <el-button type="danger" @click="coudan">凑单</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
-      <el-collapse-item
-        title="购物车"
-        name="2"
-      >
+      <el-collapse-item title="购物车" name="2">
         <el-form>
           <el-form-item>
             <el-radio-group v-model="platform2">
@@ -63,28 +41,14 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              @click="pullCartData()"
-            >拉取</el-button>
+            <el-button type="primary" @click="pullCartData()">拉取</el-button>
             <el-form-item label="日期">
-              <el-date-picker
-                type="datetime"
-                v-model="datetime2"
-                format="yyyy-MM-dd HH:mm:ss"
-              ></el-date-picker>
+              <el-date-picker type="datetime" v-model="datetime2" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
-            <el-button
-              type="danger"
-              :disabled="checkedLength===0"
-              @click="submit"
-            >提交订单</el-button>
+            <el-button type="danger" :disabled="checkedLength===0" @click="submit">提交订单</el-button>
           </el-form-item>
         </el-form>
-        <cart-table
-          :value="tableData"
-          @update-checked="updateChecked"
-        ></cart-table>
+        <cart-table :value="tableData" @update-checked="updateChecked"></cart-table>
       </el-collapse-item>
     </el-collapse>
     <div>
@@ -92,10 +56,7 @@
       <el-button @click="evalFile">执行文件</el-button>
     </div>
     <div>
-      <el-input
-        v-model="code"
-        type="textarea"
-      ></el-input>
+      <el-input v-model="code" type="textarea"></el-input>
       <el-button @click="evalCode">运行代码</el-button>
     </div>
   </div>
@@ -104,7 +65,16 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import CartTable from "./components/CartTable.vue";
-import handlers, { Platform } from "./handlers";
+import { Platform } from "./handlers";
+import {
+  resolveUrls,
+  buyDirect,
+  qiangquan,
+  coudan,
+  cartList,
+  cartToggle,
+  cartBuy
+} from "./api";
 
 @Component({
   components: {
@@ -127,42 +97,43 @@ export default class App extends Vue {
     if (!this.text) {
       return [];
     }
-    var urls = await this.instance.resolveUrls(this.text);
+    var urls = await resolveUrls(this.text, this.realPlatform);
     console.log(urls);
     return urls;
   }
 
   async qiangdan() {
     var urls = await this.getUrls();
-    urls.forEach(url => this.instance.qiangdan(url, this.num, this.datetime));
+    urls.forEach(url =>
+      buyDirect(
+        {
+          url,
+          quantity: this.num
+        },
+        this.datetime,
+        this.realPlatform
+      )
+    );
   }
 
   async qiangquan() {
     var urls = await this.getUrls();
-    urls.forEach(this.instance.qiangquan);
+    urls.forEach(url => qiangquan(url, this.realPlatform));
   }
 
   async coudan() {
     // var urls = await this.getUrls();
-    return this.instance.coudan([this.text]);
+    return coudan([this.text], this.realPlatform);
   }
 
-  evalFile() {
-    evalFile(this.filename, true);
-  }
-
-  evalCode() {
-    evalFunction(this.code);
-  }
-
-  get instance() {
+  get realPlatform() {
     if (this.platform === "auto") {
       if (/\.jd\.com\//.test(this.text)) {
-        return handlers.jingdong;
+        return "jingdong";
       }
-      return handlers.taobao;
+      return "taobao";
     }
-    return handlers[this.platform];
+    return this.platform;
   }
 
   platform2: Platform = "taobao";
@@ -171,8 +142,7 @@ export default class App extends Vue {
   root!: any;
   async pullCartData(data: any) {
     if (!data) {
-      let ins = handlers[this.platform2];
-      data = await ins.getCartInfo();
+      data = await cartList(this.realPlatform);
     }
     var items: any = [];
     if (this.platform2 === "taobao") {
@@ -225,7 +195,13 @@ export default class App extends Vue {
       item.polyType === "1" ? "" : item.itemId,
       item.polyType
     ]);
-    var r = await handlers.jingdong.toggleCart(data, item.checked, 0);
+    var r = await cartToggle(
+      {
+        items: data,
+        checked: item.checked
+      },
+      this.realPlatform
+    );
     if (r.errId === "0") {
       this.pullCartData(r);
     } else {
@@ -255,7 +231,15 @@ export default class App extends Vue {
         });
       });
     }
-    handlers[this.platform2].cartBuy(this.datetime2, items);
+    cartBuy(items, this.datetime2, this.platform2);
+  }
+
+  evalFile() {
+    evalFile(this.filename, true);
+  }
+
+  evalCode() {
+    evalFunction(this.code);
   }
 }
 </script>
