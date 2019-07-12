@@ -97,7 +97,12 @@ export default class App extends Vue {
     if (!this.text) {
       return [];
     }
-    var urls = await resolveUrls(this.text, this.realPlatform);
+    var urls = await resolveUrls(
+      {
+        text: this.text
+      },
+      this.realPlatform
+    );
     console.log(urls);
     return urls;
   }
@@ -118,12 +123,12 @@ export default class App extends Vue {
 
   async qiangquan() {
     var urls = await this.getUrls();
-    urls.forEach(url => qiangquan(url, this.realPlatform));
+    urls.forEach(url => qiangquan({ data: url }, this.realPlatform));
   }
 
   async coudan() {
     // var urls = await this.getUrls();
-    return coudan([this.text], this.realPlatform);
+    return coudan({ data: [this.text] }, this.realPlatform);
   }
 
   get realPlatform() {
@@ -231,7 +236,7 @@ export default class App extends Vue {
         });
       });
     }
-    cartBuy(items, this.datetime2, this.platform2);
+    cartBuy({ data: items }, this.datetime2, this.platform2);
   }
 
   evalFile() {
