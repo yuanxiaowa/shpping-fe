@@ -1,5 +1,12 @@
 <template>
   <div>
+
+    <el-checkbox
+      label="全选"
+      v-model="checked"
+      @input="$emit('select-all',checked)"
+      :disabled="value.length===0"
+    ></el-checkbox>
     <el-table
       :data="value"
       style="width: 100%"
@@ -13,9 +20,15 @@
             size="mini"
           >
             <el-table-column width="55">
+              <template slot="header">
+                <el-checkbox
+                  @input="$emit('select-vendor',props.row)"
+                  v-model="props.row.checked"
+                ></el-checkbox>
+              </template>
               <template slot-scope="{row}">
                 <el-checkbox
-                  @input="$emit('update-checked',row)"
+                  @input="$emit('select-item',row)"
                   v-model="row.checked"
                 ></el-checkbox>
               </template>
@@ -43,10 +56,24 @@
               label="单价"
               prop="price"
             ></el-table-column>
-            <el-table-column
-              label="数量"
-              prop="amount"
-            ></el-table-column>
+            <el-table-column label="数量">
+              <template slot-scope="{row}">
+                <el-input-number
+                  v-model="row.quantity"
+                  @change="$emit('update-quantity',row)"
+                  :min="1"
+                ></el-input-number>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="{row}">
+                <el-button
+                  type="danger"
+                  plain
+                  @click="$emit('del-item',row,props.row)"
+                >删除</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </template>
       </el-table-column>
@@ -65,11 +92,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 @Component
 export default class CartTable extends Vue {
-  @Prop() value!: any[];
+  @Prop({
+    default() {
+      return [];
+    }
+  })
+  value!: any[];
+  checked = false;
+  @Watch("value")
+  onValueChange(new_val, old_val) {
+    this.checked = false;
+  }
 }
 </script>
 

@@ -1,0 +1,173 @@
+<template>
+  <el-form>
+    <el-form-item label="平台">
+      <el-radio-group v-model="platform">
+        <el-radio label="auto">自动选择</el-radio>
+        <el-radio label="taobao">淘宝</el-radio>
+        <el-radio label="jingdong">京东</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="文本">
+      <el-input
+        type="textarea"
+        v-model="text"
+      ></el-input>
+    </el-form-item>
+    <el-row>
+      <el-col :span="12">
+        <el-form-item label="数量">
+          <el-input-number v-model="num"></el-input-number>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="日期">
+          <el-date-picker
+            type="datetime"
+            v-model="datetime"
+            format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-form-item>
+      <el-button
+        type="primary"
+        @click="execAction(qiangdan)"
+      >抢单</el-button>
+      <el-button
+        type="warning"
+        @click="execAction(handleCoupon)"
+      >抢券</el-button>
+      <el-button
+        @click="execAction(addCart)"
+        type="warning"
+      >加入购物车</el-button>
+      <el-button
+        type="danger"
+        @click="coudan"
+      >凑单</el-button>
+    </el-form-item>
+  </el-form>
+</template>
+
+<script lang="tsx">
+import { Component, Vue } from "vue-property-decorator";
+import { Platform } from "../handlers";
+import {
+  resolveUrls,
+  buyDirect,
+  qiangquan,
+  coudan,
+  cartAdd,
+  getQrcode
+} from "../api";
+import bus from "../bus";
+
+@Component({})
+export default class Buy extends Vue {
+  text = ``;
+  datetime = "";
+  num = 1;
+  platform: "auto" | Platform = "auto";
+  async getUrls() {
+    if (!this.text) {
+      return [];
+    }
+    var urls: string[] = await resolveUrls(
+      {
+        data: this.text
+      },
+      this.realPlatform
+    );
+    console.log(urls);
+    return urls;
+  }
+
+  async execAction(fn: (url: string) => any) {
+    var urls = await this.getUrls();
+    urls.forEach(fn);
+  }
+
+  async handleCoupon(url: string) {
+    var res = await this.qiangquan(url);
+    if (res) {
+      if (!res.success) {
+        let msg;
+        if (res.manual) {
+          var qurl = await getQrcode(url);
+          msg = (
+            <div style="text-align:center">
+              <p>手动扫描领取优惠券</p>
+              <img src={qurl} />
+            </div>
+          );
+        } else {
+          msg = "领券失败，要继续吗？";
+        }
+        let b = await this.$confirm(msg, {
+          title: "提示"
+        });
+        if (!b) {
+          throw new Error("领券失败");
+        }
+      }
+      url = res.url;
+    }
+    return url;
+  }
+
+  async addCart(url: string) {
+    url = await this.handleCoupon(url);
+    return cartAdd(
+      {
+        url,
+        quantity: this.num
+      },
+      this.realPlatform
+    );
+  }
+
+  async qiangdan(url: string) {
+    this.$notify.success("执行直接购买");
+    url = await this.handleCoupon(url);
+    await buyDirect(
+      {
+        url,
+        quantity: this.num,
+        other: {
+          memo: "--"
+        }
+      },
+      this.datetime,
+      this.realPlatform
+    );
+  }
+
+  async qiangquan(url: string) {
+    this.$notify.success("开始抢券");
+    return qiangquan({ data: url }, this.realPlatform);
+  }
+
+  async coudan() {
+    bus.$emit("unselect-all");
+    this.$notify.success("开始凑单");
+    var urls = await this.getUrls();
+    var ids = await Promise.all(urls.map(this.addCart));
+    // var urls = await this.getUrls();
+    return coudan({ data: ids }, this.realPlatform);
+  }
+
+  get realPlatform() {
+    if (this.platform === "auto") {
+      if (/\.jd\.com\//.test(this.text)) {
+        return "jingdong";
+      }
+      return "taobao";
+    }
+    return this.platform;
+  }
+}
+</script>
+
+<style>
+</style>
