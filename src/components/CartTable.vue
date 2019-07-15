@@ -1,61 +1,28 @@
 <template>
   <div>
-
-    <el-checkbox
-      label="全选"
-      v-model="checked"
-      @input="$emit('select-all',checked)"
-      :disabled="value.length===0"
-    ></el-checkbox>
-    <el-table
-      :data="value"
-      style="width: 100%"
-      default-expand-all
-      size="mini"
-    >
+    <el-table :data="value" style="width: 100%" default-expand-all size="mini">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table
-            :data="props.row.items"
-            size="mini"
-          >
+          <el-table :data="props.row.items" size="mini">
             <el-table-column width="55">
               <template slot="header">
-                <el-checkbox
-                  @input="$emit('select-vendor',props.row)"
-                  v-model="props.row.checked"
-                ></el-checkbox>
+                <el-checkbox @input="$emit('select-vendor',props.row)" v-model="props.row.checked"></el-checkbox>
               </template>
               <template slot-scope="{row}">
-                <el-checkbox
-                  @input="$emit('select-item',row)"
-                  v-model="row.checked"
-                ></el-checkbox>
+                <el-checkbox @input="$emit('select-item',row)" v-model="row.checked"></el-checkbox>
               </template>
             </el-table-column>
             <el-table-column label="商品图片">
               <template slot-scope="{row}">
-                <img
-                  :src="row.img"
-                  alt=""
-                >
+                <img :src="row.img" alt />
               </template>
             </el-table-column>
-            <el-table-column
-              label="商品名称"
-              width="300"
-            >
+            <el-table-column label="商品名称" width="300">
               <template slot-scope="{row}">
-                <a
-                  :href="row.url"
-                  target="_blank"
-                >{{row.title}}</a>
+                <a :href="row.url" target="_blank">{{row.title}}</a>
               </template>
             </el-table-column>
-            <el-table-column
-              label="单价"
-              prop="price"
-            ></el-table-column>
+            <el-table-column label="单价" prop="price"></el-table-column>
             <el-table-column label="数量">
               <template slot-scope="{row}">
                 <el-input-number
@@ -67,11 +34,7 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="{row}">
-                <el-button
-                  type="danger"
-                  plain
-                  @click="$emit('del-item',row,props.row)"
-                >删除</el-button>
+                <el-button type="danger" plain @click="$emit('del-item',row,props.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -81,11 +44,17 @@
         type="selection"
         width="55"
       >
-      </el-table-column> -->
-      <el-table-column
-        label="店铺名称"
-        prop="title"
-      >
+      </el-table-column>-->
+      <el-table-column prop="title">
+        <template slot="header">
+          <el-checkbox
+            label="全选"
+            v-model="checked"
+            @input="$emit('select-all',checked)"
+            :disabled="value.length===0"
+          ></el-checkbox>
+          <span style="margin-left:2em">店铺名称</span>
+        </template>
       </el-table-column>
     </el-table>
   </div>

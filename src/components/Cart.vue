@@ -2,28 +2,17 @@
   <div>
     <el-form>
       <el-form-item>
-        <el-radio-group v-model="platform">
-          <el-radio label="taobao">淘宝</el-radio>
-          <el-radio label="jingdong">京东</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          @click="pullCartData()"
-        >拉取</el-button>
-        <el-form-item label="日期">
-          <el-date-picker
-            type="datetime"
-            v-model="datetime"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-        </el-form-item>
-        <el-button
-          type="danger"
-          :disabled="checkedLength===0"
-          @click="submit"
-        >提交订单</el-button>
+        <el-col :span="12">
+          <el-radio-group v-model="platform">
+            <el-radio label="taobao">淘宝</el-radio>
+            <el-radio label="jingdong">京东</el-radio>
+          </el-radio-group>
+          <el-button style="margin-left:2em" type="primary" @click="pullCartData()">拉取</el-button>
+        </el-col>
+        <el-col :span="12" label="日期">
+          <el-date-picker type="datetime" v-model="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-button type="danger" :disabled="checkedLength===0" @click="submit">提交订单</el-button>
+        </el-col>
       </el-form-item>
     </el-form>
     <cart-table

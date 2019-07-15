@@ -1,5 +1,5 @@
 <template>
-  <el-form>
+  <el-form label-width="80px">
     <el-form-item label="平台">
       <el-radio-group v-model="platform">
         <el-radio label="auto">自动选择</el-radio>
@@ -8,44 +8,33 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="文本">
-      <el-input
-        type="textarea"
-        v-model="text"
-      ></el-input>
+      <el-input type="textarea" v-model="text"></el-input>
     </el-form-item>
-    <el-row>
-      <el-col :span="12">
+    <el-form-item>
+      <el-col :span="8">
         <el-form-item label="数量">
           <el-input-number v-model="num"></el-input-number>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-form-item label="日期">
-          <el-date-picker
-            type="datetime"
-            v-model="datetime"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
+          <el-date-picker type="datetime" v-model="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
         </el-form-item>
       </el-col>
-    </el-row>
+      <el-col :span="8">
+        <el-form-item label="规格">
+          <el-input v-model="skus"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-form-item>
+    <el-form-item label="备注">
+      <el-input type="textarea" v-model="memo"></el-input>
+    </el-form-item>
     <el-form-item>
-      <el-button
-        type="primary"
-        @click="execAction(qiangdan)"
-      >抢单</el-button>
-      <el-button
-        type="warning"
-        @click="execAction(handleCoupon)"
-      >抢券</el-button>
-      <el-button
-        @click="execAction(addCart)"
-        type="warning"
-      >加入购物车</el-button>
-      <el-button
-        type="danger"
-        @click="coudan"
-      >凑单</el-button>
+      <el-button type="primary" @click="execAction(qiangdan)">抢单</el-button>
+      <el-button type="warning" @click="execAction(handleCoupon)">抢券</el-button>
+      <el-button @click="execAction(addCart)" type="warning">加入购物车</el-button>
+      <el-button type="danger" @click="coudan">凑单</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -69,6 +58,8 @@ export default class Buy extends Vue {
   datetime = "";
   num = 1;
   platform: "auto" | Platform = "auto";
+  skus = "";
+  memo = "";
   async getUrls() {
     if (!this.text) {
       return [];
@@ -116,12 +107,20 @@ export default class Buy extends Vue {
     return url;
   }
 
+  getSkus() {
+    var skus = this.skus.trim();
+    if (skus) {
+      return skus.split(/,|\s+/).map(Number);
+    }
+  }
+
   async addCart(url: string) {
     url = await this.handleCoupon(url);
     return cartAdd(
       {
         url,
-        quantity: this.num
+        quantity: this.num,
+        skus: this.getSkus()
       },
       this.realPlatform
     );
@@ -134,8 +133,9 @@ export default class Buy extends Vue {
       {
         url,
         quantity: this.num,
+        skus: this.getSkus(),
         other: {
-          memo: "--"
+          memo: this.memo
         }
       },
       this.datetime,
