@@ -185,7 +185,7 @@ export default class Buy extends Vue {
             this.platform = "auto";
             this.coudan();
           });
-        } else if (/前\d+|0.01|速度|1元包邮|抽奖|领金豆/.test(text)) {
+        } else if (/前\d+|0.01|速度|1元包邮|抽奖|领金豆|无门槛/.test(text)) {
           this.sendMsg(text);
         }
       }
