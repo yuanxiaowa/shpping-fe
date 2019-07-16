@@ -19,6 +19,12 @@
       >
         <comment></comment>
       </el-collapse-item>
+      <el-collapse-item
+        title="天猫60s课堂"
+        name="4"
+      >
+        <sixty-course></sixty-course>
+      </el-collapse-item>
     </el-collapse>
     <div>
       <el-input v-model="filename"></el-input>
@@ -38,6 +44,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import CartTable from "./components/CartTable.vue";
 import Comment from "./components/Comment.vue";
+import SixtyCourse from "./components/SixtyCourse.vue";
 import Buy from "./components/Buy.vue";
 import Cart from "./components/Cart.vue";
 import { Platform } from "./handlers";
@@ -56,7 +63,8 @@ import {
     CartTable,
     Comment,
     Buy,
-    Cart
+    Cart,
+    SixtyCourse
   }
 })
 export default class App extends Vue {

@@ -187,3 +187,18 @@ export function sendPrivateMsg(message: string, user_id: string) {
     }
   });
 }
+export function getSixtyCourseList() {
+  return instance
+    .get("/sixty-course/list")
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function replyixtyCourse(params: any) {
+  return instance
+    .get("/sixty-course/reply", {
+      params
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
