@@ -10,7 +10,7 @@
           <el-button style="margin-left:2em" type="primary" @click="pullCartData()">拉取</el-button>
         </el-col>
         <el-col :span="12" label="日期">
-          <el-date-picker type="datetime" v-model="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <date-picker v-model="datetime"></date-picker>
           <el-button type="danger" :disabled="checkedLength===0" @click="submit">提交订单</el-button>
         </el-col>
       </el-form-item>
@@ -29,6 +29,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import CartTable from "./CartTable.vue";
+import DatePicker from "./DatePicker.vue";
 import { Platform } from "../handlers";
 import {
   cartList,
@@ -42,7 +43,8 @@ import bus from "../bus";
 
 @Component({
   components: {
-    CartTable
+    CartTable,
+    DatePicker
   }
 })
 export default class App extends Vue {

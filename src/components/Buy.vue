@@ -18,7 +18,7 @@
       </el-col>
       <el-col :span="8">
         <el-form-item label="日期">
-          <el-date-picker type="datetime" v-model="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <date-picker v-model="datetime"></date-picker>
         </el-form-item>
       </el-col>
       <el-col :span="8">
@@ -41,6 +41,7 @@
 
 <script lang="tsx">
 import { Component, Vue } from "vue-property-decorator";
+import DatePicker from "./DatePicker.vue";
 import { Platform } from "../handlers";
 import {
   resolveUrls,
@@ -55,7 +56,11 @@ import bus from "../bus";
 import { groups } from "../config";
 import { Notification } from "element-ui";
 
-@Component({})
+@Component({
+  components: {
+    DatePicker
+  }
+})
 export default class Buy extends Vue {
   text = ``;
   datetime = "";
@@ -159,25 +164,29 @@ export default class Buy extends Vue {
     return coudan({ data: ids }, this.realPlatform);
   }
 
+  sendMsg(msg: string) {
+    sendPrivateMsg(msg, "870092104");
+  }
+
   mounted() {
     bus.$on("msg-group", ({ text, group_id }: Record<string, any>) => {
       if (groups.includes(group_id)) {
         console.log(text);
         if (/(?<!\d)0元|0撸|免单/.test(text)) {
-          sendPrivateMsg(text, "870092104");
+          this.sendMsg(text);
+          this.platform = "auto";
           this.$nextTick(() => {
-            this.platform = "auto";
             this.execAction(this.handleCoupon);
           });
         } else if (text.includes("锁单")) {
-          sendPrivateMsg(text, "870092104");
+          this.sendMsg(text);
           this.text = text;
           this.$nextTick(() => {
             this.platform = "auto";
             this.coudan();
           });
-        } else if (/前\d+|0.01|速度|1元包邮|抽奖试试|领金豆/.test(text)) {
-          sendPrivateMsg(text, "870092104");
+        } else if (/前\d+|0.01|速度|1元包邮|抽奖|领金豆/.test(text)) {
+          this.sendMsg(text);
         }
       }
     });
