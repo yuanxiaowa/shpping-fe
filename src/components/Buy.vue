@@ -48,9 +48,12 @@ import {
   qiangquan,
   coudan,
   cartAdd,
-  getQrcode
+  getQrcode,
+  sendPrivateMsg
 } from "../api";
 import bus from "../bus";
+import { groups } from "../config";
+import { Notification } from "element-ui";
 
 @Component({})
 export default class Buy extends Vue {
@@ -70,8 +73,7 @@ export default class Buy extends Vue {
       },
       this.realPlatform
     );
-    console.log(urls);
-    return urls;
+    return urls.filter(Boolean);
   }
 
   async execAction(fn: (url: string) => any) {
@@ -155,6 +157,30 @@ export default class Buy extends Vue {
     var ids = await Promise.all(urls.map(this.addCart));
     // var urls = await this.getUrls();
     return coudan({ data: ids }, this.realPlatform);
+  }
+
+  mounted() {
+    bus.$on("msg-group", ({ text, group_id }: Record<string, any>) => {
+      if (groups.includes(group_id)) {
+        console.log(text);
+        if (/(?<!\d)0元|0撸|免单/.test(text)) {
+          sendPrivateMsg(text, "870092104");
+          this.$nextTick(() => {
+            this.platform = "auto";
+            this.execAction(this.handleCoupon);
+          });
+        } else if (text.includes("锁单")) {
+          sendPrivateMsg(text, "870092104");
+          this.text = text;
+          this.$nextTick(() => {
+            this.platform = "auto";
+            this.coudan();
+          });
+        } else if (/前\d+|0.01|速度|1元包邮|抽奖试试|领金豆/.test(text)) {
+          sendPrivateMsg(text, "870092104");
+        }
+      }
+    });
   }
 
   get realPlatform() {

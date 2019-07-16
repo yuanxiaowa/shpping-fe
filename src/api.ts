@@ -178,3 +178,12 @@ export function getQrcode(url: string) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function sendPrivateMsg(message: string, user_id: string) {
+  return axios.get("http://localhost:5700/send_private_msg", {
+    params: {
+      user_id,
+      message
+    }
+  });
+}
