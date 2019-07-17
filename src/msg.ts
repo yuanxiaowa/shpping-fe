@@ -10,10 +10,12 @@ const suser = 870092104;
 var ws = new WebSocket("ws://localhost:6700/event/");
 ws.onmessage = e => {
   var { message_type, raw_message, group_id, user_id } = JSON.parse(e.data);
-  // const text = raw_message; // .replace(/\[CQ:[^\]]+/g, "").trim();
+  const text = raw_message.trim(); // .replace(/\[CQ:[^\]]+/g, "").trim();
   if (message_type === "group") {
     if (groups.includes(group_id)) {
-      handler(raw_message);
+      if (handler(raw_message)) {
+        sendMsg(text);
+      }
     }
   } else if (message_type === "private" && user_id === suser) {
     if (raw_message === "cs") {
@@ -28,18 +30,20 @@ function handler(text: string) {
   if (prevText === text) {
     return;
   }
-  prevText = text.trim();
   if (/(?<!\d)0元|0撸|免单/.test(text)) {
-    sendMsg(text);
     bus.$emit("qiangdan", text);
-  } else if (text.includes("锁单")) {
-    sendMsg(text);
+    return true;
+  }
+  if (text.includes("锁单")) {
     bus.$emit("coudan", text);
-  } else if (
-    /前\d+|(?<!\d)0.\d+|速度|1元包邮|抽奖|领金豆|无门槛|淘宝搜/.test(text)
-  ) {
+    return true;
+  }
+  if (text.includes("1元包邮")) {
+    return !/钢化膜|手机膜/.test(text);
+  }
+  if (/前\d+|(?<!\d)0.\d+|速度|抽奖|领金豆|无门槛|淘宝搜/.test(text)) {
     // if (/\w/.test(text)) {
-    sendMsg(text);
+    return true;
     // }
   }
 }

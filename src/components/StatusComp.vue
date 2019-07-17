@@ -17,6 +17,7 @@ export default class Status extends Vue {
     checkStatus("taobao").then(url => {
       if (!url) {
         this.$notify.success("状态正常");
+        sendMsg("登录状态正常");
       } else {
         sendMsg(url);
         // @ts-ignore
