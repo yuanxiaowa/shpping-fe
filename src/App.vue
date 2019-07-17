@@ -1,28 +1,19 @@
 <template>
   <div>
     <el-collapse v-model="activeNames">
-      <el-collapse-item
-        title="领券下单"
-        name="1"
-      >
+      <el-collapse-item title="状态" name="0">
+        <status-comp />
+      </el-collapse-item>
+      <el-collapse-item title="领券下单" name="1">
         <buy></buy>
       </el-collapse-item>
-      <el-collapse-item
-        title="购物车"
-        name="2"
-      >
+      <el-collapse-item title="购物车" name="2">
         <cart></cart>
       </el-collapse-item>
-      <el-collapse-item
-        title="评论"
-        name="3"
-      >
+      <el-collapse-item title="评论" name="3">
         <comment></comment>
       </el-collapse-item>
-      <el-collapse-item
-        title="天猫60s课堂"
-        name="4"
-      >
+      <el-collapse-item title="天猫60s课堂" name="4">
         <sixty-course></sixty-course>
       </el-collapse-item>
     </el-collapse>
@@ -31,10 +22,7 @@
       <el-button @click="evalFile">执行文件</el-button>
     </div>
     <div>
-      <el-input
-        v-model="code"
-        type="textarea"
-      ></el-input>
+      <el-input v-model="code" type="textarea"></el-input>
       <el-button @click="evalCode">运行代码</el-button>
     </div>
   </div>
@@ -47,6 +35,7 @@ import Comment from "./components/Comment.vue";
 import SixtyCourse from "./components/SixtyCourse.vue";
 import Buy from "./components/Buy.vue";
 import Cart from "./components/Cart.vue";
+import StatusComp from "./components/StatusComp.vue";
 import { Platform } from "./handlers";
 import {
   resolveUrls,
@@ -64,7 +53,8 @@ import {
     Comment,
     Buy,
     Cart,
-    SixtyCourse
+    SixtyCourse,
+    StatusComp
   }
 })
 export default class App extends Vue {

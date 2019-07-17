@@ -38,14 +38,11 @@ const keys: (keyof Handler)[] = [
 ];
 
 (<Platform[]>["taobao", "jingdong"]).forEach(name => {
-  handlers[name] = <Handler>keys.reduce(
-    (state, key) => {
-      // @ts-ignore
-      state[key] = window[name + key.replace(/^\w/, _ => _.toUpperCase())];
-      return state;
-    },
-    <any>{}
-  );
+  handlers[name] = <Handler>keys.reduce((state, key) => {
+    // @ts-ignore
+    state[key] = window[name + key.replace(/^\w/, _ => _.toUpperCase())];
+    return state;
+  }, {});
 });
 
 console.log(handlers);

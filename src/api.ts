@@ -179,7 +179,7 @@ export function getQrcode(url: string) {
     .catch(handleError);
 }
 
-export function sendPrivateMsg(message: string, user_id: string) {
+export function sendPrivateMsg(message: string, user_id: number) {
   return axios.get("http://localhost:5700/send_private_msg", {
     params: {
       user_id,
@@ -198,6 +198,17 @@ export function replyixtyCourse(params: any) {
   return instance
     .get("/sixty-course/reply", {
       params
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function checkStatus(platform: string) {
+  return instance
+    .get("/check/status", {
+      params: {
+        platform
+      }
     })
     .then(handleResponse)
     .catch(handleError);

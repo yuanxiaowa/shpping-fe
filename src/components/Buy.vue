@@ -49,12 +49,9 @@ import {
   qiangquan,
   coudan,
   cartAdd,
-  getQrcode,
-  sendPrivateMsg
+  getQrcode
 } from "../api";
 import bus from "../bus";
-import { groups } from "../config";
-import { Notification } from "element-ui";
 
 @Component({
   components: {
@@ -68,13 +65,14 @@ export default class Buy extends Vue {
   platform: "auto" | Platform = "auto";
   skus = "";
   memo = "";
-  async getUrls() {
-    if (!this.text) {
+  async getUrls(data = this.text) {
+    data = data.trim();
+    if (!data) {
       return [];
     }
     var urls: string[] = await resolveUrls(
       {
-        data: this.text
+        data
       },
       this.realPlatform
     );
@@ -164,31 +162,20 @@ export default class Buy extends Vue {
     return coudan({ data: ids }, this.realPlatform);
   }
 
-  sendMsg(msg: string) {
-    sendPrivateMsg(msg, "870092104");
-  }
-
   mounted() {
-    bus.$on("msg-group", ({ text, group_id }: Record<string, any>) => {
-      if (groups.includes(group_id)) {
-        console.log(text);
-        if (/(?<!\d)0元|0撸|免单/.test(text)) {
-          this.sendMsg(text);
-          this.platform = "auto";
-          this.$nextTick(() => {
-            this.execAction(this.handleCoupon);
-          });
-        } else if (text.includes("锁单")) {
-          this.sendMsg(text);
-          this.text = text;
-          this.$nextTick(() => {
-            this.platform = "auto";
-            this.coudan();
-          });
-        } else if (/前\d+|0.01|速度|1元包邮|抽奖|领金豆|无门槛/.test(text)) {
-          this.sendMsg(text);
-        }
-      }
+    bus.$on("qiangdan", (text: string) => {
+      this.platform = "auto";
+      this.text = text;
+      this.$nextTick(() => {
+        this.execAction(this.qiangdan);
+      });
+    });
+    bus.$on("coudan", (text: string) => {
+      this.platform = "auto";
+      this.text = text;
+      this.$nextTick(() => {
+        this.coudan();
+      });
     });
   }
 

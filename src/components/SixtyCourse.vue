@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button @click="pull">拉取</el-button>
     <el-form>
       <template v-for="item of items">
         <el-form-item
@@ -7,15 +8,8 @@
           :label="item.title"
           v-if="!item.finished||item.lotteryCount>0"
         >
-          <el-radio-group
-            v-if="!item.todayAnswered"
-            v-model="item.option"
-          >
-            <el-radio
-              v-for="(v,k) of item.options"
-              :label="v"
-              :key="k"
-            ></el-radio>
+          <el-radio-group v-if="!item.todayAnswered" v-model="item.option">
+            <el-radio v-for="(v,k) of item.options" :label="v" :key="k"></el-radio>
           </el-radio-group>
           <el-button
             v-if="!item.todayAnswered||item.lotteryCount>0"
@@ -34,7 +28,7 @@ import { getSixtyCourseList, replyixtyCourse } from "../api";
 @Component
 export default class SixtyCourse extends Vue {
   items: any[] = [];
-  async mounted() {
+  async pull() {
     this.items = await getSixtyCourseList();
   }
   reply(item) {
