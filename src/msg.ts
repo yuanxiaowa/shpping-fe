@@ -41,7 +41,11 @@ function handler(text: string) {
   if (text.includes("1元包邮")) {
     return !/钢化膜|手机膜/.test(text);
   }
-  if (/前\d+|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜/.test(text)) {
+  if (
+    /前\d+|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|试试|红包|虹包/.test(
+      text
+    )
+  ) {
     // if (/\w/.test(text)) {
     return true;
     // }
