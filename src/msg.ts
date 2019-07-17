@@ -28,7 +28,7 @@ function handler(text: string) {
   if (prevText === text) {
     return;
   }
-  prevText = text;
+  prevText = text.trim();
   if (/(?<!\d)0元|0撸|免单/.test(text)) {
     sendMsg(text);
     bus.$emit("qiangdan", text);
