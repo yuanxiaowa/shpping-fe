@@ -34,7 +34,7 @@ function handler(text: string) {
     bus.$emit("qiangdan", text);
     return true;
   }
-  if (/领券|抢券|福利|\d毛/.test(text)) {
+  if (/领券|领取优惠券|抢券|福利|\d毛/.test(text)) {
     bus.$emit("qiangquan", text);
     return true;
   }
