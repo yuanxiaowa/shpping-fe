@@ -31,10 +31,17 @@ function handler(text: string) {
     return;
   }
   if (/(?<!\d|件)0元|0撸|零撸|免单/.test(text)) {
-    bus.$emit("qiangdan", text);
+    let quantity = 1;
+    if (/(\d+)件|拍(\d+)/.test(text)) {
+      quantity = Number(RegExp.$1 || RegExp.$2);
+    }
+    bus.$emit("qiangdan", {
+      text,
+      quantity
+    });
     return true;
   }
-  if (/领券|领取优惠券|抢券|福利|\d毛/.test(text)) {
+  if (/领券|领取优惠券|抢券|防身|福利|\d毛/.test(text)) {
     bus.$emit("qiangquan", text);
     return true;
   }

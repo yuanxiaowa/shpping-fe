@@ -8,12 +8,15 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="文本">
-      <el-input type="textarea" v-model="text"></el-input>
+      <el-input
+        type="textarea"
+        v-model="text"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <el-col :span="8">
         <el-form-item label="数量">
-          <el-input-number v-model="num"></el-input-number>
+          <el-input-number v-model.number="num"></el-input-number>
         </el-form-item>
       </el-col>
       <el-col :span="8">
@@ -28,13 +31,28 @@
       </el-col>
     </el-form-item>
     <el-form-item label="备注">
-      <el-input type="textarea" v-model="memo"></el-input>
+      <el-input
+        type="textarea"
+        v-model="memo"
+      ></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="execAction(qiangdan)">抢单</el-button>
-      <el-button type="warning" @click="execAction(handleCoupon)">抢券</el-button>
-      <el-button @click="execAction(addCart)" type="warning">加入购物车</el-button>
-      <el-button type="danger" @click="coudan">凑单</el-button>
+      <el-button
+        type="primary"
+        @click="execAction(qiangdan)"
+      >抢单</el-button>
+      <el-button
+        type="warning"
+        @click="execAction(handleCoupon)"
+      >抢券</el-button>
+      <el-button
+        @click="execAction(addCart)"
+        type="warning"
+      >加入购物车</el-button>
+      <el-button
+        type="danger"
+        @click="coudan"
+      >凑单</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -174,13 +192,17 @@ export default class Buy extends Vue {
         this.execAction(this.qiangquan);
       });
     });
-    bus.$on("qiangdan", (text: string) => {
-      this.platform = "auto";
-      this.text = text;
-      this.$nextTick(() => {
-        this.execAction(this.qiangdan);
-      });
-    });
+    bus.$on(
+      "qiangdan",
+      ({ text, quantity }: { text: string; quantity: number }) => {
+        this.platform = "auto";
+        this.text = text;
+        this.num = quantity;
+        this.$nextTick(() => {
+          this.execAction(this.qiangdan);
+        });
+      }
+    );
     bus.$on("coudan", (text: string) => {
       this.platform = "auto";
       this.text = text;
