@@ -30,8 +30,12 @@ function handler(text: string) {
   if (prevText === text) {
     return;
   }
-  if (/(?<!\d)0元|0撸|免单/.test(text)) {
+  if (/(?<!\d|件)0元|0撸|零撸|免单/.test(text)) {
     bus.$emit("qiangdan", text);
+    return true;
+  }
+  if (/领券|抢券|福利|\d毛/.test(text)) {
+    bus.$emit("qiangquan", text);
     return true;
   }
   if (text.includes("锁单")) {
@@ -42,14 +46,15 @@ function handler(text: string) {
     return !/钢化膜|手机膜/.test(text);
   }
   if (
-    /前\d+|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|试试|红包|虹包/.test(
+    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|试试|红包|虹包|神价/.test(
       text
     )
   ) {
     // if (/\w/.test(text)) {
-    return true;
+    return !/面膜|婴/.test(text);
     // }
   }
+  return /大米|盐/.test(text);
 }
 
 export function sendMsg(msg: string) {

@@ -52,6 +52,7 @@ import {
   getQrcode
 } from "../api";
 import bus from "../bus";
+import { sendMsg } from "../msg";
 
 @Component({
   components: {
@@ -91,17 +92,20 @@ export default class Buy extends Vue {
         let msg;
         if (res.manual) {
           var qurl = await getQrcode(url);
+          sendMsg("手动领取优惠券\n" + qurl);
           msg = (
             <div style="text-align:center">
               <p>手动扫描领取优惠券</p>
               <img src={qurl} />
+              <el-input value={url} />
             </div>
           );
         } else {
           msg = "领券失败，要继续吗？";
         }
         let b = await this.$confirm(msg, {
-          title: "提示"
+          title: "提示",
+          closeOnClickModal: false
         });
         if (!b) {
           throw new Error("领券失败");
@@ -163,6 +167,13 @@ export default class Buy extends Vue {
   }
 
   mounted() {
+    bus.$emit("qiangquan", (text: string) => {
+      this.platform = "auto";
+      this.text = text;
+      this.$nextTick(() => {
+        this.execAction(this.qiangquan);
+      });
+    });
     bus.$on("qiangdan", (text: string) => {
       this.platform = "auto";
       this.text = text;
