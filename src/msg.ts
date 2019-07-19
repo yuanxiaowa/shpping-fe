@@ -26,6 +26,7 @@ ws.onmessage = e => {
 };
 
 var prevText: string;
+const r_filter = /面膜|婴|冰袖|卷发棒|面膜|腮红|充电宝|孕妇|童装|宝宝|卫生巾/;
 function handler(text: string) {
   if (prevText === text) {
     return;
@@ -49,6 +50,9 @@ function handler(text: string) {
       text
     )
   ) {
+    if (r_filter.test(text)) {
+      return;
+    }
     bus.$emit("qiangquan", text);
     return true;
   }
@@ -65,7 +69,7 @@ function handler(text: string) {
     )
   ) {
     // if (/\w/.test(text)) {
-    return !/面膜|婴|冰袖|卷发棒|面膜|腮红|充电宝|孕妇|童装|宝宝/.test(text);
+    return !r_filter.test(text);
     // }
   }
   return /大米|盐/.test(text);
