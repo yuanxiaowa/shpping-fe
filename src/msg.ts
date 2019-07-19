@@ -10,7 +10,7 @@ const suser = 870092104;
 var ws = new WebSocket("ws://localhost:6700/event/");
 ws.onmessage = e => {
   var { message_type, raw_message, group_id, user_id } = JSON.parse(e.data);
-  const text = raw_message.trim(); // .replace(/\[CQ:[^\]]+/g, "").trim();
+  var text = raw_message; // .replace(/\[CQ:[^\]]+/g, "").trim();
   if (message_type === "group") {
     if (groups.includes(group_id)) {
       if (handler(raw_message)) {
@@ -30,18 +30,25 @@ function handler(text: string) {
   if (prevText === text) {
     return;
   }
-  if (/(?<!\d|件)0元|0撸|零撸|免单/.test(text)) {
+  text = text.replace(/&amp;/g, "&").trim();
+  if (/(?<!\d|件|份|条)0元|0撸|零撸|免单/.test(text)) {
     let quantity = 1;
     if (/(\d+)件|拍(\d+)/.test(text)) {
       quantity = Number(RegExp.$1 || RegExp.$2);
     }
     bus.$emit("qiangdan", {
       text,
-      quantity
+      quantity,
+      expectedPrice: 0,
+      forcePrice: true
     });
     return true;
   }
-  if (/领券|领取优惠券|抢券|防身|福利|\d毛/.test(text)) {
+  if (
+    /领券|领取优惠券|抢券|领\d+-\d+|领(标题)?下方|领\d折券|防身|\d券|福利|\d毛/.test(
+      text
+    )
+  ) {
     bus.$emit("qiangquan", text);
     return true;
   }
