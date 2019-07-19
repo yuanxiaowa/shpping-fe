@@ -213,3 +213,12 @@ export function checkStatus(platform: string) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function goodsList(params: any) {
+  return instance
+    .get("/goods/list", {
+      params
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}

@@ -30,6 +30,12 @@ export default class DatePicker extends Vue {
             )
           );
         }
+      },
+      {
+        text: "现在",
+        onClick(picker) {
+          picker.$emit("pick", new Date());
+        }
       }
     ]
   };

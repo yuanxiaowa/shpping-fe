@@ -1,21 +1,38 @@
 <template>
   <el-form label-width="80px">
-    <el-form-item label="平台">
-      <el-radio-group v-model="platform">
-        <el-radio label="auto">自动选择</el-radio>
-        <el-radio label="taobao">淘宝</el-radio>
-        <el-radio label="jingdong">京东</el-radio>
-      </el-radio-group>
+    <el-form-item>
+      <el-col :span="12">
+        <el-form-item label="平台">
+          <el-radio-group v-model="platform">
+            <el-radio label="auto">自动选择</el-radio>
+            <el-radio label="taobao">淘宝</el-radio>
+            <el-radio label="jingdong">京东</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-col>
+      <el-col
+        :span="12"
+        v-if="realPlatform==='taobao'"
+      >
+        <el-form-item label="">
+        </el-form-item>
+      </el-col>
     </el-form-item>
     <el-form-item>
       <el-col :span="12">
         <el-form-item label="文本">
-          <el-input type="textarea" v-model="text"></el-input>
+          <el-input
+            type="textarea"
+            v-model="text"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="memo"></el-input>
+          <el-input
+            type="textarea"
+            v-model="memo"
+          ></el-input>
         </el-form-item>
       </el-col>
     </el-form-item>
@@ -23,7 +40,17 @@
       <el-col :span="12">
         <el-form-item label="期望价格">
           <el-input v-model.number="expectedPrice">
-            <el-checkbox slot="prepend" v-model="forcePrice" label="强制"></el-checkbox>
+            <el-checkbox
+              slot="prepend"
+              v-model="forcePrice"
+              label="强制"
+            ></el-checkbox>
+            <el-checkbox
+              v-if="realPlatform==='taobao'"
+              slot="append"
+              label="猫超凑0.01"
+              v-model="mc_dot1"
+            ></el-checkbox>
           </el-input>
         </el-form-item>
       </el-col>
@@ -34,22 +61,45 @@
       </el-col>
     </el-form-item>
     <el-form-item>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-form-item label="数量">
           <el-input-number v-model.number="num"></el-input-number>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-form-item label="日期">
           <date-picker v-model="datetime"></date-picker>
         </el-form-item>
       </el-col>
+      <el-col
+        :span="8"
+        v-if="realPlatform==='taobao'"
+      >
+        <el-form-item label="猫超凑单">
+          <el-input v-model.number="price_coudan">
+            <span slot="append">元</span>
+          </el-input>
+        </el-form-item>
+      </el-col>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="execAction(qiangdan)">抢单</el-button>
-      <el-button type="warning" @click="execAction(qiangquan)">抢券</el-button>
-      <el-button @click="execAction(addCart)" type="warning">加入购物车</el-button>
-      <el-button type="danger" @click="coudan">凑单</el-button>
+      <el-button
+        type="primary"
+        @click="execAction(qiangdan)"
+      >抢单</el-button>
+      <el-button
+        type="warning"
+        @click="execAction(qiangquan)"
+      >抢券</el-button>
+      <el-button
+        @click="execAction(addCart)"
+        type="warning"
+      >加入购物车</el-button>
+      <el-button
+        type="danger"
+        @click="coudan"
+      >凑单</el-button>
+      <el-button @click="reset">充值</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -64,7 +114,8 @@ import {
   qiangquan,
   coudan,
   cartAdd,
-  getQrcode
+  getQrcode,
+  goodsList
 } from "../api";
 import bus from "../bus";
 import { sendMsg } from "../msg";
@@ -77,11 +128,20 @@ interface InfoItem {
   forcePrice?: boolean;
   expectedPrice?: number;
   datetime?: string;
+  mc_dot1?: boolean;
+  price_coudan?: number;
 }
 
 type InfoItemNoUrl = Pick<
   InfoItem,
-  "platform" | "quantity" | "skus" | "forcePrice" | "expectedPrice" | "datetime"
+  | "platform"
+  | "quantity"
+  | "skus"
+  | "forcePrice"
+  | "expectedPrice"
+  | "datetime"
+  | "mc_dot1"
+  | "price_coudan"
 >;
 
 function getPlatform(text: string) {
@@ -105,6 +165,8 @@ export default class Buy extends Vue {
   memo = "";
   expectedPrice = 0;
   forcePrice = false;
+  mc_dot1 = false;
+  price_coudan = 0;
 
   async getUrls(data: string, platform: Platform) {
     data = data.trim();
@@ -129,7 +191,8 @@ export default class Buy extends Vue {
       skus: this.getSkus(),
       forcePrice: this.forcePrice,
       expectedPrice: this.expectedPrice,
-      datetime: this.datetime
+      datetime: this.datetime,
+      mc_dot1: this.mc_dot1
     }
   ) {
     var urls = await this.getUrls(text, item.platform);
@@ -167,6 +230,7 @@ export default class Buy extends Vue {
         skus: arg.skus,
         expectedPrice: arg.expectedPrice,
         forcePrice: arg.forcePrice,
+        mc_dot1: arg.mc_dot1,
         other: {
           memo: this.memo
         }
@@ -218,13 +282,34 @@ export default class Buy extends Vue {
     text: string = this.text,
     item: InfoItemNoUrl = {
       platform: this.realPlatform,
-      quantity: 1
+      quantity: 1,
+      price_coudan: this.price_coudan
     }
   ) {
     bus.$emit("unselect-all");
     this.$notify.success("开始凑单");
     var urls = await this.getUrls(text, item.platform);
-    var ids = await Promise.all(urls.map(url => this.addCart(url, item)));
+    var quantities: any = text.match(/(?<=拍)\d/g);
+    if (item.price_coudan) {
+      let [{ url }] = await goodsList({
+        platform: item.platform,
+        start_price: item.price_coudan
+      });
+      urls.push(url);
+    }
+    if (!quantities) {
+      quantities = [];
+    } else {
+      quantities = quantities.map(Number);
+    }
+    var ids = await Promise.all(
+      urls.map((url, i) =>
+        this.addCart(url, {
+          platform: item.platform,
+          quantity: quantities[i] || 1
+        })
+      )
+    );
     // var urls = await this.getUrls();
     return coudan({ data: ids }, item.platform);
   }
@@ -250,6 +335,15 @@ export default class Buy extends Vue {
         quantity: 1
       });
     });
+  }
+
+  reset() {
+    this.num = 1;
+    this.forcePrice = false;
+    this.text = "";
+    this.expectedPrice = 0;
+    this.mc_dot1 = false;
+    this.price_coudan = 0;
   }
 
   get realPlatform() {
