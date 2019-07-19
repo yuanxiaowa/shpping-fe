@@ -45,7 +45,7 @@ function handler(text: string) {
     return true;
   }
   if (
-    /领券|领取优惠券|抢券|领\d+-\d+|领(标题)?下方|领\d折券|防身|\d券|福利|\d毛/.test(
+    /领券|领取优惠券|抢券|(\d+)?-\d+券|领(标题)?下方|领\d折券|防身|福利|\d毛/.test(
       text
     )
   ) {
@@ -65,7 +65,7 @@ function handler(text: string) {
     )
   ) {
     // if (/\w/.test(text)) {
-    return !/面膜|婴/.test(text);
+    return !/面膜|婴|冰袖|卷发棒|面膜|腮红|充电宝|孕妇|童装|宝宝/.test(text);
     // }
   }
   return /大米|盐/.test(text);
