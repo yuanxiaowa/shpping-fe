@@ -10,11 +10,18 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-      <el-col
-        :span="12"
-        v-if="realPlatform==='taobao'"
-      >
-        <el-form-item label="">
+      <el-col :span="12">
+        <el-form-item label="捡漏">
+          <el-input
+            :disabled="!force_jianlou"
+            v-model="jianlou"
+          >
+            <el-checkbox
+              slot="prepend"
+              v-model="force_jianlou"
+            ></el-checkbox>
+            <span slot="append">分钟</span>
+          </el-input>
         </el-form-item>
       </el-col>
     </el-form-item>
@@ -79,7 +86,7 @@
         v-if="realPlatform==='taobao'"
       >
         <el-form-item label="猫超凑单">
-          <el-input v-model.number="price_coudan">
+          <el-input v-model="price_coudan">
             <span slot="append">元</span>
           </el-input>
         </el-form-item>
@@ -102,7 +109,7 @@
         type="danger"
         @click="coudan"
       >凑单</el-button>
-      <el-button @click="reset">充值</el-button>
+      <el-button @click="reset">重置</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -132,6 +139,7 @@ interface InfoItem {
   datetime?: string;
   mc_dot1?: boolean;
   price_coudan?: number;
+  jianlou?: number;
 }
 
 type InfoItemNoUrl = Pick<
@@ -143,6 +151,7 @@ type InfoItemNoUrl = Pick<
   | "datetime"
   | "mc_dot1"
   | "price_coudan"
+  | "jianlou"
 >;
 
 function getPlatform(text: string) {
@@ -168,6 +177,8 @@ export default class Buy extends Vue {
   forcePrice = false;
   mc_dot1 = false;
   price_coudan = 0;
+  force_jianlou = false;
+  jianlou = 0;
 
   async getUrls(data: string, platform: Platform) {
     data = data.trim();
@@ -192,7 +203,8 @@ export default class Buy extends Vue {
       skus: this.getSkus(),
       expectedPrice: this.forcePrice ? this.expectedPrice : undefined,
       datetime: this.datetime,
-      mc_dot1: this.mc_dot1
+      mc_dot1: this.mc_dot1,
+      jianlou: this.force_jianlou ? this.jianlou : undefined
     }
   ) {
     var urls = await this.getUrls(text, item.platform);
@@ -284,7 +296,7 @@ export default class Buy extends Vue {
     item: InfoItemNoUrl = {
       platform: this.realPlatform,
       quantity: 1,
-      price_coudan: this.price_coudan
+      price_coudan: Number(this.price_coudan)
     }
   ) {
     bus.$emit("unselect-all");
@@ -344,6 +356,8 @@ export default class Buy extends Vue {
     this.expectedPrice = 0;
     this.mc_dot1 = false;
     this.price_coudan = 0;
+    this.force_jianlou = false;
+    this.jianlou = 0;
   }
 
   get realPlatform() {
