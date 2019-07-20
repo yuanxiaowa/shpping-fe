@@ -39,11 +39,14 @@
     <el-form-item>
       <el-col :span="12">
         <el-form-item label="期望价格">
-          <el-input v-model.number="expectedPrice">
+          <el-input
+            :disabled="!forcePrice"
+            v-model.number="expectedPrice"
+          >
             <el-checkbox
               slot="prepend"
               v-model="forcePrice"
-              label="强制"
+              label=""
             ></el-checkbox>
             <el-checkbox
               v-if="realPlatform==='taobao'"
@@ -125,7 +128,6 @@ interface InfoItem {
   platform: Platform;
   quantity: number;
   skus?: number[];
-  forcePrice?: boolean;
   expectedPrice?: number;
   datetime?: string;
   mc_dot1?: boolean;
@@ -137,7 +139,6 @@ type InfoItemNoUrl = Pick<
   | "platform"
   | "quantity"
   | "skus"
-  | "forcePrice"
   | "expectedPrice"
   | "datetime"
   | "mc_dot1"
@@ -189,8 +190,7 @@ export default class Buy extends Vue {
       platform: this.realPlatform,
       quantity: this.num,
       skus: this.getSkus(),
-      forcePrice: this.forcePrice,
-      expectedPrice: this.expectedPrice,
+      expectedPrice: this.forcePrice ? this.expectedPrice : undefined,
       datetime: this.datetime,
       mc_dot1: this.mc_dot1
     }
@@ -229,7 +229,6 @@ export default class Buy extends Vue {
         quantity: arg.quantity,
         skus: arg.skus,
         expectedPrice: arg.expectedPrice,
-        forcePrice: arg.forcePrice,
         mc_dot1: arg.mc_dot1,
         other: {
           memo: this.memo
@@ -244,7 +243,9 @@ export default class Buy extends Vue {
 
   async qiangquan(url: string, arg: InfoItemNoUrl) {
     if (this.prevUrl === url) {
-      throw new Error("重复领取");
+      if (!(await this.$confirm("与上次链接相同，要继续操作吗？"))) {
+        throw new Error("重复领取");
+      }
     }
     this.prevUrl = url;
     this.$notify.success("开始抢券");
@@ -325,8 +326,7 @@ export default class Buy extends Vue {
       this.execAction(this.qiangdan, arg.text, {
         platform: getPlatform(arg.text),
         quantity: arg.quantity,
-        expectedPrice: arg.expectedPrice,
-        forcePrice: arg.forcePrice
+        expectedPrice: arg.expectedPrice
       });
     });
     bus.$on("coudan", (text: string) => {
