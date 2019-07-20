@@ -38,9 +38,15 @@ export default class DatePicker extends Vue {
         }
       },
       {
-        text: "下15秒",
+        text: "15秒后",
         onClick(picker) {
           picker.$emit("pick", new Date(Date.now() + 1000 * 15));
+        }
+      },
+      {
+        text: "30秒后",
+        onClick(picker) {
+          picker.$emit("pick", new Date(Date.now() + 1000 * 30));
         }
       }
     ]
