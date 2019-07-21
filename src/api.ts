@@ -222,3 +222,17 @@ export function goodsList(params: any) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function getConfig() {
+  return instance
+    .get("/config")
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function setConfig(data: any) {
+  return instance
+    .post("/config", data)
+    .then(handleResponse)
+    .catch(handleError);
+}

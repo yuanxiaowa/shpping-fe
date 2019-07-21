@@ -178,7 +178,7 @@ export default class Buy extends Vue {
   mc_dot1 = false;
   price_coudan = 0;
   force_jianlou = false;
-  jianlou = 0;
+  jianlou = 15;
 
   async getUrls(data: string, platform: Platform) {
     data = data.trim();
@@ -204,7 +204,7 @@ export default class Buy extends Vue {
       expectedPrice: this.forcePrice ? this.expectedPrice : undefined,
       datetime: this.datetime,
       mc_dot1: this.mc_dot1,
-      jianlou: this.force_jianlou ? this.jianlou : undefined
+      jianlou: this.force_jianlou ? Number(this.jianlou) : undefined
     }
   ) {
     var urls = await this.getUrls(text, item.platform);
@@ -242,6 +242,7 @@ export default class Buy extends Vue {
         skus: arg.skus,
         expectedPrice: arg.expectedPrice,
         mc_dot1: arg.mc_dot1,
+        jianlou: arg.jianlou,
         other: {
           memo: this.memo
         }
@@ -357,7 +358,7 @@ export default class Buy extends Vue {
     this.mc_dot1 = false;
     this.price_coudan = 0;
     this.force_jianlou = false;
-    this.jianlou = 0;
+    this.jianlou = 15;
   }
 
   get realPlatform() {

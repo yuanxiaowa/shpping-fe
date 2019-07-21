@@ -5,7 +5,14 @@
         title="状态"
         name="0"
       >
-        <status-comp />
+        <el-row>
+          <el-col :span="12">
+            <status-comp />
+          </el-col>
+          <el-col :span="12">
+            <config></config>
+          </el-col>
+        </el-row>
       </el-collapse-item>
       <el-collapse-item
         title="领券下单"
@@ -61,6 +68,7 @@ import Buy from "./components/Buy.vue";
 import Cart from "./components/Cart.vue";
 import JingdongCoupon from "./components/JingdongCoupon.vue";
 import StatusComp from "./components/StatusComp.vue";
+import Config from "./components/Config.vue";
 import { Platform } from "./handlers";
 import {
   resolveUrls,
@@ -80,7 +88,8 @@ import {
     Cart,
     SixtyCourse,
     StatusComp,
-    JingdongCoupon
+    JingdongCoupon,
+    Config
   }
 })
 export default class App extends Vue {
