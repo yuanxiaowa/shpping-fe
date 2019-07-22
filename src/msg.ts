@@ -26,7 +26,7 @@ ws.onmessage = e => {
 };
 
 var prevText: string;
-const rFilter = /面膜|婴|冰袖|卷发棒|面膜|腮红|充电宝|孕妇|童装|宝宝|卫生巾|耳机|名人/;
+const rFilter = /面膜|婴|冰袖|卷发棒|面膜|腮红|充电宝|孕妇|童装|宝宝|卫生巾|耳机|名人|纸尿裤/;
 function handler(text: string) {
   if (prevText === text) {
     return;
