@@ -81,7 +81,7 @@ export default class CartTable extends Vue {
     var ret = await commentList(
       {
         page: this.page,
-        type: 6
+        type: 8
       },
       this.platform
     );
