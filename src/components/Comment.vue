@@ -12,6 +12,7 @@
         <el-button
           @click="comment"
           :disabled="multipleSelection.length===0"
+          :loading="pending"
         >评价选中</el-button>
       </el-form-item>
     </el-form>
@@ -73,6 +74,7 @@ export default class CartTable extends Vue {
   multipleSelection: any[] = [];
   more = false;
   page = 1;
+  pending = false;
   onClick() {
     this.page = 1;
     this.refresh();
@@ -81,7 +83,7 @@ export default class CartTable extends Vue {
     var ret = await commentList(
       {
         page: this.page,
-        type: 8
+        type: 6
       },
       this.platform
     );
@@ -95,6 +97,7 @@ export default class CartTable extends Vue {
   }
 
   async comment() {
+    this.pending = true;
     try {
       await comment(
         {
@@ -104,6 +107,7 @@ export default class CartTable extends Vue {
       );
     } catch (e) {}
     this.refresh();
+    this.pending = false;
   }
 
   onSelectionChange(val: any) {
