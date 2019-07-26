@@ -255,7 +255,7 @@ export default class Buy extends Vue {
 
   async qiangdan(url: string, arg: InfoItemNoUrl) {
     this.$notify.success("执行直接购买");
-    url = await this.qiangquan(url, arg);
+    url = await this.qiangquan(url, { ...arg, t: undefined });
     await buyDirect(
       {
         url,
