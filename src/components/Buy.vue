@@ -1,7 +1,7 @@
 <template>
   <el-form label-width="80px">
     <el-form-item>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-form-item label="平台">
           <el-radio-group v-model="platform">
             <el-radio label="auto">自动选择</el-radio>
@@ -10,7 +10,7 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-form-item label="捡漏">
           <el-input
             :disabled="!force_jianlou"
@@ -24,9 +24,14 @@
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-form-item label="加车购买">
           <el-checkbox v-model="from_cart"></el-checkbox>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="pc购买">
+          <el-checkbox v-model="from_pc"></el-checkbox>
         </el-form-item>
       </el-col>
     </el-form-item>
@@ -146,6 +151,7 @@ interface InfoItem {
   price_coudan?: number;
   jianlou?: number;
   from_cart?: boolean;
+  from_pc?: boolean;
 }
 
 type InfoItemNoUrl = Pick<
@@ -159,6 +165,7 @@ type InfoItemNoUrl = Pick<
   | "price_coudan"
   | "jianlou"
   | "from_cart"
+  | "from_pc"
 >;
 
 function getPlatform(text: string) {
@@ -187,6 +194,7 @@ export default class Buy extends Vue {
   force_jianlou = false;
   jianlou = 15;
   from_cart = false;
+  from_pc = false;
 
   async getUrls(data: string, platform: Platform) {
     data = data.trim();
@@ -213,7 +221,8 @@ export default class Buy extends Vue {
       datetime: this.datetime,
       mc_dot1: this.mc_dot1,
       jianlou: this.force_jianlou ? Number(this.jianlou) : undefined,
-      from_cart: this.from_cart
+      from_cart: this.from_cart,
+      from_pc: this.from_pc
     }
   ) {
     var urls = await this.getUrls(text, item.platform);
@@ -253,6 +262,7 @@ export default class Buy extends Vue {
         mc_dot1: arg.mc_dot1,
         jianlou: arg.jianlou,
         from_cart: arg.from_cart,
+        from_pc: arg.from_pc,
         other: {
           memo: this.memo
         }
