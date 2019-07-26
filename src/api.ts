@@ -116,11 +116,16 @@ export function coudan(data: any, platform: string): Promise<any> {
     .then(handleResponse)
     .catch(handleError);
 }
-export function qiangquan(data: any, platform: string): Promise<any> {
+export function qiangquan(
+  data: any,
+  t: string,
+  platform: string
+): Promise<any> {
   return instance
     .post("/qiangquan", data, {
       params: {
-        platform
+        platform,
+        t
       }
     })
     .then(handleResponse)

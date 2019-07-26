@@ -152,6 +152,7 @@ interface InfoItem {
   jianlou?: number;
   from_cart?: boolean;
   from_pc?: boolean;
+  t?: string;
 }
 
 type InfoItemNoUrl = Pick<
@@ -166,6 +167,7 @@ type InfoItemNoUrl = Pick<
   | "jianlou"
   | "from_cart"
   | "from_pc"
+  | "t"
 >;
 
 function getPlatform(text: string) {
@@ -222,7 +224,8 @@ export default class Buy extends Vue {
       mc_dot1: this.mc_dot1,
       jianlou: this.force_jianlou ? Number(this.jianlou) : undefined,
       from_cart: this.from_cart,
-      from_pc: this.from_pc
+      from_pc: this.from_pc,
+      t: this.datetime
     }
   ) {
     var urls = await this.getUrls(text, item.platform);
@@ -267,7 +270,7 @@ export default class Buy extends Vue {
           memo: this.memo
         }
       },
-      arg.datetime!,
+      arg.t!,
       arg.platform
     );
   }
@@ -282,7 +285,7 @@ export default class Buy extends Vue {
     }
     this.prevUrl = url;
     this.$notify.success("开始抢券");
-    var res = await qiangquan({ data: url }, arg.platform);
+    var res = await qiangquan({ data: url }, arg.t!, arg.platform);
     if (res) {
       if (!res.success) {
         let msg;
