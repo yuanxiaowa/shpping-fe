@@ -2,16 +2,32 @@
   <div>
     <el-form>
       <el-form-item>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-radio-group v-model="platform">
             <el-radio label="taobao">淘宝</el-radio>
             <el-radio label="jingdong">京东</el-radio>
           </el-radio-group>
-          <el-button style="margin-left:2em" type="primary" @click="pullCartData()">拉取</el-button>
+          <el-button
+            style="margin-left:2em"
+            type="primary"
+            @click="pullCartData()"
+          >拉取</el-button>
         </el-col>
-        <el-col :span="12" label="日期">
+        <el-col
+          :span="8"
+          label="日期"
+        >
           <date-picker v-model="datetime"></date-picker>
-          <el-button type="danger" :disabled="checkedLength===0" @click="submit">提交订单</el-button>
+          <el-button
+            type="danger"
+            :disabled="checkedLength===0"
+            @click="submit"
+          >提交订单</el-button>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="pc购买">
+            <el-checkbox v-model="from_pc"></el-checkbox>
+          </el-form-item>
         </el-col>
       </el-form-item>
     </el-form>
@@ -52,6 +68,8 @@ export default class App extends Vue {
   datetime = "";
   tableData: any[] = [];
   other!: any;
+  from_pc = false;
+
   async pullCartData(data: any) {
     if (!data) {
       data = await cartList(this.platform);
@@ -148,7 +166,7 @@ export default class App extends Vue {
         });
       });
     }
-    cartBuy({ items }, this.datetime, this.platform);
+    cartBuy({ items, from_pc: this.from_pc }, this.datetime, this.platform);
   }
 
   mounted() {
