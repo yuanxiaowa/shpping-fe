@@ -26,12 +26,14 @@ ws.onmessage = e => {
 };
 
 var prevText: string;
+const rTaobao = /[￥(¢]([a-zA-Z0-9]{11})[￥)¢]/;
 const rFilter = /大闸蟹|龙虾|护发素|面膜|婴|冰袖|卷发棒|面膜|腮红|充电宝|孕妇|童装|宝宝|卫生巾|耳机|名人|纸尿裤|试卷|真题|素描|眉笔|女款|冈本|套套|避孕套|防晒|洗面奶|眼罩|蟑螂药/;
 function handler(text: string) {
   if (prevText === text) {
     return;
   }
   text = text.replace(/&amp;/g, "&").trim();
+  var isTaobao = rTaobao.test(text);
   if (/(?<!\d|件|份|条)0元|0撸|零撸|免单/.test(text)) {
     let quantity = 1;
     if (/(\d+)件|拍(\d+)/.test(text)) {
@@ -41,7 +43,8 @@ function handler(text: string) {
       text,
       quantity,
       expectedPrice: 0,
-      forcePrice: true
+      forcePrice: true,
+      platform: isTaobao ? "taobao" : "jingdong"
     });
     return true;
   }
@@ -50,7 +53,7 @@ function handler(text: string) {
       text
     )
   ) {
-    if (rFilter.test(text)) {
+    if (isTaobao && rFilter.test(text)) {
       return;
     }
     bus.$emit("qiangquan", text);
@@ -72,7 +75,7 @@ function handler(text: string) {
     )
   ) {
     // if (/\w/.test(text)) {
-    return !rFilter.test(text);
+    return !(isTaobao && rFilter.test(text));
     // }
   }
   return /大米|盐/.test(text);
