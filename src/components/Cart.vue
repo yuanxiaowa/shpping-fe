@@ -64,7 +64,7 @@ import bus from "../bus";
   }
 })
 export default class App extends Vue {
-  platform: Platform = "jingdong";
+  platform: Platform = "taobao";
   datetime = "";
   tableData: any[] = [];
   other!: any;
@@ -72,7 +72,7 @@ export default class App extends Vue {
 
   async pullCartData(data: any) {
     if (!data) {
-      data = await cartList(this.platform);
+      data = await cartList(this.platform, this.from_pc);
     }
     this.tableData = data.items;
     this.other = data.other;

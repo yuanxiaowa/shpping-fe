@@ -20,11 +20,12 @@ function handleError(e: Error) {
   throw new Error(e.message);
 }
 
-export function cartList(platform: string): Promise<any> {
+export function cartList(platform: string, from_pc = false): Promise<any> {
   return instance
     .get("/cart", {
       params: {
-        platform
+        platform,
+        from_pc: from_pc ? 1 : ""
       }
     })
     .then(handleResponse)
