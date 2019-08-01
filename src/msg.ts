@@ -25,14 +25,39 @@ ws.onmessage = e => {
   }
 };
 
-var prevText: string;
-const rTaobao = /[￥(¢]([a-zA-Z0-9]{11})[￥)¢]/;
+const rTaobao = /[￥(¢]+([a-zA-Z0-9]{11})[￥)¢]+/;
 const rFilter = /大闸蟹|螃蟹|龙虾|护发素|面膜|婴|冰袖|卷发棒|面膜|腮红|充电宝|孕妇|童装|宝宝|卫生巾|耳机|名人|纸尿裤|试卷|真题|素描|眉笔|女款|冈本|套套|避孕套|防晒|洗面奶|眼罩|蟑螂药/;
+
+function getTidyText(text: string) {
+  return text
+    .replace(rTaobao, "")
+    .replace("---复制本消息，打开淘宝即可---", "")
+    .trim();
+}
+
+class Recorder {
+  max = 10;
+  items: string[] = [];
+  add(str: string) {
+    if (this.items.length >= this.max) {
+      this.items.shift();
+    }
+    this.items.push(getTidyText(str));
+  }
+  has(str: string) {
+    var text = getTidyText(str);
+    return this.items.includes(text);
+  }
+}
+
+var recorder = new Recorder();
+
 function handler(text: string) {
-  if (prevText === text) {
+  text = text.replace(/&amp;/g, "&").trim();
+  if (recorder.has(text)) {
     return;
   }
-  text = text.replace(/&amp;/g, "&").trim();
+  recorder.add(text);
   var isTaobao = rTaobao.test(text);
   if (/(?<!\d|件|份|条)0元|0撸|零撸|免单/.test(text)) {
     let quantity = 1;
