@@ -104,6 +104,15 @@ function handler(text: string) {
       text
     )
   ) {
+    if (text.includes("0.1")) {
+      bus.$emit("qiangdan", {
+        text,
+        quantity: 1,
+        expectedPrice: 0.1,
+        forcePrice: true,
+        platform: isTaobao ? "taobao" : "jingdong"
+      });
+    }
     // if (/\w/.test(text)) {
     return !(isTaobao && rFilter.test(text));
     // }
