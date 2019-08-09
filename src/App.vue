@@ -1,10 +1,13 @@
+<!--
+ * @Author: oudingyin
+ * @Date: 2019-07-01 09:12:05
+ * @LastEditors: oudingy1in
+ * @LastEditTime: 2019-08-09 16:20:54
+ -->
 <template>
   <div>
     <el-collapse v-model="activeNames">
-      <el-collapse-item
-        title="状态"
-        name="0"
-      >
+      <el-collapse-item title="状态" name="0">
         <el-row>
           <el-col :span="12">
             <status-comp />
@@ -14,34 +17,22 @@
           </el-col>
         </el-row>
       </el-collapse-item>
-      <el-collapse-item
-        title="领券下单"
-        name="1"
-      >
+      <el-collapse-item title="领券下单" name="1">
         <buy></buy>
       </el-collapse-item>
-      <el-collapse-item
-        title="购物车"
-        name="2"
-      >
+      <el-collapse-item title="购物车" name="2">
         <cart></cart>
       </el-collapse-item>
-      <el-collapse-item
-        title="评论"
-        name="3"
-      >
+      <el-collapse-item title="搜索" name="5">
+        <search></search>
+      </el-collapse-item>
+      <el-collapse-item title="评论" name="3">
         <comment></comment>
       </el-collapse-item>
-      <el-collapse-item
-        title="京东优惠券"
-        name="4"
-      >
+      <el-collapse-item title="京东优惠券" name="4">
         <jingdong-coupon></jingdong-coupon>
       </el-collapse-item>
-      <el-collapse-item
-        title="天猫60s课堂"
-        name="4"
-      >
+      <el-collapse-item title="天猫60s课堂" name="4">
         <sixty-course></sixty-course>
       </el-collapse-item>
     </el-collapse>
@@ -50,10 +41,7 @@
       <el-button @click="evalFile">执行文件</el-button>
     </div>
     <div>
-      <el-input
-        v-model="code"
-        type="textarea"
-      ></el-input>
+      <el-input v-model="code" type="textarea"></el-input>
       <el-button @click="evalCode">运行代码</el-button>
     </div>
   </div>
@@ -68,6 +56,7 @@ import Buy from "./components/Buy.vue";
 import Cart from "./components/Cart.vue";
 import JingdongCoupon from "./components/JingdongCoupon.vue";
 import StatusComp from "./components/StatusComp.vue";
+import Search from "./components/Search.vue";
 import Config from "./components/Config.vue";
 import { Platform } from "./handlers";
 import {
@@ -89,7 +78,8 @@ import {
     SixtyCourse,
     StatusComp,
     JingdongCoupon,
-    Config
+    Config,
+    Search
   }
 })
 export default class App extends Vue {

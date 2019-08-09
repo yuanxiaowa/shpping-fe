@@ -58,7 +58,10 @@ class Recorder {
 var recorder = new Recorder();
 
 function handler(text: string) {
-  text = text.replace(/&amp;/g, "&").trim();
+  text = text
+    .replace(/&amp;/g, "&")
+    .replace(/💰/g, "元")
+    .trim();
   if (recorder.has(text)) {
     return;
   }

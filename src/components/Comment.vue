@@ -1,3 +1,9 @@
+<!--
+ * @Author: oudingyin
+ * @Date: 2019-07-15 08:54:29
+ * @LastEditors: oudingy1in
+ * @LastEditTime: 2019-08-09 14:03:03
+ -->
 <template>
   <div>
     <el-form>
@@ -9,37 +15,16 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="onClick">获取</el-button>
-        <el-button
-          @click="comment"
-          :disabled="multipleSelection.length===0"
-          :loading="pending"
-        >评价选中</el-button>
+        <el-button @click="comment" :disabled="multipleSelection.length===0" :loading="pending">评价选中</el-button>
       </el-form-item>
     </el-form>
-    <el-table
-      ref="tb"
-      :data="tableData"
-      @selection-change="onSelectionChange"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-      >
-      </el-table-column>
+    <el-table ref="tb" :data="tableData" @selection-change="onSelectionChange">
+      <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="商品名称">
         <template slot-scope="{row}">
-          <div
-            v-for="item of row.items"
-            :key="item.id"
-          >
-            <img
-              :src="item.img"
-              alt=""
-            >
-            <a
-              :href="item.url"
-              target="_blank"
-            >{{item.title}}</a>
+          <div v-for="item of row.items" :key="item.id">
+            <img :src="item.img" width="50" />
+            <a :href="item.url" target="_blank">{{item.title}}</a>
           </div>
         </template>
       </el-table-column>
@@ -47,17 +32,11 @@
         <template slot-scope="{row}">
           <el-button>评价</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>-->
     </el-table>
     <div>
-      <el-button
-        :disabled="page<=1"
-        @click="go(-1)"
-      >上一页</el-button>
-      <el-button
-        v-if="more"
-        @click="go(1)"
-      >下一页</el-button>
+      <el-button :disabled="page<=1" @click="go(-1)">上一页</el-button>
+      <el-button v-if="more" @click="go(1)">下一页</el-button>
     </div>
   </div>
 </template>

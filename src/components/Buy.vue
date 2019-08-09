@@ -1,3 +1,9 @@
+<!--
+ * @Author: oudingyin
+ * @Date: 2019-07-15 08:54:29
+ * @LastEditors: oudingy1in
+ * @LastEditTime: 2019-08-09 16:03:49
+ -->
 <template>
   <el-form label-width="80px">
     <el-form-item>
@@ -284,7 +290,7 @@ export default class Buy extends Vue {
           }
         }
       }
-      url = res.url;
+      url = res.url || url;
     }
     return url;
   }
