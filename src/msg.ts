@@ -25,18 +25,49 @@ ws.onmessage = e => {
   }
 };
 
-const rTaobao = /(?<![\w/&%])[a-zA-Z0-9]{11}(?![\w/&%])/;
-const rFilter = /大闸蟹|螃蟹|龙虾|护发素|面膜|婴|冰袖|卷发棒|面膜|腮红|充电宝|孕妇|童装|宝宝|卫生巾|耳机|名人|纸尿裤|试卷|真题|素描|眉笔|女款|冈本|套套|避孕套|防晒|洗面奶|眼罩|蟑螂药|儿童/;
+const r_taobao = /(?<!\w)\w{11}(?!\w)/;
+const r_url = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
+const r_symbol = /[&%【】,，，\s￥(（¢)）]/g;
+const blacklist = [
+  "大闸蟹",
+  "螃蟹",
+  "龙虾",
+  "护发素",
+  "面膜",
+  "婴",
+  "冰袖",
+  "卷发棒",
+  "面膜",
+  "腮红",
+  "充电宝",
+  "孕妇",
+  "童装",
+  "宝宝",
+  "卫生巾",
+  "耳机",
+  "名人",
+  "纸尿裤",
+  "试卷",
+  "真题",
+  "素描",
+  "眉笔",
+  "女款",
+  "冈本",
+  "套套",
+  "避孕套",
+  "防晒",
+  "洗面奶",
+  "眼罩",
+  "蟑螂药",
+  "儿童"
+];
 
 function getTidyText(text: string) {
   return text
-    .replace(rTaobao, "")
+    .replace(r_symbol, "")
     .replace(/[-—]*复制本消息，打开淘宝即可[-—]*/, "")
-    .replace(
-      /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g,
-      ""
-    )
-    .replace(/[【】,，，\s￥(（¢)）]/g, "")
+    .replace(r_url, "")
+    .replace(r_symbol, "")
     .trim();
 }
 
@@ -66,7 +97,14 @@ function handler(text: string) {
     return;
   }
   recorder.add(text);
-  var isTaobao = rTaobao.test(text);
+  var texts = (<string[]>[]).concat(
+    text.match(r_url) || [],
+    text.match(r_taobao) || []
+  );
+  if (texts.length === 0) {
+    return /速度|锁单|试试|双叠加/.test(text);
+  }
+  var isTaobao = r_taobao.test(text);
   if (/(?<!\d|件|份|条)0元|0撸|零撸|免单/.test(text)) {
     let quantity = 1;
     if (/(\d+)件|拍(\d+)/.test(text)) {
@@ -86,7 +124,7 @@ function handler(text: string) {
       text
     )
   ) {
-    if (isTaobao && rFilter.test(text)) {
+    if (isTaobao && blacklist.includes(text)) {
       return;
     }
     bus.$emit("qiangquan", text);
@@ -103,7 +141,7 @@ function handler(text: string) {
     return true;
   }
   if (
-    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|红包|虹包|神价|双叠加|秒杀/.test(
+    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|红包|虹包|神价|双叠加|秒杀|神车/.test(
       text
     )
   ) {
@@ -117,10 +155,10 @@ function handler(text: string) {
       });
     }
     // if (/\w/.test(text)) {
-    return !(isTaobao && rFilter.test(text));
+    return !(isTaobao && blacklist.includes(text));
     // }
   }
-  return /大米|盐/.test(text);
+  return /大米|盐|猫超/.test(text);
 }
 
 export function sendMsg(msg: string) {
