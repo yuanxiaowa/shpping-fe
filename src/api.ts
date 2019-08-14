@@ -1,3 +1,9 @@
+/*
+ * @Author: oudingyin
+ * @Date: 2019-07-12 17:17:39
+ * @LastEditors: oudingy1in
+ * @LastEditTime: 2019-08-13 11:13:38
+ */
 import axios, { AxiosResponse } from "axios";
 import { Notification } from "element-ui";
 
@@ -212,6 +218,17 @@ export function replyixtyCourse(params: any) {
 export function checkStatus(platform: string) {
   return instance
     .get("/check/status", {
+      params: {
+        platform
+      }
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function sysTime(platform: string) {
+  return instance
+    .get("/sys/time", {
       params: {
         platform
       }

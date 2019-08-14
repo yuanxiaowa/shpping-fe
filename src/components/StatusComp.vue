@@ -1,17 +1,29 @@
+<!--
+ * @Author: oudingyin
+ * @Date: 2019-07-17 14:14:39
+ * @LastEditors: oudingy1in
+ * @LastEditTime: 2019-07-17 14:14:39
+ -->
 <template>
   <div>
+    <el-radio-group v-model="platform">
+      <el-radio label="taobao">淘宝</el-radio>
+      <el-radio label="jingdong">京东</el-radio>
+    </el-radio-group>
     <el-button @click="checkStatus">获取状态</el-button>
+    <el-button @click="sysTime">同步时间</el-button>
   </div>
 </template>
 
 <script lang="tsx">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { checkStatus } from "../api";
+import { checkStatus, sysTime } from "../api";
 import { sendMsg } from "../msg";
 import bus from "../bus";
 
 @Component
 export default class Status extends Vue {
+  platform = "taobao";
   status_text = "";
   checkStatus() {
     checkStatus("taobao").then(url => {
@@ -24,6 +36,9 @@ export default class Status extends Vue {
         this.$msgbox(<img src={url} />);
       }
     });
+  }
+  sysTime() {
+    sysTime(this.platform);
   }
   mounted() {
     bus.$on("check-status", this.checkStatus);
