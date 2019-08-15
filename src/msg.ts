@@ -79,7 +79,7 @@ function getTidyText(text: string) {
 }
 
 class Recorder {
-  max = 10;
+  max = 20;
   items: string[] = [];
   add(str: string) {
     if (this.items.length >= this.max) {
@@ -94,6 +94,8 @@ class Recorder {
 }
 
 var recorder = new Recorder();
+// @ts-ignore
+window.recorder = recorder;
 
 function handler(text: string) {
   text = text
@@ -144,11 +146,32 @@ function handler(text: string) {
   if (text.includes("1元包邮")) {
     return !/钢化膜|手机膜|数据线/.test(text);
   }
+  if (text.includes("双叠加")) {
+    if (/(拍|下)(\d+)/) {
+      bus.$emit("qiangdan", {
+        text,
+        quantity: Number(RegExp.$1),
+        expectedPrice: 10,
+        forcePrice: true,
+        platform: isTaobao ? "taobao" : "jingdong"
+      });
+    }
+    return true;
+  }
   if (text.includes("试试")) {
+    if (/(\d+).?试试/.test(text)) {
+      bus.$emit("qiangdan", {
+        text,
+        quantity: Number(RegExp.$1),
+        expectedPrice: 10,
+        forcePrice: true,
+        platform: isTaobao ? "taobao" : "jingdong"
+      });
+    }
     return true;
   }
   if (
-    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|红包|虹包|神价|双叠加|秒杀|神车|手慢无|手快有/.test(
+    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
       text
     )
   ) {

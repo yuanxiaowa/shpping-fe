@@ -18,8 +18,14 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="捡漏">
-          <el-input :disabled="!force_jianlou" v-model="jianlou">
-            <el-checkbox slot="prepend" v-model="force_jianlou"></el-checkbox>
+          <el-input
+            :disabled="!force_jianlou"
+            v-model="jianlou"
+          >
+            <el-checkbox
+              slot="prepend"
+              v-model="force_jianlou"
+            ></el-checkbox>
             <span slot="append">分钟</span>
           </el-input>
         </el-form-item>
@@ -38,20 +44,33 @@
     <el-form-item>
       <el-col :span="12">
         <el-form-item label="文本">
-          <el-input type="textarea" v-model="text"></el-input>
+          <el-input
+            type="textarea"
+            v-model="text"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="memo"></el-input>
+          <el-input
+            type="textarea"
+            v-model="memo"
+          ></el-input>
         </el-form-item>
       </el-col>
     </el-form-item>
     <el-form-item>
       <el-col :span="12">
         <el-form-item label="期望价格">
-          <el-input :disabled="!forcePrice" v-model.number="expectedPrice">
-            <el-checkbox slot="prepend" v-model="forcePrice" label></el-checkbox>
+          <el-input
+            :disabled="!forcePrice"
+            v-model.number="expectedPrice"
+          >
+            <el-checkbox
+              slot="prepend"
+              v-model="forcePrice"
+              label
+            ></el-checkbox>
             <el-checkbox
               v-if="realPlatform==='taobao'"
               slot="append"
@@ -78,7 +97,10 @@
           <date-picker v-model="datetime"></date-picker>
         </el-form-item>
       </el-col>
-      <el-col :span="8" v-if="realPlatform==='taobao'">
+      <el-col
+        :span="8"
+        v-if="realPlatform==='taobao'"
+      >
         <el-form-item label="猫超凑单">
           <el-input v-model="price_coudan">
             <span slot="append">元</span>
@@ -87,10 +109,22 @@
       </el-col>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="execAction(qiangdan)">抢单</el-button>
-      <el-button type="warning" @click="execAction(qiangquan)">抢券</el-button>
-      <el-button @click="execAction(addCart)" type="warning">加入购物车</el-button>
-      <el-button type="danger" @click="coudan">凑单</el-button>
+      <el-button
+        type="primary"
+        @click="execAction(qiangdan)"
+      >抢单</el-button>
+      <el-button
+        type="warning"
+        @click="execAction(qiangquan)"
+      >抢券</el-button>
+      <el-button
+        @click="execAction(addCart)"
+        type="warning"
+      >加入购物车</el-button>
+      <el-button
+        type="danger"
+        @click="coudan"
+      >凑单</el-button>
       <el-button @click="reset">重置</el-button>
     </el-form-item>
   </el-form>
@@ -303,7 +337,7 @@ export default class Buy extends Vue {
       price_coudan: Number(this.price_coudan)
     }
   ) {
-    bus.$emit("unselect-all");
+    bus.$emit("unselect-all", this.realPlatform);
     this.$notify.success("开始凑单");
     var urls = await this.getUrls(text, item.platform);
     var quantities: any = text.match(/(?<=拍)\d/g);

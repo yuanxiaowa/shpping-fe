@@ -170,7 +170,10 @@ export default class App extends Vue {
   }
 
   mounted() {
-    bus.$on("unselect-all", () => this.selectAll(false));
+    bus.$on("unselect-all", (platform: Platform) => {
+      this.platform = platform;
+      this.selectAll(false);
+    });
   }
 }
 </script>
