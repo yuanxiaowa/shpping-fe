@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-13 09:09:21
+ * @LastEditTime: 2019-08-15 17:24:58
  */
 import bus from "./bus";
 import { groups } from "./config";
@@ -148,7 +148,7 @@ function handler(text: string) {
     return true;
   }
   if (
-    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|红包|虹包|神价|双叠加|秒杀|神车|手慢无/.test(
+    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|红包|虹包|神价|双叠加|秒杀|神车|手慢无|手快有/.test(
       text
     )
   ) {
