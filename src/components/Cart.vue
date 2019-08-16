@@ -1,3 +1,9 @@
+<!--
+ * @Author: oudingyin
+ * @Date: 2019-07-15 08:54:29
+ * @LastEditors: oudingy1in
+ * @LastEditTime: 2019-08-16 10:43:11
+ -->
 <template>
   <div>
     <el-form>
@@ -7,28 +13,33 @@
             <el-radio label="taobao">淘宝</el-radio>
             <el-radio label="jingdong">京东</el-radio>
           </el-radio-group>
-          <el-button
-            style="margin-left:2em"
-            type="primary"
-            @click="pullCartData()"
-          >拉取</el-button>
+          <el-button style="margin-left:2em" type="primary" @click="pullCartData()">拉取</el-button>
         </el-col>
-        <el-col
-          :span="8"
-          label="日期"
-        >
+        <el-col :span="8" label="日期">
           <date-picker v-model="datetime"></date-picker>
-          <el-button
-            type="danger"
-            :disabled="checkedLength===0"
-            @click="submit"
-          >提交订单</el-button>
         </el-col>
         <el-col :span="8">
           <el-form-item label="pc购买">
             <el-checkbox v-model="from_pc"></el-checkbox>
           </el-form-item>
         </el-col>
+      </el-form-item>
+      <el-form-item>
+        <el-col :span="12">
+          <el-form-item label="存在失效商品不提交">
+            <el-checkbox v-model="noinvalid"></el-checkbox>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="期望价格">
+            <el-input v-model="expectedPrice" :disabled="!forcePrice">
+              <el-checkbox v-model="forcePrice" slot="prepend"></el-checkbox>
+            </el-input>
+          </el-form-item>
+        </el-col>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="danger" :disabled="checkedLength===0" @click="submit">提交订单</el-button>
       </el-form-item>
     </el-form>
     <cart-table
@@ -69,6 +80,9 @@ export default class App extends Vue {
   tableData: any[] = [];
   other!: any;
   from_pc = false;
+  noinvalid = false;
+  expectedPrice = 0;
+  forcePrice = false;
 
   async pullCartData(data: any) {
     if (!data) {
@@ -166,7 +180,11 @@ export default class App extends Vue {
         });
       });
     }
-    cartBuy({ items, from_pc: this.from_pc }, this.datetime, this.platform);
+    var data: any = { items, from_pc: this.from_pc, noinvalid: this.noinvalid };
+    if (this.forcePrice) {
+      data.expectedPrice = this.expectedPrice;
+    }
+    cartBuy(data, this.datetime, this.platform);
   }
 
   mounted() {

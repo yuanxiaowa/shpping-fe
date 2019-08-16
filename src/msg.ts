@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-15 17:24:58
+ * @LastEditTime: 2019-08-16 10:14:44
  */
 import bus from "./bus";
 import { groups } from "./config";
@@ -75,6 +75,7 @@ function getTidyText(text: string) {
     .replace(/[-—]*复制本消息，打开淘宝即可[-—]*/, "")
     .replace(r_url, "")
     .replace(r_symbol, "")
+    .replace(/\[CQ:imagefile=[^\]]+\]/g, "")
     .trim();
 }
 
@@ -129,7 +130,7 @@ function handler(text: string) {
     return true;
   }
   if (
-    /领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|抢券|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
+    /领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|无门槛|抢券|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
       text
     )
   ) {
@@ -171,7 +172,7 @@ function handler(text: string) {
     return true;
   }
   if (
-    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|无门槛|淘宝搜|红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
+    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|淘宝搜|红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
       text
     )
   ) {
