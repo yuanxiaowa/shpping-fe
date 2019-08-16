@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-16 10:14:44
+ * @LastEditTime: 2019-08-16 11:30:56
  */
 import bus from "./bus";
 import { groups } from "./config";
@@ -184,6 +184,8 @@ function handler(text: string) {
         forcePrice: true,
         platform: isTaobao ? "taobao" : "jingdong"
       });
+    } else {
+      bus.$emit("qiangquan", text);
     }
     // if (/\w/.test(text)) {
     return !(isTaobao && blacklist.includes(text));
