@@ -115,7 +115,7 @@ function handler(text: string) {
     return /速度|锁单|试试|双叠加/.test(text);
   }
   var isTaobao = r_taobao.test(text);
-  if (/(?<!\d|件|份|条)0元|0撸|零撸|免单/.test(text)) {
+  if (/(?<!\d|件|份|条)0元|0撸|零撸|免单|不是(0|零)不要买/.test(text)) {
     let quantity = 1;
     if (/(\d+)件|拍(\d+)/.test(text)) {
       quantity = Number(RegExp.$1 || RegExp.$2);
