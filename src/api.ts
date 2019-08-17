@@ -259,3 +259,21 @@ export function setConfig(data: any) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function getTasks() {
+  return instance
+    .get("/task/list")
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function cancelTask(id: string) {
+  return instance
+    .get("/task/cancel", {
+      params: {
+        id
+      }
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}

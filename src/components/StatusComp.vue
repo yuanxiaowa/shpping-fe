@@ -12,6 +12,8 @@
     </el-radio-group>
     <el-button @click="checkStatus">获取状态</el-button>
     <el-button @click="sysTime">同步时间</el-button>
+    <el-button @click="show_task=true">任务列表</el-button>
+    <task v-model="show_task"></task>
   </div>
 </template>
 
@@ -20,11 +22,17 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { checkStatus, sysTime } from "../api";
 import { sendMsg } from "../msg";
 import bus from "../bus";
+import Task from "./Task.vue";
 
-@Component
+@Component({
+  components: {
+    Task
+  }
+})
 export default class Status extends Vue {
   platform = "taobao";
   status_text = "";
+  show_task = false;
   checkStatus() {
     checkStatus("taobao").then(url => {
       if (!url) {
