@@ -28,7 +28,9 @@ export default class JingdongCoupon extends Vue {
 
   getCoupon(data) {
     getPlusQuanpin(data).then(({ resultCode }) => {
-      if (resultCode === "2001") {
+      if (resultCode === "1000") {
+        this.$notify.success("领取成功");
+      } else {
         this.$notify.error("领取失败");
       }
     });
