@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-01 09:12:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-09 16:20:54
+ * @LastEditTime: 2019-08-21 17:53:09
  -->
 <template>
   <div>
@@ -25,6 +25,9 @@
       </el-collapse-item>
       <el-collapse-item title="搜索" name="5">
         <search></search>
+      </el-collapse-item>
+      <el-collapse-item title="秒杀列表" name="6">
+        <seckill-list></seckill-list>
       </el-collapse-item>
       <el-collapse-item title="评论" name="3">
         <comment></comment>
@@ -57,6 +60,7 @@ import Cart from "./components/Cart.vue";
 import JingdongCoupon from "./components/JingdongCoupon.vue";
 import StatusComp from "./components/StatusComp.vue";
 import Search from "./components/Search.vue";
+import SeckillList from "./components/SeckillList.vue";
 import Config from "./components/Config.vue";
 import { Platform } from "./handlers";
 import {
@@ -79,7 +83,8 @@ import {
     StatusComp,
     JingdongCoupon,
     Config,
-    Search
+    Search,
+    SeckillList
   }
 })
 export default class App extends Vue {

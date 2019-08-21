@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-12 17:17:39
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-13 11:13:38
+ * @LastEditTime: 2019-08-21 17:50:47
  */
 import axios, { AxiosResponse } from "axios";
 import { Notification } from "element-ui";
@@ -273,6 +273,15 @@ export function cancelTask(id: string) {
       params: {
         id
       }
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function getSeckillList(params) {
+  return instance
+    .get("/seckill/list", {
+      params
     })
     .then(handleResponse)
     .catch(handleError);
