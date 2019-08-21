@@ -286,3 +286,26 @@ export function getSeckillList(params) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function getMyCoupons(params) {
+  return instance
+    .get("/my/coupons", {
+      params
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function getPlusQuanpinList() {
+  return instance
+    .get("/quanpin/plus")
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function getPlusQuanpin(data) {
+  return instance
+    .post("/quanpin/plus/get", data)
+    .then(handleResponse)
+    .catch(handleError);
+}
