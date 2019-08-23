@@ -10,10 +10,12 @@
   "dependencies": {
     "@types/axios": "^0.14.0",
     "axios": "^0.19.0",
+    "clipboard": "^2.0.4",
     "core-js": "^2.6.5",
     "element-ui": "^2.11.1",
     "tslint-eslint-rules": "^5.4.0",
     "vue": "^2.6.10",
+    "vue-auto-routing": "0.3.0",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3"
