@@ -14,7 +14,7 @@ export function resolveGoods(text: string) {
     }
   }
   if (items) {
-    let nums_arr = text.match(/(?<=(?<!拍)下|拍)\d+/g)!;
+    let nums_arr = text.match(/(?<=(?<!拍)下|拍|买)\d+/g)!;
     if (nums_arr) {
       nums = items.map((_, i) => Number(nums_arr[i]) || 1);
     } else {
