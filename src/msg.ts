@@ -7,6 +7,7 @@
 import bus from "./bus";
 import { groups } from "./config";
 import { sendPrivateMsg } from "./api";
+import { resolveGoods } from "./tools";
 
 const suser = 870092104;
 
@@ -97,6 +98,8 @@ class Recorder {
 var recorder = new Recorder();
 // @ts-ignore
 window.recorder = recorder;
+// @ts-ignore
+window.resolveGoods = resolveGoods;
 
 function handler(text: string) {
   if (text.includes("【苏宁】") || text.includes("【盒马】")) {
@@ -125,6 +128,7 @@ function handler(text: string) {
     )
   ) {
     let quantity = 1;
+    // resolveGoods(text);
     if (/(\d+)件|(拍|下)(\d+)/.test(text)) {
       quantity = Number(RegExp.$1 || RegExp.$2);
     }
