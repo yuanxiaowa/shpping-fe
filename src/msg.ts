@@ -99,6 +99,9 @@ var recorder = new Recorder();
 window.recorder = recorder;
 
 function handler(text: string) {
+  if (text.includes("【苏宁】") || text.includes("【盒马】")) {
+    return;
+  }
   text = text
     .replace(/\s+/, " ")
     .replace(/&amp;/g, "&")
