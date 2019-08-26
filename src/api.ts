@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-12 17:17:39
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-21 17:50:47
+ * @LastEditTime: 2019-08-26 20:23:49
  */
 import axios, { AxiosResponse } from "axios";
 import { Notification } from "element-ui";
@@ -306,6 +306,15 @@ export function getPlusQuanpinList() {
 export function getPlusQuanpin(data) {
   return instance
     .post("/quanpin/plus/get", data)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function testOrder(params: any) {
+  return instance
+    .get("/test/order", {
+      params
+    })
     .then(handleResponse)
     .catch(handleError);
 }

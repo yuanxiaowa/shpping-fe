@@ -2,12 +2,11 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-23 16:19:50
+ * @LastEditTime: 2019-08-26 21:01:54
  */
 import bus from "./bus";
 import { groups } from "./config";
 import { sendPrivateMsg } from "./api";
-import { resolveGoods } from "./tools";
 
 const suser = 870092104;
 
@@ -35,39 +34,7 @@ ws.onmessage = e => {
 const r_taobao = /(?<!\w)\w{11}(?!\w)/g;
 const r_url = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
 const r_symbol = /[&%【】,，，\s￥(（¢)）]/g;
-const blacklist = [
-  "大闸蟹",
-  "螃蟹",
-  "龙虾",
-  "护发素",
-  "面膜",
-  "婴",
-  "冰袖",
-  "卷发棒",
-  "面膜",
-  "腮红",
-  "充电宝",
-  "孕妇",
-  "童装",
-  "宝宝",
-  "卫生巾",
-  "耳机",
-  "名人",
-  "纸尿裤",
-  "试卷",
-  "真题",
-  "素描",
-  "眉笔",
-  "女款",
-  "冈本",
-  "套套",
-  "避孕套",
-  "防晒",
-  "洗面奶",
-  "眼罩",
-  "蟑螂药",
-  "儿童"
-];
+const blacklist = require("./text/blacklist.json");
 
 function getTidyText(text: string) {
   return text
@@ -98,8 +65,6 @@ class Recorder {
 var recorder = new Recorder();
 // @ts-ignore
 window.recorder = recorder;
-// @ts-ignore
-window.resolveGoods = resolveGoods;
 
 function handler(text: string) {
   if (text.includes("【苏宁】") || text.includes("【盒马】")) {

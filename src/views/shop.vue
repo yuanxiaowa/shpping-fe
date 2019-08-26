@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-01 09:12:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-23 16:21:33
+ * @LastEditTime: 2019-08-26 14:30:11
  -->
 <template>
   <div>
@@ -23,19 +23,19 @@
       <el-collapse-item title="购物车" name="2">
         <cart></cart>
       </el-collapse-item>
-      <el-collapse-item title="搜索" name="5">
+      <el-collapse-item title="搜索" name="3">
         <search></search>
       </el-collapse-item>
-      <el-collapse-item title="秒杀列表" name="6">
+      <el-collapse-item title="秒杀列表" name="4">
         <seckill-list></seckill-list>
       </el-collapse-item>
-      <el-collapse-item title="评论" name="3">
+      <el-collapse-item title="评论" name="5">
         <comment></comment>
       </el-collapse-item>
-      <el-collapse-item title="京东优惠券" name="4">
+      <el-collapse-item title="京东优惠券" name="6">
         <jingdong-coupon></jingdong-coupon>
       </el-collapse-item>
-      <el-collapse-item title="天猫60s课堂" name="4">
+      <el-collapse-item title="天猫60s课堂" name="7">
         <sixty-course></sixty-course>
       </el-collapse-item>
     </el-collapse>
