@@ -94,7 +94,7 @@ function handler(text: string) {
   ) {
     let quantity = 1;
     // resolveGoods(text);
-    if (/(\d+)件|(拍|下)(\d+)/.test(text)) {
+    if (/(\d+)件|(?:拍|下)(\d+)/.test(text)) {
       quantity = Number(RegExp.$1 || RegExp.$2);
     }
     bus.$emit("qiangdan", {
