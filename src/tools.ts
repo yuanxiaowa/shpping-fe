@@ -21,7 +21,7 @@ export function resolveText(text: string) {
   var urls: string[] | null;
   var quantities: number[] | null;
   var forcePrice = false;
-  urls = text.match(/(?<![^a-zA-Z0-9])[a-zA-Z0-9]{11}(?![^a-zA-Z0-9])/g);
+  urls = text.match(/(?<![a-zA-Z0-9])[a-zA-Z0-9]{11}(?![a-zA-Z0-9])/g);
   if (urls) {
     type = "taokouling";
   } else {
@@ -33,6 +33,13 @@ export function resolveText(text: string) {
     }
   }
   if (urls) {
+    let quantities_arr = text.match(/(?<=(?<!拍)下|拍|买)\d+/g)!;
+    if (quantities_arr) {
+      quantities = urls.map((_, i) => Number(quantities_arr[i]) || 1);
+    } else {
+      quantities = Array(urls.length).fill(1);
+    }
+    let price = 10;
     if (
       /拼购(券|日)|领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|无门槛|抢券|快领|速度领|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
         text
@@ -44,16 +51,11 @@ export function resolveText(text: string) {
       return <Ret>{
         type: type!,
         action: "qiangquan",
-        urls
+        urls,
+        quantities,
+        price
       };
     }
-    let quantities_arr = text.match(/(?<=(?<!拍)下|拍|买)\d+/g)!;
-    if (quantities_arr) {
-      quantities = urls.map((_, i) => Number(quantities_arr[i]) || 1);
-    } else {
-      quantities = Array(urls.length).fill(1);
-    }
-    let price = 10;
     let action: string = "";
     if (
       /([\d.]+)元/.test(text) ||
@@ -125,15 +127,15 @@ export async function getDealedData(data: any) {
   if (data.urls[0].includes(".jd.com")) {
     platform = "jingdong";
   }
+  data.platform = platform;
   var urls = await getUrls(data);
-  return Object.assign(data, {
-    platform,
-    urls
-  });
+  data.urls = urls;
+  return data;
 }
 
 export async function getDealedDataFromText(text: string) {
   var data = resolveText(text);
+  data = await getDealedData(data);
   if (!data) {
     throw new Error("无链接");
   }

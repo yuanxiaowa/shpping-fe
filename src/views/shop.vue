@@ -7,7 +7,10 @@
 <template>
   <div>
     <el-collapse v-model="activeNames">
-      <el-collapse-item title="状态" name="0">
+      <el-collapse-item
+        title="状态"
+        name="0"
+      >
         <el-row>
           <el-col :span="12">
             <status-comp />
@@ -17,25 +20,46 @@
           </el-col>
         </el-row>
       </el-collapse-item>
-      <el-collapse-item title="领券下单" name="1">
+      <el-collapse-item
+        title="领券下单"
+        name="1"
+      >
         <buy></buy>
       </el-collapse-item>
-      <el-collapse-item title="购物车" name="2">
+      <el-collapse-item
+        title="购物车"
+        name="2"
+      >
         <cart></cart>
       </el-collapse-item>
-      <el-collapse-item title="搜索" name="3">
+      <el-collapse-item
+        title="搜索"
+        name="3"
+      >
         <search></search>
       </el-collapse-item>
-      <el-collapse-item title="秒杀列表" name="4">
+      <el-collapse-item
+        title="秒杀列表"
+        name="4"
+      >
         <seckill-list></seckill-list>
       </el-collapse-item>
-      <el-collapse-item title="评论" name="5">
+      <el-collapse-item
+        title="评论"
+        name="5"
+      >
         <comment></comment>
       </el-collapse-item>
-      <el-collapse-item title="京东优惠券" name="6">
+      <el-collapse-item
+        title="京东优惠券"
+        name="6"
+      >
         <jingdong-coupon></jingdong-coupon>
       </el-collapse-item>
-      <el-collapse-item title="天猫60s课堂" name="7">
+      <el-collapse-item
+        title="天猫60s课堂"
+        name="7"
+      >
         <sixty-course></sixty-course>
       </el-collapse-item>
     </el-collapse>
@@ -44,7 +68,10 @@
       <el-button @click="evalFile">执行文件</el-button>
     </div>
     <div>
-      <el-input v-model="code" type="textarea"></el-input>
+      <el-input
+        v-model="code"
+        type="textarea"
+      ></el-input>
       <el-button @click="evalCode">运行代码</el-button>
     </div>
   </div>
@@ -67,16 +94,6 @@ import StatusComp from "../components/StatusComp.vue";
 import Search from "../components/Search.vue";
 import SeckillList from "../components/SeckillList.vue";
 import Config from "../components/Config.vue";
-import { Platform } from "../handlers";
-import {
-  resolveUrls,
-  buyDirect,
-  qiangquan,
-  coudan,
-  cartList,
-  cartToggle,
-  cartBuy
-} from "../api";
 
 @Component({
   components: {
