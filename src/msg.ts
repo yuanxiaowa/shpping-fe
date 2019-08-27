@@ -2,11 +2,12 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-26 21:01:54
+ * @LastEditTime: 2019-08-27 19:42:32
  */
 import bus from "./bus";
 import { groups } from "./config";
 import { sendPrivateMsg } from "./api";
+import { resolveText } from "./tools";
 
 const suser = 870092104;
 
@@ -67,7 +68,10 @@ var recorder = new Recorder();
 window.recorder = recorder;
 
 function handler(text: string) {
-  if (text.includes("【苏宁】") || text.includes("【盒马】")) {
+  if (
+    text.includes("【苏宁】") ||
+    text.includes("【盒马】" || text.includes("美团"))
+  ) {
     return;
   }
   text = text
@@ -79,96 +83,14 @@ function handler(text: string) {
     return;
   }
   recorder.add(text);
-  var texts = (<string[]>[]).concat(
-    text.match(r_url) || [],
-    text.match(r_taobao) || []
-  );
-  if (texts.length === 0) {
-    return /速度|锁单|试试|双叠加/.test(text);
-  }
-  var isTaobao = r_taobao.test(text);
-  if (
-    /(?<!\d|第\d+件|第\d+份|第\d+条)0元|0撸|零撸|免单|不是(0|零)不要买|实付0|直接(够)买就是0|到手0/.test(
-      text
-    )
-  ) {
-    let quantity = 1;
-    // resolveGoods(text);
-    if (/(\d+)件|(?:拍|下)(\d+)/.test(text)) {
-      quantity = Number(RegExp.$1 || RegExp.$2);
+  var data = resolveText(text);
+  if (data && data.action) {
+    if (data.action === "notice") {
+      return true;
     }
-    bus.$emit("qiangdan", {
-      text,
-      quantity,
-      expectedPrice: 0,
-      forcePrice: true,
-      platform: isTaobao ? "taobao" : "jingdong"
-    });
+    bus.$emit(data.action, data);
     return true;
   }
-  if (
-    /拼购(券|日)|领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|无门槛|抢券|快领|速度领|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
-      text
-    )
-  ) {
-    if (isTaobao && blacklist.includes(text)) {
-      return;
-    }
-    bus.$emit("qiangquan", text);
-    return true;
-  }
-  if (text.includes("锁单")) {
-    bus.$emit("coudan", text);
-    return true;
-  }
-  if (text.includes("1元包邮")) {
-    return !/钢化膜|手机膜|数据线/.test(text);
-  }
-  if (text.includes("双叠加")) {
-    if (/(拍|下)(\d+)/) {
-      bus.$emit("qiangdan", {
-        text,
-        quantity: Number(RegExp.$1),
-        expectedPrice: 10,
-        forcePrice: true,
-        platform: isTaobao ? "taobao" : "jingdong"
-      });
-    }
-    return true;
-  }
-  if (text.includes("试试")) {
-    if (/(\d+).?试试/.test(text)) {
-      bus.$emit("qiangdan", {
-        text,
-        quantity: Number(RegExp.$1),
-        expectedPrice: 10,
-        forcePrice: true,
-        platform: isTaobao ? "taobao" : "jingdong"
-      });
-    }
-    return true;
-  }
-  if (
-    /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|淘宝搜|红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
-      text
-    )
-  ) {
-    if (text.includes("0.1")) {
-      bus.$emit("qiangdan", {
-        text,
-        quantity: 1,
-        expectedPrice: 0.1,
-        forcePrice: true,
-        platform: isTaobao ? "taobao" : "jingdong"
-      });
-    } else {
-      bus.$emit("qiangquan", text);
-    }
-    // if (/\w/.test(text)) {
-    return !(isTaobao && blacklist.includes(text));
-    // }
-  }
-  return /大米|盐|猫超/.test(text);
 }
 
 export function sendMsg(msg: string) {

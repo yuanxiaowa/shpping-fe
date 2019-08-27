@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-12 17:17:39
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-26 20:23:49
+ * @LastEditTime: 2019-08-27 20:31:31
  */
 import axios, { AxiosResponse } from "axios";
 import { Notification } from "element-ui";
@@ -162,16 +162,6 @@ export function comment(data: any, platform: string): Promise<any> {
 export function resolveUrl(data: any, platform: string): Promise<any> {
   return instance
     .post("/resolve/url", data, {
-      params: {
-        platform
-      }
-    })
-    .then(handleResponse)
-    .catch(handleError);
-}
-export function resolveUrls(data: any, platform: string): Promise<any> {
-  return instance
-    .post("/resolve/urls", data, {
       params: {
         platform
       }
