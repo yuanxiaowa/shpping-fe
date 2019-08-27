@@ -16,6 +16,7 @@ interface Ret {
 }
 
 const blacklist = require("./text/blacklist.json");
+window.resolveText = resolveText;
 export function resolveText(text: string) {
   var type: string;
   var urls: string[] | null;
@@ -40,6 +41,19 @@ export function resolveText(text: string) {
       quantities = Array(urls.length).fill(1);
     }
     let price = 10;
+    let action: string = "";
+    if (
+      /([\d.]+)元/.test(text) ||
+      /付([\d.]+)/.test(text) ||
+      /【([\d.]+)元?】/.test(text) ||
+      /\[([\d.]+)元?\]/.test(text) ||
+      /(?:[\s：:，,]|半价|折合|折后)([\d.]+)(?!\w)/.test(text) ||
+      /([\d\.]+)元?包邮/.test(text) ||
+      /件([\d\.]+)/.test(text)
+    ) {
+      forcePrice = true;
+      price = Number(RegExp.$1);
+    }
     if (
       /拼购(券|日)|领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|无门槛|抢券|快领|速度领|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
         text
@@ -55,17 +69,6 @@ export function resolveText(text: string) {
         quantities,
         price
       };
-    }
-    let action: string = "";
-    if (
-      /([\d.]+)元/.test(text) ||
-      /付([\d.]+)/.test(text) ||
-      /【([\d.]+)元?】/.test(text) ||
-      /\[([\d.]+)元?\]/.test(text) ||
-      /(?:[\s：:，,]|半价|折合|折后)([\d.]+)(?!\w)/.test(text)
-    ) {
-      forcePrice = true;
-      price = Number(RegExp.$1);
     }
     if (
       /(?<!\d|件|份|条)0元|0撸|零撸|免单|不是(0|零)不要买|实付0|直接(够)买就是0|到手0/.test(
