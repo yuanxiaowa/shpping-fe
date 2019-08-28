@@ -4,7 +4,7 @@ import { resolveUrl } from "./api";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-28 17:29:59
+ * @LastEditTime: 2019-08-28 19:21:24
  */
 interface Ret {
   action: string;
@@ -35,12 +35,13 @@ export function resolveText(text: string) {
     }
   }
   if (urls) {
-    let quantities_arr = text.match(
-      /(?<=(?<!拍)下|拍|买|加车|选)\d+|\d+(?=件|份)/g
-    )!;
+    let quantities_arr = text.match(/(?<=(?<!拍)下|拍|买|加车|选)\d+/g)!;
     if (quantities_arr) {
       quantities = urls.map((_, i) => Number(quantities_arr[i]) || 1);
     } else {
+      quantities_arr = text.match(/\d+(?=件|份)/g)!;
+    }
+    if (!quantities_arr) {
       quantities = Array(urls.length).fill(1);
     }
     let expectedPrice = 10;
