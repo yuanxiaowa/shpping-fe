@@ -8,6 +8,7 @@ import bus from "./bus";
 import { groups } from "./config";
 import { sendPrivateMsg } from "./api";
 import { resolveText } from "./tools";
+import "./order";
 
 const suser = 870092104;
 

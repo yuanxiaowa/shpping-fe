@@ -1,43 +1,55 @@
-/*
- * @Author: oudingyin
- * @Date: 2019-08-26 20:35:40
- * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-26 23:14:44
- */
-import { resolveUrl, qiangquan } from "./api";
-import { Platform } from "./handlers";
+import { getDealedData } from "./tools";
+import bus from "./bus";
+import { qiangquan as qiangquan_api, buyDirect, coudan } from "./api";
+import { Notification } from "element-ui";
 
-interface InfoItem {
-  url: string;
-  platform: Platform;
-  quantity: number;
-  skus?: number[];
-  expectedPrice?: number;
-  datetime?: string;
-  mc_dot1?: boolean;
-  price_coudan?: number;
-  jianlou?: number;
-  from_cart?: boolean;
-  from_pc?: boolean;
-  t?: string;
-}
-
-export async function goQiangquan(args: {
-  url: string;
-  platform: string;
-  t: string;
-}) {
-  var url = await resolveUrl({ data: args.url }, args.platform);
-  return qiangquan(
-    {
-      data: url
-    },
-    args.t,
-    args.platform
+export async function qiangquan(
+  urls: string[],
+  t: string | undefined,
+  platform: string
+) {
+  var couponResult = await Promise.all(
+    urls.map(url => qiangquan_api({ data: url }, t!, platform))
   );
-  /* url = await resolveUrl({
-    data:url
-  }, platform) */
+  return couponResult.filter(Boolean);
 }
-
-export async function goQiandan(url: string) {}
+bus.$on("qiangquan", async (data: any) => {
+  /* this.execAction(this.qiangquan, text, {
+        platform: getPlatform(text),
+        quantity: 1
+      }); */
+  data = await getDealedData(data);
+  await qiangquan(data.urls, undefined, data.platform);
+});
+bus.$on("coudan", async (data: any) => {
+  data = await getDealedData(data);
+  var urls = await qiangquan(data.urls, undefined, data.platform);
+  data.urls = urls.map(({ url }) => url).filter(Boolean);
+  if (data.urls.length === 1) {
+    buyDirect(
+      {
+        url: data.urls[0],
+        quantity: data.quantities[0],
+        skus: data.skus,
+        expectedPrice: data.expectedPrice,
+        from_pc: true,
+        other: {}
+      },
+      data.datetime!,
+      data.platform
+    );
+  } else {
+    Notification.success("开始凑单");
+    bus.$emit("unselect-all", data.platform);
+    coudan(
+      Object.assign(
+        {
+          from_pc: true,
+          other: {}
+        },
+        data
+      ),
+      data.platform
+    );
+  }
+});

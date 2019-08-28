@@ -18,6 +18,17 @@ interface Ret {
 const blacklist = require("./text/blacklist.json");
 // @ts-ignore
 window.resolveText = resolveText;
+const num_cn_map = "零一二三四五六七八九十".split("").reduce(
+  (state, s, i) => {
+    state[s] = i;
+    return state;
+  },
+  {
+    两: 2
+  }
+);
+const NUM_CN_STR = Object.keys(num_cn_map).join("");
+
 export function resolveText(text: string) {
   var type: string;
   var urls: string[] | null;
@@ -37,13 +48,20 @@ export function resolveText(text: string) {
     }
   }
   if (urls) {
-    let quantities_arr = text.match(/(?<=(?<!拍)下|拍|买|加车|选)\d+/g)!;
-    if (quantities_arr) {
-      quantities = urls.map((_, i) => Number(quantities_arr[i]) || 1);
-    } else {
+    let quantities_arr = text.match(/(?<=(?<!拍)下|拍|买|加车|加购|选)\d+/g)!;
+    if (!quantities_arr) {
       quantities_arr = text.match(/\d+(?=件|份)/g)!;
     }
     if (!quantities_arr) {
+      quantities_arr = text.match(new RegExp(`[${NUM_CN_STR}](?=件|份)`, "g"))!;
+      if (quantities_arr) {
+        quantities_arr = quantities_arr.map(key => num_cn_map[key]);
+      }
+    }
+
+    if (quantities_arr) {
+      quantities = urls.map((_, i) => Number(quantities_arr[i]) || 1);
+    } else {
       quantities = Array(urls.length).fill(1);
     }
     let expectedPrice = 10;
@@ -57,7 +75,10 @@ export function resolveText(text: string) {
       /([\d\.]+)包邮/.test(text) ||
       /件([\d\.]+)/.test(text) ||
       /到手([\d\.]+)/.test(text) ||
-      /([\d\.]+)到手/.test(text)
+      /([\d\.]+)到手/.test(text) ||
+      /价([\d\.]+)/.test(text) ||
+      /拍下\s*([\d\.]+)/.test(text) ||
+      /^\s*([\d.]+)/.test(text)
     ) {
       forcePrice = true;
       expectedPrice = Number(RegExp.$1);
@@ -94,18 +115,21 @@ export function resolveText(text: string) {
       expectedPrice = 0.1;
       action = "coudan";
       forcePrice = true;
-    } else if (
-      text.includes("试试") ||
-      text.includes("锁单") ||
-      text.includes("先锁")
-    ) {
+    } else if (text.includes("试试")) {
       expectedPrice = 10;
+      action = "coudan";
+    } else if (
+      text.includes("锁单") ||
+      text.includes("先锁") ||
+      text.includes("速度拍下") ||
+      text.includes("漏洞")
+    ) {
       action = "coudan";
     } else if (text.includes("双叠加")) {
       expectedPrice = 10;
       action = "coudan";
     } else if (
-      /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|淘宝搜|红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
+      /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|淘宝搜|(?<!可用|消灭)(小|聚划算)?红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
         text
       )
     ) {

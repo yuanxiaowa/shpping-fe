@@ -5,18 +5,24 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test:unit": "jest"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/jest": "^24.0.18",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "axios": "^0.19.0",
     "clipboard": "^2.0.4",
     "core-js": "^2.6.5",
     "element-ui": "^2.11.1",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.0.2",
     "tslint-eslint-rules": "^5.4.0",
     "vue": "^2.6.10",
     "vue-auto-routing": "0.3.0",
     "vue-class-component": "^7.0.2",
+    "vue-jest": "^3.0.4",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3"
   },
@@ -26,5 +32,19 @@
     "@vue/cli-service": "^3.0.1",
     "typescript": "^3.4.3",
     "vue-template-compiler": "^2.6.10"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "json",
+      "vue"
+    ],
+    "testURL": "http://localhost/",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest",
+      ".*\\.(vue)$": "vue-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
   }
 }

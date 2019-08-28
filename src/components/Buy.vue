@@ -18,8 +18,14 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="捡漏">
-          <el-input :disabled="!force_jianlou" v-model="jianlou">
-            <el-checkbox slot="prepend" v-model="force_jianlou"></el-checkbox>
+          <el-input
+            :disabled="!force_jianlou"
+            v-model="jianlou"
+          >
+            <el-checkbox
+              slot="prepend"
+              v-model="force_jianlou"
+            ></el-checkbox>
             <span slot="append">分钟</span>
           </el-input>
         </el-form-item>
@@ -38,20 +44,33 @@
     <el-form-item>
       <el-col :span="12">
         <el-form-item label="文本">
-          <el-input type="textarea" v-model="text"></el-input>
+          <el-input
+            type="textarea"
+            v-model="text"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="memo"></el-input>
+          <el-input
+            type="textarea"
+            v-model="memo"
+          ></el-input>
         </el-form-item>
       </el-col>
     </el-form-item>
     <el-form-item>
       <el-col :span="12">
         <el-form-item label="期望价格">
-          <el-input :disabled="!forcePrice" v-model.number="expectedPrice">
-            <el-checkbox slot="prepend" v-model="forcePrice" label></el-checkbox>
+          <el-input
+            :disabled="!forcePrice"
+            v-model.number="expectedPrice"
+          >
+            <el-checkbox
+              slot="prepend"
+              v-model="forcePrice"
+              label
+            ></el-checkbox>
             <el-checkbox
               v-if="realPlatform==='taobao'"
               slot="append"
@@ -78,7 +97,10 @@
           <date-picker v-model="datetime"></date-picker>
         </el-form-item>
       </el-col>
-      <el-col :span="8" v-if="realPlatform==='taobao'">
+      <el-col
+        :span="8"
+        v-if="realPlatform==='taobao'"
+      >
         <el-form-item label="猫超凑单">
           <el-input v-model="price_coudan">
             <span slot="append">元</span>
@@ -87,9 +109,18 @@
       </el-col>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="doQiangdan">抢单</el-button>
-      <el-button type="warning" @click="doQiangquan">抢券</el-button>
-      <el-button @click="doAddCart" type="warning">加入购物车</el-button>
+      <el-button
+        type="primary"
+        @click="doQiangdan"
+      >抢单</el-button>
+      <el-button
+        type="warning"
+        @click="doQiangquan"
+      >抢券</el-button>
+      <el-button
+        @click="doAddCart"
+        type="warning"
+      >加入购物车</el-button>
       <el-button @click="reset">重置</el-button>
     </el-form-item>
   </el-form>
@@ -101,13 +132,14 @@ import DatePicker from "./DatePicker.vue";
 import { Platform } from "../handlers";
 import {
   buyDirect,
-  qiangquan,
   coudan,
   cartAdd,
   getQrcode,
   goodsList,
-  resolveUrl
+  resolveUrl,
+  qiangquan as qiangquan_api
 } from "../api";
+import { qiangquan } from "../order";
 import bus from "../bus";
 import { sendMsg } from "../msg";
 import { resolveText, getDealedData, getDealedDataFromText } from "../tools";
@@ -263,7 +295,7 @@ export default class Buy extends Vue {
     }
     this.prevUrl = data.urls[0];
     this.$notify.success("开始抢券");
-    var urls = await this.qiangquan(data.urls, this.datetime, data.platform);
+    var urls = await qiangquan(data.urls, this.datetime, data.platform);
     data.urls = urls
       .filter(Boolean)
       .map(item => item.url)
@@ -271,17 +303,10 @@ export default class Buy extends Vue {
     return data;
   }
 
-  async qiangquan(urls: string[], t: string | undefined, platform: string) {
-    var couponResult = await Promise.all(
-      urls.map(url => qiangquan({ data: url }, t!, platform))
-    );
-    return couponResult.filter(Boolean);
-  }
-
   async qiangquan_old(url: string, arg: InfoItemNoUrl, force = false) {
     this.prevUrl = url;
     this.$notify.success("开始抢券");
-    var res = await qiangquan({ data: url }, arg.t!, arg.platform);
+    var res = await qiangquan_api({ data: url }, arg.t!, arg.platform);
     if (res) {
       if (!res.success) {
         let msg;
@@ -315,9 +340,9 @@ export default class Buy extends Vue {
     return url;
   }
 
-  async doToQiangquan(text: string) {
+  async doToQiangquan(text: string, datetime?: any) {
     var data = await getDealedDataFromText(this.text);
-    var urls = await this.qiangquan(data.urls, this.datetime, data.platform);
+    var urls = await qiangquan(data.urls, datetime, data.platform);
     data.urls = urls
       .filter(Boolean)
       .map(item => item.url)
@@ -325,48 +350,7 @@ export default class Buy extends Vue {
     return data;
   }
 
-  mounted() {
-    bus.$on("qiangquan", async (data: any) => {
-      /* this.execAction(this.qiangquan, text, {
-        platform: getPlatform(text),
-        quantity: 1
-      }); */
-      data = await getDealedData(data);
-      await this.qiangquan(data.urls, this.datetime, data.platform);
-    });
-    bus.$on("coudan", async (data: any) => {
-      data = await getDealedData(data);
-      var urls = await this.qiangquan(data.urls, this.datetime, data.platform);
-      data.urls = urls.map(({ url }) => url).filter(Boolean);
-      if (data.urls.length === 1) {
-        buyDirect(
-          {
-            url: data.urls[0],
-            quantity: data.quantities[0],
-            skus: data.skus,
-            expectedPrice: data.expectedPrice,
-            from_pc: true,
-            other: {}
-          },
-          data.datetime!,
-          data.platform
-        );
-      } else {
-        this.$notify.success("开始凑单");
-        bus.$emit("unselect-all", data.platform);
-        coudan(
-          Object.assign(
-            {
-              from_pc: true,
-              other: {}
-            },
-            data
-          ),
-          data.platform
-        );
-      }
-    });
-  }
+  mounted() {}
 
   reset() {
     this.num = 1;
