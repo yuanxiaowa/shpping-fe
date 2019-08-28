@@ -4,7 +4,7 @@ import { resolveUrl } from "./api";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-28 19:21:24
+ * @LastEditTime: 2019-08-28 21:00:24
  */
 interface Ret {
   action: string;
@@ -49,7 +49,7 @@ export function resolveText(text: string) {
     if (
       /([\d.]+)元/.test(text) ||
       /付([\d.]+)/.test(text) ||
-      /【([\d.]+)】/.test(text) ||
+      /【([\d.]+)(包邮)?】/.test(text) ||
       /\[([\d.]+)\]/.test(text) ||
       /(?:[\s：:，,]|半价|折合|折后)([\d.]+)(?!\w)/.test(text) ||
       /([\d\.]+)包邮/.test(text) ||
