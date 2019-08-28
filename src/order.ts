@@ -41,15 +41,17 @@ bus.$on("coudan", async (data: any) => {
   } else {
     Notification.success("开始凑单");
     bus.$emit("unselect-all", data.platform);
-    coudan(
-      Object.assign(
-        {
-          from_pc: true,
-          other: {}
-        },
-        data
-      ),
-      data.platform
-    );
+    setTimeout(() => {
+      coudan(
+        Object.assign(
+          {
+            from_pc: true,
+            other: {}
+          },
+          data
+        ),
+        data.platform
+      );
+    });
   }
 });
