@@ -4,7 +4,7 @@ import { resolveUrl } from "./api";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-28 21:00:24
+ * @LastEditTime: 2019-08-28 21:08:26
  */
 interface Ret {
   action: string;
@@ -23,7 +23,9 @@ export function resolveText(text: string) {
   var urls: string[] | null;
   var quantities: number[] | null;
   var forcePrice = false;
-  urls = text.match(/(?<![a-zA-Z0-9&=])[a-zA-Z0-9]{11}(?![a-zA-Z0-9&=])/g);
+  urls = text.match(
+    /(?<![a-zA-Z0-9&=./?])[a-zA-Z0-9]{11}(?![a-zA-Z0-9&=./?])/g
+  );
   if (urls) {
     type = "taokouling";
   } else {
