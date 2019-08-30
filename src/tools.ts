@@ -1,4 +1,5 @@
 import { resolveUrl } from "./api";
+import { Platform } from "./handlers";
 
 /*
  * @Author: oudingyin
@@ -169,7 +170,7 @@ export async function getDealedData(data: any) {
   data.platform = platform;
   var urls = await getUrls(data);
   data.urls = urls;
-  return data;
+  return <Ret & { platform: Platform }>data;
 }
 
 export async function getDealedDataFromText(text: string) {
@@ -178,5 +179,5 @@ export async function getDealedDataFromText(text: string) {
   if (!data) {
     throw new Error("无链接");
   }
-  return getDealedData(data);
+  return data;
 }
