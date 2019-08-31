@@ -1,7 +1,19 @@
+/*
+ * @Author: oudingyin
+ * @Date: 2019-08-26 20:35:40
+ * @LastEditors: oudingy1in
+ * @LastEditTime: 2019-08-31 15:28:33
+ */
 import { getDealedData } from "./tools";
 import bus from "./bus";
-import { qiangquan as qiangquan_api, buyDirect, coudan } from "./api";
+import {
+  qiangquan as qiangquan_api,
+  buyDirect,
+  coudan,
+  cartToggleAll
+} from "./api";
 import { Notification } from "element-ui";
+import { Platform } from "./handlers";
 
 export async function qiangquan(
   urls: string[],
@@ -54,4 +66,12 @@ bus.$on("coudan", async (data: any) => {
       );
     });
   }
+});
+bus.$on("unselect-all", (platform: Platform) => {
+  return cartToggleAll(
+    {
+      checked: false
+    },
+    platform
+  );
 });

@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-15 08:54:29
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-16 10:43:11
+ * @LastEditTime: 2019-08-31 15:25:15
  -->
 <template>
   <div>
@@ -149,13 +149,7 @@ export default class App extends Vue {
         item.checked = checked;
       });
     });
-    return cartToggleAll(
-      {
-        ...this.other,
-        checked
-      },
-      this.platform
-    );
+    bus.$emit("unselect-all");
   }
 
   get checkedLength() {
@@ -185,13 +179,6 @@ export default class App extends Vue {
       data.expectedPrice = this.expectedPrice;
     }
     cartBuy(data, this.datetime, this.platform);
-  }
-
-  mounted() {
-    bus.$on("unselect-all", (platform: Platform) => {
-      this.platform = platform;
-      this.selectAll(false);
-    });
   }
 }
 </script>
