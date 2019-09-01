@@ -37,6 +37,9 @@ bus.$on("coudan", async (data: any) => {
   data = await getDealedData(data);
   var urls = await qiangquan(data.urls, undefined, data.platform);
   data.urls = urls.map(({ url }) => url).filter(Boolean);
+  if (data.urls.length === 0) {
+    throw new Error("无链接");
+  }
   if (data.urls.length === 1) {
     buyDirect(
       {
