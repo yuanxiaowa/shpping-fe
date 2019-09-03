@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-02 10:22:51
+ * @LastEditTime: 2019-09-03 09:49:53
  */
 interface Ret {
   action: string;
@@ -79,7 +79,8 @@ export function resolveText(text: string) {
       /([\d\.]+)到手/.test(text) ||
       /价([\d\.]+)/.test(text) ||
       /拍下\s*([\d\.]+)/.test(text) ||
-      /^\s*([\d.]+)/.test(text)
+      /([\d\.]+)起/.test(text) ||
+      /^\s*([\d.]+)(?!点)/.test(text)
     ) {
       forcePrice = true;
       expectedPrice = Number(RegExp.$1);

@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-08-21 17:44:34
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-02 11:24:20
+ * @LastEditTime: 2019-09-03 09:54:48
  -->
 <template>
   <div>
@@ -23,7 +23,7 @@
       <el-table-column>
         <template slot-scope="{row}">
           <el-checkbox v-model="row.checked" @change="selectGroupAll(row,$event)">全选</el-checkbox>
-          <el-button @click="seckill(row.items)">秒杀</el-button>
+          <el-button @click="seckill(row.items,true)">秒杀</el-button>
           <div v-for="item of row.items" :key="item.id">
             <el-checkbox v-model="item.checked"></el-checkbox>
             <a :href="item.url" target="_blank">{{item.title}}</a>
@@ -71,10 +71,12 @@ export default class SeckillList extends Vue {
       this.list = data;
     });
   }
-  seckill(items) {
+  seckill(items, isChecked = false) {
     items.forEach(item => {
-      if (!item.checked) {
-        return;
+      if (isChecked) {
+        if (!item.checked) {
+          return;
+        }
       }
       buyDirect(
         {
