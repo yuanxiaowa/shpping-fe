@@ -48,7 +48,8 @@ bus.$on("coudan", async (data: any) => {
         skus: data.skus,
         expectedPrice: data.expectedPrice,
         from_pc: true,
-        other: {}
+        other: {},
+        diejia: data.diejia
       },
       data.datetime!,
       data.platform

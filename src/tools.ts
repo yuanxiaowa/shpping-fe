@@ -67,6 +67,7 @@ export function resolveText(text: string) {
     }
     let expectedPrice = 10;
     let action: string = "";
+    let diejia: any;
     if (
       /([\d.]+)元/.test(text) ||
       /付([\d.]+)/.test(text) ||
@@ -129,8 +130,9 @@ export function resolveText(text: string) {
       action = "coudan";
       expectedPrice = 500;
     } else if (text.includes("双叠加")) {
-      expectedPrice = 10;
+      expectedPrice = 20;
       action = "coudan";
+      diejia = true;
     } else if (
       /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|淘宝搜|(?<!可用|消灭)(小|聚划算)?红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
         text
@@ -150,7 +152,8 @@ export function resolveText(text: string) {
       quantities,
       expectedPrice: expectedPrice,
       action,
-      forcePrice
+      forcePrice,
+      diejia
     };
   }
   if (/速度|锁单|试试|双叠加/.test(text)) {
