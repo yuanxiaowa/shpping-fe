@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-03 09:49:53
+ * @LastEditTime: 2019-09-04 14:37:20
  */
 interface Ret {
   action: string;
@@ -86,7 +86,7 @@ export function resolveText(text: string) {
       expectedPrice = Number(RegExp.$1);
     }
     if (
-      /拼购(券|日)|领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|无门槛|抢券|快领|速度领|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
+      /拼购(券|日)|领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|无门槛|史低|漏洞|bug|抢券|快领|速度领|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
         text
       )
     ) {
@@ -127,6 +127,7 @@ export function resolveText(text: string) {
       text.includes("漏洞")
     ) {
       action = "coudan";
+      expectedPrice = 500;
     } else if (text.includes("双叠加")) {
       expectedPrice = 10;
       action = "coudan";

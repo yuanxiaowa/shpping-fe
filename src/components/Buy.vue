@@ -220,6 +220,9 @@ export default class Buy extends Vue {
   async doQiangdan() {
     var data = await this.doToQiangquan(this.text);
     this.$notify.success("执行直接购买");
+    if (data.urls.length === 0) {
+      throw new Error("无链接")
+    }
     if (!this.price_coudan && data.urls.length === 1) {
       buyDirect(
         {
