@@ -934,7 +934,8 @@
 
 "@types/jest@^24.0.18":
   version "24.0.18"
-  resolved "https://registry.npm.taobao.org/@types/jest/download/@types/jest-24.0.18.tgz#9c7858d450c59e2164a8a9df0905fc5091944498"
+  resolved "https://registry.npmjs.org/@types/jest/-/jest-24.0.18.tgz#9c7858d450c59e2164a8a9df0905fc5091944498"
+  integrity sha512-jcDDXdjTcrQzdN06+TSVsPPqxvsZA/5QkYfIZlq1JMw7FdP5AZylbOc+6B/cuDurctRe+MziUMtQ3xQdrbjqyQ==
   dependencies:
     "@types/jest-diff" "*"
 

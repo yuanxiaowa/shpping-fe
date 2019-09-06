@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-12 17:17:39
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-27 20:31:31
+ * @LastEditTime: 2019-09-06 17:12:55
  */
 import axios, { AxiosResponse } from "axios";
 import { Notification } from "element-ui";
@@ -262,6 +262,26 @@ export function cancelTask(id: string) {
     .get("/task/cancel", {
       params: {
         id
+      }
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function getCollection(params: any) {
+  return instance
+    .get("/collection", {
+      params
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function delCollection(data: any, platform: string) {
+  return instance
+    .post("/collection/del", data, {
+      params: {
+        platform
       }
     })
     .then(handleResponse)

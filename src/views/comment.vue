@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-15 08:54:29
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-09 14:03:03
+ * @LastEditTime: 2019-09-06 16:57:54
  -->
 <template>
   <div>
@@ -40,13 +40,18 @@
     </div>
   </div>
 </template>
+<route-meta>
+{
+  "title": "评论"
+}
+</route-meta>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { commentList, comment } from "../api";
 
 @Component
-export default class CartTable extends Vue {
+export default class Comment extends Vue {
   @Prop() value!: any[];
   platform = "jingdong";
   tableData: any[] = [];

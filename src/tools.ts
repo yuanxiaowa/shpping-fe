@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-04 14:37:20
+ * @LastEditTime: 2019-09-06 14:15:15
  */
 interface Ret {
   action: string;
@@ -14,6 +14,7 @@ interface Ret {
   urls: string[];
   quantities: number[];
   forcePrice: boolean;
+  t?: string;
 }
 
 const blacklist = require("./text/blacklist.json");
@@ -68,6 +69,7 @@ export function resolveText(text: string) {
     let expectedPrice = 10;
     let action: string = "";
     let diejia: any;
+    let datetime: string | undefined;
     if (
       /([\d.]+)元/.test(text) ||
       /付([\d.]+)/.test(text) ||
@@ -146,6 +148,15 @@ export function resolveText(text: string) {
     } else if (/大米|盐|猫超/.test(text)) {
       action = "notice";
     }
+    if (/(\d+)点/.test(text)) {
+      let h = +RegExp.$1;
+      let now = new Date();
+      let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
+      if (h === 0 || now.getHours() > h) {
+        date.setDate(date.getDate() + 1);
+      }
+      datetime = date.toString();
+    }
     return <Ret>{
       type: type!,
       urls,
@@ -153,7 +164,8 @@ export function resolveText(text: string) {
       expectedPrice: expectedPrice,
       action,
       forcePrice,
-      diejia
+      diejia,
+      t: datetime
     };
   }
   if (/速度|锁单|试试|双叠加/.test(text)) {

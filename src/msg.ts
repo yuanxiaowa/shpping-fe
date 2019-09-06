@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-27 19:42:32
+ * @LastEditTime: 2019-09-06 13:58:16
  */
 import bus from "./bus";
 import { groups } from "./config";
@@ -43,6 +43,7 @@ function getTidyText(text: string) {
     .replace(r_taobao, "")
     .replace(r_symbol, "")
     .replace(/[-—]*复制本消息，打开淘宝即可[-—]*/, "")
+    .replace(/复制打开.*?(\s|，|$)/, "")
     .replace(r_url, "")
     .replace(r_symbol, "")
     .replace(/\[CQ:imagefile=[^\]]+\]/g, "")

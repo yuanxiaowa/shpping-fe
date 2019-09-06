@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-01 09:12:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-08-23 16:25:13
+ * @LastEditTime: 2019-09-06 16:58:22
  -->
 <template>
   <div>
@@ -39,6 +39,26 @@ export default class HomePage extends Vue {
     {
       to: "/test-order",
       title: "订单测试"
+    },
+    {
+      to: "/comment",
+      title: "评论"
+    },
+    {
+      to: "/calc-price",
+      title: "价格计算"
+    },
+    {
+      to: "/sixty-course",
+      title: "天猫60s"
+    },
+    {
+      to: "/eval",
+      title: "代码执行"
+    },
+    {
+      to: "/collection",
+      title: "收藏"
     }
   ];
 }

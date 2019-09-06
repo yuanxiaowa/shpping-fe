@@ -1,3 +1,9 @@
+<!--
+ * @Author: oudingyin
+ * @Date: 2019-07-16 16:32:11
+ * @LastEditors: oudingy1in
+ * @LastEditTime: 2019-09-06 14:37:00
+ -->
 <template>
   <div>
     <el-button @click="pull">拉取</el-button>
@@ -21,6 +27,11 @@
     </el-form>
   </div>
 </template>
+<route-meta>
+{
+  "title": "天猫60s课堂"
+}
+</route-meta>
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { getSixtyCourseList, replyixtyCourse } from "../api";
