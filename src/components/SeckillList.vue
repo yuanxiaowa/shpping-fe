@@ -141,7 +141,7 @@ export default class SeckillList extends Vue {
             this.seckill(items);
           }, 1000 * 60);
         }, t - 8 * 1000 * 60 - Date.now());
-        sendMsg(t + "开始秒杀");
+        sendMsg(time + "开始秒杀");
       });
     });
   }
