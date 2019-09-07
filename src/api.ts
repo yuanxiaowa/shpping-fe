@@ -6,6 +6,8 @@
  */
 import axios, { AxiosResponse } from "axios";
 import { Notification } from "element-ui";
+import bus from "./bus";
+import { sendMsg } from "./msg";
 
 var instance = axios.create({
   baseURL: "http://localhost:7001"
@@ -13,6 +15,10 @@ var instance = axios.create({
 
 function handleResponse({ data: { code, data, msg } }: AxiosResponse<any>) {
   if (code !== 0) {
+    if (msg === "令牌过期") {
+      bus.$emit("check-status");
+      sendMsg(msg);
+    }
     throw new Error(msg);
   }
   if (msg) {
