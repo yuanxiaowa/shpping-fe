@@ -38,7 +38,17 @@ ws.onmessage = e => {
     if (raw_message.includes("同步时间")) {
       return bus.$emit("sys-time", raw_message);
     }
-    handler(raw_message);
+    let datetime: string | undefined;
+    if (/(\d+)点/.test(text)) {
+      let h = +RegExp.$1;
+      let now = new Date();
+      let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
+      if (h === 0 || now.getHours() > h) {
+        date.setDate(date.getDate() + 1);
+      }
+      datetime = date.toString();
+    }
+    handler(raw_message, datetime);
   }
 };
 
@@ -78,7 +88,7 @@ var recorder = new Recorder();
 // @ts-ignore
 window.recorder = recorder;
 
-function handler(text: string) {
+function handler(text: string, datetime?: string) {
   if (
     text.includes("【苏宁】") ||
     text.includes("【盒马】" || text.includes("美团"))
@@ -94,7 +104,7 @@ function handler(text: string) {
     return;
   }
   recorder.add(text);
-  var data = resolveText(text);
+  var data = resolveText(text, datetime);
   if (data && data.action) {
     if (data.action === "notice") {
       return true;

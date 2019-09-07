@@ -33,12 +33,11 @@ const num_cn_map = "零一二三四五六七八九十".split("").reduce(
 );
 const NUM_CN_STR = Object.keys(num_cn_map).join("");
 
-export function resolveText(text: string) {
+export function resolveText(text: string, datetime?: string) {
   var type: string;
   var urls: string[] | null;
   var quantities: number[] | null;
   var forcePrice = false;
-  var datetime: string | undefined;
   urls = text.match(
     /(?<![a-zA-Z0-9&=./?])[a-zA-Z0-9]{11}(?![a-zA-Z0-9&=./?])/g
   );
@@ -70,15 +69,6 @@ export function resolveText(text: string) {
       quantities = urls.map((_, i) => Number(quantities_arr[i]) || 1);
     } else {
       quantities = Array(urls.length).fill(1);
-    }
-    if (/(\d+)点/.test(text)) {
-      let h = +RegExp.$1;
-      let now = new Date();
-      let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
-      if (h === 0 || now.getHours() > h) {
-        date.setDate(date.getDate() + 1);
-      }
-      datetime = date.toString();
     }
     let expectedPrice = 10;
     let action: string = "";
