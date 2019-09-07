@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-15 08:54:29
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-07 09:35:33
+ * @LastEditTime: 2019-09-07 09:40:15
  -->
 <template>
   <el-form label-width="80px">
@@ -227,9 +227,11 @@ export default class Buy extends Vue {
       buyDirect(
         {
           url: data.urls[0],
-          quantity: this.num ===1?data.quantities[0]:this.num, ,
+          quantity: this.num === 1 ? data.quantities[0] : this.num,
           skus: this.getSkus(),
-          expectedPrice: this.forcePrice ? +this.expectedPrice:data.expectedPrice,
+          expectedPrice: this.forcePrice
+            ? +this.expectedPrice
+            : data.expectedPrice,
           mc_dot1: this.mc_dot1,
           jianlou: this.force_jianlou ? this.jianlou : undefined,
           from_cart: this.from_cart,
