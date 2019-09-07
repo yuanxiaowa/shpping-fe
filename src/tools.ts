@@ -55,7 +55,9 @@ export function resolveText(text: string) {
       quantities_arr = text.match(/(?<!前)\d+(?=件|份)/g)!;
     }
     if (!quantities_arr) {
-      quantities_arr = text.match(new RegExp(`[${NUM_CN_STR}](?=件|份)`, "g"))!;
+      quantities_arr = text.match(
+        new RegExp(`(?<!限购)[${NUM_CN_STR}](?=件|份)`, "g")
+      )!;
       if (quantities_arr) {
         quantities_arr = quantities_arr.map(key => num_cn_map[key]);
       }
