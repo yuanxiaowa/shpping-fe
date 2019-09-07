@@ -92,23 +92,6 @@ export function resolveText(text: string, datetime?: string) {
       expectedPrice = Number(RegExp.$1);
     }
     if (
-      /拼购(券|日)|领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|无门槛|史低|漏洞|bug|抢券|快领|速度领|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
-        text
-      )
-    ) {
-      if (type! === "taokouling" && blacklist.find(t => text.includes(t))) {
-        return;
-      }
-      return <Ret>{
-        type: type!,
-        action: "qiangquan",
-        urls,
-        quantities,
-        expectedPrice: expectedPrice,
-        datetime
-      };
-    }
-    if (
       /(?<!\d|件|份|条)0元|0撸|零撸|免单|不是(0|零)不要买|实付0|直接(够)买就是0|到手0/.test(
         text
       )
@@ -145,6 +128,22 @@ export function resolveText(text: string, datetime?: string) {
       )
     ) {
       action = "qiangquan";
+    } else if (
+      /拼购(券|日)|领券|新券|领全品|白条券|吱付券|支付券|可领|领取优惠券|无门槛|史低|漏洞|bug|抢券|快领|速度领|(\d+)?-\d+券|领(标题)?下方|领\d+折?券|防身|福利|(\d|一二三四五六七八九)(毛|分)/.test(
+        text
+      )
+    ) {
+      if (type! === "taokouling" && blacklist.find(t => text.includes(t))) {
+        return;
+      }
+      return <Ret>{
+        type: type!,
+        action: "qiangquan",
+        urls,
+        quantities,
+        expectedPrice: expectedPrice,
+        datetime
+      };
     } else if (text.includes("1元包邮")) {
       if (!/钢化膜|手机膜|数据线/.test(text)) {
         action = "notice";
