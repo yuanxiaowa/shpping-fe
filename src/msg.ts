@@ -26,8 +26,17 @@ ws.onmessage = e => {
       }
     }
   } else if (message_type === "private" && user_id === suser) {
-    if (raw_message === "cs") {
+    if (raw_message === "cs" || raw_message === "检查状态") {
       return bus.$emit("check-status");
+    }
+    if (raw_message === "任务列表") {
+      return bus.$emit("tasks");
+    }
+    if (raw_message === "取消任务列表") {
+      return bus.$emit("tasks-kill");
+    }
+    if (raw_message.includes("同步时间")) {
+      return bus.$emit("sys-time", raw_message);
     }
     handler(raw_message);
   }

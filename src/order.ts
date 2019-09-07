@@ -10,10 +10,14 @@ import {
   qiangquan as qiangquan_api,
   buyDirect,
   coudan,
-  cartToggleAll
+  cartToggleAll,
+  sysTime,
+  getTasks,
+  cancelTask
 } from "./api";
 import { Notification } from "element-ui";
 import { Platform } from "./handlers";
+import { sendMsg } from "./msg";
 
 export async function qiangquan(
   urls: string[],
@@ -78,4 +82,29 @@ bus.$on("unselect-all", (platform: Platform) => {
     },
     platform
   );
+});
+bus.$on("sys-time", (text: string) => {
+  var platform = text.includes("京东") ? "jingdong" : "taobao";
+  sysTime(platform);
+});
+bus.$on("tasks", () => {
+  getTasks().then(data => {
+    sendMsg(
+      data
+        .map(item => [item.platform, item.type, item.text].join("-"))
+        .join("\n")
+    );
+  });
+});
+bus.$on("tasks-kill", () => {
+  getTasks().then(data => {
+    Promise.all(data.map(item => cancelTask(item.id))).then(
+      () => {
+        sendMsg("已取消");
+      },
+      () => {
+        sendMsg("取消失败");
+      }
+    );
+  });
 });
