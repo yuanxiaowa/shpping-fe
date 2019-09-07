@@ -92,7 +92,7 @@ bus.$on("tasks", () => {
     sendMsg(
       data
         .map(item => [item.platform, item.type, item.text].join("-"))
-        .join("\n")
+        .join("\n") || "暂无"
     );
   });
 });
