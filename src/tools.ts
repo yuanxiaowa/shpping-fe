@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-07 09:38:33
+ * @LastEditTime: 2019-09-07 11:38:32
  */
 interface Ret {
   action: string;
@@ -170,7 +170,7 @@ export function resolveText(text: string) {
       action,
       forcePrice,
       diejia,
-      t: datetime
+      datetime
     };
   }
   if (/速度|锁单|试试|双叠加/.test(text)) {

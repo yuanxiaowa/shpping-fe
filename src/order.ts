@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-08-26 20:35:40
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-04 14:01:18
+ * @LastEditTime: 2019-09-07 11:38:11
  */
 import { getDealedData } from "./tools";
 import bus from "./bus";

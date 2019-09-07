@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-15 08:54:29
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-07 09:40:15
+ * @LastEditTime: 2019-09-07 11:39:48
  -->
 <template>
   <el-form label-width="80px">
@@ -240,7 +240,7 @@ export default class Buy extends Vue {
             memo: this.memo
           }
         },
-        this.datetime!,
+        this.datetime || data.datetime,
         data.platform
       );
     } else {
