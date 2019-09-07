@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-06 14:15:15
+ * @LastEditTime: 2019-09-07 09:38:33
  */
 interface Ret {
   action: string;
@@ -157,6 +157,9 @@ export function resolveText(text: string) {
       }
       datetime = date.toString();
     }
+    if (expectedPrice < 1 && datetime) {
+      action = "coudan";
+    }
     return <Ret>{
       type: type!,
       urls,
@@ -191,6 +194,11 @@ export async function getDealedData(data: any) {
 }
 
 export async function getDealedDataFromText(text: string) {
+  text = text
+    .replace(/\s+/, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/💰/g, "元")
+    .trim();
   var data = resolveText(text);
   data = await getDealedData(data);
   if (!data) {
