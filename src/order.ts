@@ -35,7 +35,7 @@ bus.$on("qiangquan", async (data: any) => {
         quantity: 1
       }); */
   data = await getDealedData(data);
-  await qiangquan(data.urls, undefined, data.platform);
+  await qiangquan(data.urls, data.datetime, data.platform);
 });
 bus.$on("coudan", async (data: any) => {
   data = await getDealedData(data);

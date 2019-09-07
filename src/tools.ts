@@ -15,6 +15,8 @@ interface Ret {
   quantities: number[];
   forcePrice: boolean;
   t?: string;
+  platform: Platform;
+  datetime?: string;
 }
 
 const blacklist = require("./text/blacklist.json");
@@ -36,6 +38,7 @@ export function resolveText(text: string) {
   var urls: string[] | null;
   var quantities: number[] | null;
   var forcePrice = false;
+  var datetime: string | undefined;
   urls = text.match(
     /(?<![a-zA-Z0-9&=./?])[a-zA-Z0-9]{11}(?![a-zA-Z0-9&=./?])/g
   );
@@ -68,10 +71,18 @@ export function resolveText(text: string) {
     } else {
       quantities = Array(urls.length).fill(1);
     }
+    if (/(\d+)点/.test(text)) {
+      let h = +RegExp.$1;
+      let now = new Date();
+      let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
+      if (h === 0 || now.getHours() > h) {
+        date.setDate(date.getDate() + 1);
+      }
+      datetime = date.toString();
+    }
     let expectedPrice = 10;
     let action: string = "";
     let diejia: any;
-    let datetime: string | undefined;
     if (
       /([\d.]+)元/.test(text) ||
       /付([\d.]+)/.test(text) ||
@@ -103,7 +114,8 @@ export function resolveText(text: string) {
         action: "qiangquan",
         urls,
         quantities,
-        expectedPrice: expectedPrice
+        expectedPrice: expectedPrice,
+        datetime
       };
     }
     if (
@@ -150,18 +162,10 @@ export function resolveText(text: string) {
     } else if (/大米|盐|猫超/.test(text)) {
       action = "notice";
     }
-    if (/(\d+)点/.test(text)) {
-      let h = +RegExp.$1;
-      let now = new Date();
-      let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
-      if (h === 0 || now.getHours() > h) {
-        date.setDate(date.getDate() + 1);
-      }
-      datetime = date.toString();
-    }
     if (expectedPrice < 1 && datetime) {
       action = "coudan";
     }
+    // @ts-ignore
     return <Ret>{
       type: type!,
       urls,
