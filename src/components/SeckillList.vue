@@ -145,6 +145,9 @@ export default class SeckillList extends Vue {
       });
     });
   }
+  beforeDestroy() {
+    bus.$off("seckill");
+  }
 }
 </script>
 
