@@ -91,7 +91,7 @@ bus.$on("tasks", () => {
   getTasks().then(data => {
     sendMsg(
       data
-        .map(item => [item.platform, item.type, item.text].join("-"))
+        .map(item => [item.platform, item.type, item.text, item.time].join("-"))
         .join("\n") || "暂无"
     );
   });
