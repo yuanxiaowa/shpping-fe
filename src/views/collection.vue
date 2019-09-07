@@ -28,11 +28,21 @@
       :disabled="multipleSelection.length===0"
       @click="del(multipleSelection)"
     >删除选中</el-button>
-    <el-table ref="tb" :data="tableData" @selection-change="multipleSelection=$event">
-      <el-table-column type="selection" width="55"></el-table-column>
+    <el-table
+      ref="tb"
+      :data="tableData"
+      @selection-change="multipleSelection=$event"
+    >
+      <el-table-column
+        type="selection"
+        width="55"
+      ></el-table-column>
       <el-table-column label="名称">
         <template slot-scope="{row}">
-          <a :href="row.url" target="_blank">{{row.title}}</a>
+          <a
+            :href="row.url"
+            target="_blank"
+          >{{row.title}}</a>
         </template>
       </el-table-column>
       <!-- <el-table-column width="120">
@@ -42,8 +52,14 @@
       </el-table-column>-->
     </el-table>
     <div>
-      <el-button :disabled="page<=1" @click="go(-1)">上一页</el-button>
-      <el-button v-if="more" @click="go(1)">下一页</el-button>
+      <el-button
+        :disabled="page<=1"
+        @click="go(-1)"
+      >上一页</el-button>
+      <el-button
+        v-if="more"
+        @click="go(1)"
+      >下一页</el-button>
     </div>
   </div>
 </template>
@@ -66,14 +82,15 @@ export default class Collection extends Vue {
     this.page = 1;
     this.getList();
   }
-  del(items: any[]) {
-    delCollection(
+  async del(items: any[]) {
+    await delCollection(
       {
         type: this.type,
         items
       },
       this.platform
     );
+    this.getList();
   }
   getList() {
     this.tableData = [];
