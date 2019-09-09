@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-09 09:55:40
+ * @LastEditTime: 2019-09-09 18:23:09
  */
 interface Ret {
   action: string;
@@ -103,8 +103,8 @@ export function resolveText(text: string, datetime?: string) {
       expectedPrice = 0.01;
       action = "coudan";
       forcePrice = true;
-    } else if (/(?<!\d|件|份|条)(?<!\d)(0\.\d)/.test(text)) {
-      expectedPrice = Number(text);
+    } else if (/(?<!\d|件|份|条)(?<!\d)(0\.\d+)/.test(text)) {
+      expectedPrice = Number(RegExp.$1);
       action = "coudan";
       forcePrice = true;
     } else if (text.includes("试试")) {
