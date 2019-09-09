@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-07 11:38:32
+ * @LastEditTime: 2019-09-09 09:55:40
  */
 interface Ret {
   action: string;
@@ -103,8 +103,8 @@ export function resolveText(text: string, datetime?: string) {
       expectedPrice = 0.01;
       action = "coudan";
       forcePrice = true;
-    } else if (text.includes("0.1")) {
-      expectedPrice = 0.1;
+    } else if (/(?<!\d|件|份|条)(?<!\d)(0\.\d)/.test(text)) {
+      expectedPrice = Number(text);
       action = "coudan";
       forcePrice = true;
     } else if (text.includes("试试")) {
@@ -113,13 +113,16 @@ export function resolveText(text: string, datetime?: string) {
     } else if (
       text.includes("锁单") ||
       text.includes("先锁") ||
-      text.includes("速度拍下") ||
-      text.includes("漏洞")
+      text.includes("速度拍下")
     ) {
       action = "coudan";
       expectedPrice = 500;
     } else if (text.includes("双叠加")) {
-      expectedPrice = 20;
+      if (text.includes("婴") || text.includes("孕")) {
+        expectedPrice = 5;
+      } else {
+        expectedPrice = 30;
+      }
       action = "coudan";
       diejia = true;
     } else if (
@@ -152,6 +155,9 @@ export function resolveText(text: string, datetime?: string) {
       action = "notice";
     }
     if (expectedPrice < 1 && datetime) {
+      action = "coudan";
+    }
+    if (!action && text.includes("抢单")) {
       action = "coudan";
     }
     // @ts-ignore

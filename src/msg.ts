@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-06 13:58:16
+ * @LastEditTime: 2019-09-09 09:22:50
  */
 import bus from "./bus";
 import { groups } from "./config";
@@ -49,7 +49,7 @@ ws.onmessage = e => {
       if (h === 0 || now.getHours() > h) {
         date.setDate(date.getDate() + 1);
       }
-      datetime = date.toString();
+      datetime = date.toLocaleString();
     }
     handler(raw_message, datetime);
   }
