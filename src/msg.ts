@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-09 09:22:50
+ * @LastEditTime: 2019-09-10 10:17:17
  */
 import bus from "./bus";
 import { groups } from "./config";
@@ -44,12 +44,7 @@ ws.onmessage = e => {
     let datetime: string | undefined;
     if (/(\d+)点/.test(text)) {
       let h = +RegExp.$1;
-      let now = new Date();
-      let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
-      if (h === 0 || now.getHours() > h) {
-        date.setDate(date.getDate() + 1);
-      }
-      datetime = date.toLocaleString();
+      datetime;
     }
     handler(raw_message, datetime);
   }
@@ -58,7 +53,6 @@ ws.onmessage = e => {
 const r_taobao = /(?<!\w)\w{11}(?!\w)/g;
 const r_url = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
 const r_symbol = /[&%【】,，，\s￥(（¢)）]/g;
-const blacklist = require("./text/blacklist.json");
 
 function getTidyText(text: string) {
   return text

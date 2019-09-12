@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-09 18:23:09
+ * @LastEditTime: 2019-09-13 00:32:26
  */
 interface Ret {
   action: string;
@@ -117,11 +117,22 @@ export function resolveText(text: string, datetime?: string) {
     ) {
       action = "coudan";
       expectedPrice = 500;
-    } else if (text.includes("双叠加")) {
-      if (text.includes("婴") || text.includes("孕")) {
-        expectedPrice = 5;
+    } else if (text.includes("叠加")) {
+      if (text.includes("da米")) {
+        expectedPrice = 70;
       } else {
-        expectedPrice = 30;
+        if (/199-(\d+)/) {
+          let n = +RegExp.$1;
+          if (n > 80) {
+            expectedPrice = 50;
+          } else {
+            expectedPrice = 20;
+          }
+        } else if (text.includes("婴") || text.includes("孕")) {
+          expectedPrice = 5;
+        } else {
+          expectedPrice = 20;
+        }
       }
       action = "coudan";
       diejia = true;
@@ -145,20 +156,22 @@ export function resolveText(text: string, datetime?: string) {
         urls,
         quantities,
         expectedPrice: expectedPrice,
-        datetime
+        datetime: getDate(datetime)
       };
     } else if (text.includes("1元包邮")) {
       if (!/钢化膜|手机膜|数据线/.test(text)) {
         action = "notice";
       }
-    } else if (/大米|盐|猫超/.test(text)) {
+    } else if (/大米|盐|猫超|有货的上/.test(text)) {
       action = "notice";
     }
-    if (expectedPrice < 1 && datetime) {
-      action = "coudan";
-    }
-    if (!action && text.includes("抢单")) {
-      action = "coudan";
+    if (!/(\d+)点/.test(text)) {
+      if (expectedPrice < 1 && datetime) {
+        action = "coudan";
+      }
+      if (!action && text.includes("抢单")) {
+        action = "coudan";
+      }
     }
     // @ts-ignore
     return <Ret>{
@@ -169,14 +182,27 @@ export function resolveText(text: string, datetime?: string) {
       action,
       forcePrice,
       diejia,
-      datetime
+      datetime: getDate(datetime)
     };
   }
-  if (/速度|锁单|试试|双叠加/.test(text)) {
+  if (/速度|锁单|试试|叠加/.test(text)) {
     return <Ret>{
       action: "notice"
     };
   }
+}
+
+export function getDate(datetime?: string) {
+  if (!datetime) {
+    return;
+  }
+  let h = +datetime;
+  let now = new Date();
+  let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
+  if (h === 0 || now.getHours() > h) {
+    date.setDate(date.getDate() + 1);
+  }
+  return date.toLocaleString();
 }
 
 export async function getUrls({ urls, platform }: any): Promise<string[]> {
