@@ -118,24 +118,26 @@ export function resolveText(text: string, datetime?: string) {
       action = "coudan";
       expectedPrice = 500;
     } else if (text.includes("叠加")) {
-      if (text.includes("da米")) {
-        expectedPrice = 70;
+      let r = /(\d+)-(\d+)/g;
+      let quote = 0;
+      let discount = 0;
+      while (r.test(text)) {
+        quote = Math.max(+RegExp.$1, quote);
+        discount = Math.max(+RegExp.$2, discount);
+      }
+      if (text.includes("大米")) {
+        expectedPrice = 100;
       } else {
-        if (/199-(\d+)/) {
-          let n = +RegExp.$1;
-          if (n > 80) {
-            expectedPrice = 50;
-          } else {
-            expectedPrice = 20;
-          }
-        } else if (text.includes("婴") || text.includes("孕")) {
+        if (text.includes("婴") || text.includes("孕")) {
           expectedPrice = 5;
+        } else if (quote > 80) {
+          expectedPrice = 50;
         } else {
           expectedPrice = 20;
         }
       }
       action = "coudan";
-      diejia = true;
+      diejia = quote;
     } else if (
       /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|淘宝搜|(?<!可用|消灭)(小|聚划算)?红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
         text
