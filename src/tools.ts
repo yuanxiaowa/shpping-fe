@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-13 09:53:12
+ * @LastEditTime: 2019-09-14 10:21:30
  */
 interface Ret {
   action: string;
@@ -54,7 +54,7 @@ export function resolveText(text: string, datetime?: string) {
   if (urls) {
     let quantities_arr = text.match(/(?<=(?<!拍)下|拍|买|加车|加购|选)\d+/g)!;
     if (!quantities_arr) {
-      quantities_arr = text.match(/(?<!前)\d+(?=件|份)/g)!;
+      quantities_arr = text.match(/(?<!前\d*)\d+(?=件|份)/g)!;
     }
     if (!quantities_arr) {
       quantities_arr = text.match(
