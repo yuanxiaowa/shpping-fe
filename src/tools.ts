@@ -126,14 +126,19 @@ export function resolveText(text: string, datetime?: string) {
         discount = Math.max(+RegExp.$2, discount);
       }
       if (text.includes("大米")) {
-        expectedPrice = 100;
+        if (expectedPrice !== 10) {
+          let _p = expectedPrice / quantities[0];
+          if (_p > 1.75) {
+            expectedPrice = 10;
+          }
+        } else {
+          expectedPrice = 50;
+        }
       } else {
         if (text.includes("婴") || text.includes("孕")) {
           expectedPrice = 5;
-        } else if (quote > 80) {
+        } else if (quote > 70) {
           expectedPrice = 50;
-        } else {
-          expectedPrice = 20;
         }
       }
       if (!/\d+点/.test(text)) {
@@ -161,7 +166,7 @@ export function resolveText(text: string, datetime?: string) {
         action: "qiangquan",
         urls,
         quantities,
-        expectedPrice: expectedPrice,
+        expectedPrice,
         datetime: getDate(datetime)
       };
     } else if (text.includes("1元包邮")) {
@@ -184,7 +189,7 @@ export function resolveText(text: string, datetime?: string) {
       type: type!,
       urls,
       quantities,
-      expectedPrice: expectedPrice,
+      expectedPrice,
       action,
       forcePrice,
       diejia,
