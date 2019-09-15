@@ -108,8 +108,12 @@ export function resolveText(text: string, datetime?: string) {
       action = "coudan";
       forcePrice = true;
     } else if (text.includes("试试")) {
-      expectedPrice = 10;
-      action = "coudan";
+      if (!/\d+点/.test(text)) {
+        expectedPrice = 10;
+        action = "coudan";
+      } else {
+        action = "qiangquan";
+      }
     } else if (
       text.includes("锁单") ||
       text.includes("先锁") ||
