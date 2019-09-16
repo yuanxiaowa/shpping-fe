@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-14 10:21:30
+ * @LastEditTime: 2019-09-16 15:33:31
  */
 interface Ret {
   action: string;
@@ -81,10 +81,9 @@ export function resolveText(text: string, datetime?: string) {
       /(?:[\s：:，,]|半价|折合|折后)([\d.]+)(?!\w)/.test(text) ||
       /([\d\.]+)包邮/.test(text) ||
       /件([\d\.]+)/.test(text) ||
-      /到手([\d\.]+)/.test(text) ||
+      /(?:到手|预计|拍下)([\d\.]+)/.test(text) ||
       /([\d\.]+)到手/.test(text) ||
       /价([\d\.]+)/.test(text) ||
-      /拍下\s*([\d\.]+)/.test(text) ||
       /([\d\.]+)起/.test(text) ||
       /^\s*([\d.]+)(?!点)/.test(text)
     ) {
@@ -177,7 +176,7 @@ export function resolveText(text: string, datetime?: string) {
       if (!/钢化膜|手机膜|数据线/.test(text)) {
         action = "notice";
       }
-    } else if (/大米|盐|猫超|有货的上/.test(text)) {
+    } else if (/大米|盐|猫超|有货的上|蟹|桌|椅/.test(text)) {
       action = "notice";
     }
     if (!/(\d+)点/.test(text)) {
