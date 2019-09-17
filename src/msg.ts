@@ -2,7 +2,7 @@
  * @Author: oudingyin
  * @Date: 2019-07-16 14:02:05
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-10 10:17:17
+ * @LastEditTime: 2019-09-17 08:58:16
  */
 import bus from "./bus";
 import { groups } from "./config";
@@ -22,7 +22,8 @@ ws.onmessage = e => {
   if (message_type === "group") {
     if (groups.includes(group_id)) {
       if (handler(raw_message)) {
-        sendMsg(text);
+        console.log(text);
+        // sendMsg("你好呀，" + text);
       }
     }
   } else if (message_type === "private" && user_id === suser) {
@@ -44,7 +45,12 @@ ws.onmessage = e => {
     let datetime: string | undefined;
     if (/(\d+)点/.test(text)) {
       let h = +RegExp.$1;
-      datetime;
+      let now = new Date();
+      let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
+      if (h === 0 || now.getHours() > h) {
+        date.setDate(date.getDate() + 1);
+      }
+      datetime = date.toString();
     }
     handler(raw_message, datetime);
   }
