@@ -204,7 +204,7 @@ export default class App extends Vue {
       noinvalid: this.noinvalid
     };
     if (this.forcePrice) {
-      data.expectedPrice = this.expectedPrice;
+      data.expectedPrice = +this.expectedPrice;
     }
     cartBuy(data, this.datetime, this.platform);
   }
