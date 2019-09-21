@@ -51,7 +51,7 @@ bus.$on("coudan", async (data: any) => {
         quantity: data.quantities[0],
         skus: data.skus,
         expectedPrice: data.expectedPrice,
-        from_pc: true,
+        // from_pc: true,
         other: {},
         diejia: data.diejia
       },
@@ -65,7 +65,7 @@ bus.$on("coudan", async (data: any) => {
       coudan(
         Object.assign(
           {
-            from_pc: true,
+            // from_pc: true,
             other: {}
           },
           data
