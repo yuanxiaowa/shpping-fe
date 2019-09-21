@@ -29,6 +29,9 @@
           <el-form-item label="pc购买">
             <el-checkbox v-model="from_pc"></el-checkbox>
           </el-form-item>
+          <el-form-item label="捡漏">
+            <el-input v-model.number="jianlou"></el-input>
+          </el-form-item>
         </el-col>
       </el-form-item>
       <el-form-item>
@@ -106,6 +109,7 @@ export default class App extends Vue {
   expectedPrice = 0;
   forcePrice = false;
   from_browser = false;
+  jianlou = 0
 
   async pullCartData(data: any) {
     if (!data) {
@@ -201,7 +205,8 @@ export default class App extends Vue {
       items,
       from_pc: this.from_pc,
       from_browser: this.from_browser,
-      noinvalid: this.noinvalid
+      noinvalid: this.noinvalid,
+      jianlou: this.jianlou
     };
     if (this.forcePrice) {
       data.expectedPrice = +this.expectedPrice;
