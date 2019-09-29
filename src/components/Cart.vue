@@ -176,7 +176,7 @@ export default class App extends Vue {
         item.checked = checked;
       });
     });
-    bus.$emit("unselect-all");
+    bus.$emit("unselect-all", this.platform);
   }
 
   get checkedLength() {
