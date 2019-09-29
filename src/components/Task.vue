@@ -17,7 +17,7 @@
         style="margin-bottom:.5em"
       >
         <el-col :span="8">
-          {{item.platform}}-{{item.type}}-{{item.text}}
+          {{item.platform}}-{{item.name}}-{{item.text}}
         </el-col>
         <el-col :span="8">
           {{item.time}}
