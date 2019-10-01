@@ -236,6 +236,7 @@ export default class Buy extends Vue {
           jianlou: this.force_jianlou ? this.jianlou : undefined,
           from_cart: this.from_cart,
           from_pc: this.from_pc,
+          ignoreRepeat: true,
           other: {
             memo: this.memo
           }
