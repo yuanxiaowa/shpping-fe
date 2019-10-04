@@ -24,6 +24,9 @@ ws.onmessage = e => {
       if (handler(raw_message)) {
         console.log(text);
         // sendMsg("你好呀，" + text);
+        if (/(\d+)点|锁单|0\.\d|速度|红包|抽奖|试试/.test(text)) {
+          sendMsg(text)
+        }
       }
     }
   } else if (message_type === "private" && user_id === suser) {
