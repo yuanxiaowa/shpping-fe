@@ -13,9 +13,10 @@ import {
   cartToggleAll,
   sysTime,
   getTasks,
-  cancelTask
+  cancelTask,
+  checkStatus
 } from "./api";
-import { Notification } from "element-ui";
+import { Notification, MessageBox } from "element-ui";
 import { Platform } from "./handlers";
 import { sendMsg } from "./msg";
 
@@ -106,5 +107,17 @@ bus.$on("tasks-kill", () => {
         sendMsg("取消失败");
       }
     );
+  });
+});
+bus.$on("check-status", () => {
+  checkStatus("taobao").then(url => {
+    if (!url) {
+      Notification.success("状态正常");
+      sendMsg("登录状态正常");
+    } else {
+      sendMsg(url);
+      // @ts-ignore
+      MessageBox(<img src={url} />);
+    }
   });
 });

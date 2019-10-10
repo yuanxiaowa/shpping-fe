@@ -19,7 +19,7 @@
 
 <script lang="tsx">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { checkStatus, sysTime } from "../api";
+import { sysTime } from "../api";
 import { sendMsg } from "../msg";
 import bus from "../bus";
 import Task from "./Task.vue";
@@ -34,22 +34,10 @@ export default class Status extends Vue {
   status_text = "";
   show_task = false;
   checkStatus() {
-    checkStatus("taobao").then(url => {
-      if (!url) {
-        this.$notify.success("状态正常");
-        sendMsg("登录状态正常");
-      } else {
-        sendMsg(url);
-        // @ts-ignore
-        this.$msgbox(<img src={url} />);
-      }
-    });
+    bus.$emit("check-status");
   }
   sysTime() {
     sysTime(this.platform);
-  }
-  mounted() {
-    bus.$on("check-status", this.checkStatus);
   }
 }
 </script>
