@@ -117,8 +117,10 @@ bus.$on("check-status", () => {
       sendMsg("登录状态正常");
     } else {
       sendMsg(url);
-      // @ts-ignore
-      MessageBox(<img src={url} />);
+      MessageBox.alert(`<img src=${url} />`, {
+        dangerouslyUseHTMLString: true,
+        center: true
+      });
     }
   });
 });
