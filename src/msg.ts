@@ -62,14 +62,13 @@ ws.onmessage = e => {
 
 const r_taobao = /(?<!\w)\w{11}(?!\w)/g;
 const r_url = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
-const r_symbol = /[&%【】,，，\s￥(（¢)）]/g;
+const r_symbol = /[&%【】,，，\s￥(（¢)）\-~!/]/g;
 
 function getTidyText(text: string) {
   return text
     .replace(r_taobao, "")
     .replace(r_symbol, "")
-    .replace(/[-—]*复制本消息，打开淘宝即可[-—]*/, "")
-    .replace(/复制打开.*?(\s|，|$)/, "")
+    .replace(/.*复制.*/, "")
     .replace(r_url, "")
     .replace(r_symbol, "")
     .replace(/\[CQ:imagefile=[^\]]+\]/g, "")

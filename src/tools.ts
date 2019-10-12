@@ -224,7 +224,7 @@ export function getDate(datetime?: string) {
   if (h === 0 || now.getHours() > h) {
     date.setDate(date.getDate() + 1);
   }
-  return date.toLocaleString();
+  return date.toString();
 }
 
 export async function getUrls({ urls, platform }: any): Promise<string[]> {
