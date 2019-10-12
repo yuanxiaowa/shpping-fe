@@ -5,7 +5,7 @@ import { Platform } from "./handlers";
  * @Author: oudingyin
  * @Date: 2019-08-26 09:17:50
  * @LastEditors: oudingy1in
- * @LastEditTime: 2019-09-16 15:33:31
+ * @LastEditTime: 2019-10-08 16:33:24
  */
 interface Ret {
   action: string;
@@ -17,6 +17,7 @@ interface Ret {
   t?: string;
   platform: Platform;
   datetime?: string;
+  jianlou?: number;
 }
 
 const blacklist = require("./text/blacklist.json");
@@ -76,12 +77,12 @@ export function resolveText(text: string, datetime?: string) {
     if (
       /([\d.]+)元/.test(text) ||
       /付([\d.]+)/.test(text) ||
+      /(?:到手|预计|拍下)([\d\.]+)/.test(text) ||
       /【([\d.]+)(包邮)?】/.test(text) ||
       /\[([\d.]+)\]/.test(text) ||
       /(?:[\s：:，,]|半价|折合|折后)([\d.]+)(?!\w)/.test(text) ||
       /([\d\.]+)包邮/.test(text) ||
       /件([\d\.]+)/.test(text) ||
-      /(?:到手|预计|拍下)([\d\.]+)/.test(text) ||
       /([\d\.]+)到手/.test(text) ||
       /价([\d\.]+)/.test(text) ||
       /([\d\.]+)起/.test(text) ||
@@ -119,7 +120,9 @@ export function resolveText(text: string, datetime?: string) {
       text.includes("速度拍下")
     ) {
       action = "coudan";
-      expectedPrice = 500;
+      if (expectedPrice > 500) {
+        expectedPrice = 500;
+      }
     } else if (text.includes("叠加")) {
       let r = /(\d+)-(\d+)/g;
       let quote = 0;
@@ -132,16 +135,20 @@ export function resolveText(text: string, datetime?: string) {
         if (expectedPrice !== 10) {
           let _p = expectedPrice / quantities[0];
           if (_p > 1.75) {
-            expectedPrice = 10;
+            expectedPrice = Math.min(10, expectedPrice);
           }
         } else {
-          expectedPrice = 50;
+          expectedPrice = Math.min(expectedPrice, 50);
         }
       } else {
         if (text.includes("婴") || text.includes("孕")) {
-          expectedPrice = 5;
+          expectedPrice = Math.min(expectedPrice, 5);
         } else if (quote > 70) {
-          expectedPrice = 50;
+          if (!text.includes("衣")) {
+            expectedPrice = Math.min(expectedPrice, 20);
+          }
+        } else {
+          expectedPrice = Math.min(expectedPrice, 10);
         }
       }
       if (!/\d+点/.test(text)) {
@@ -196,7 +203,8 @@ export function resolveText(text: string, datetime?: string) {
       action,
       forcePrice,
       diejia,
-      datetime: getDate(datetime)
+      datetime: getDate(datetime),
+      jianlou: action === "coudan" && datetime ? 30 : undefined
     };
   }
   if (/速度|锁单|试试|叠加/.test(text)) {

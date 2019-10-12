@@ -25,7 +25,7 @@ ws.onmessage = e => {
         console.log(text);
         // sendMsg("你好呀，" + text);
         if (/(\d+)点|锁单|0\.\d|速度|红包|抽奖|试试/.test(text)) {
-          sendMsg(text)
+          sendMsg(text);
         }
       }
     }
@@ -47,13 +47,14 @@ ws.onmessage = e => {
     }
     let datetime: string | undefined;
     if (/(\d+)点/.test(text)) {
-      let h = +RegExp.$1;
+      /* let h = +RegExp.$1;
       let now = new Date();
       let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
       if (h === 0 || now.getHours() > h) {
         date.setDate(date.getDate() + 1);
       }
-      datetime = date.toString();
+      datetime = date.toString(); */
+      datetime = RegExp.$1;
     }
     handler(raw_message, datetime);
   }

@@ -54,7 +54,8 @@ bus.$on("coudan", async (data: any) => {
         expectedPrice: data.expectedPrice,
         // from_pc: true,
         other: {},
-        diejia: data.diejia
+        diejia: data.diejia,
+        jianlou: data.jianlou
       },
       data.datetime!,
       data.platform
