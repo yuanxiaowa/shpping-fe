@@ -214,9 +214,12 @@ export function resolveText(text: string, datetime?: string) {
   }
 }
 
-export function getDate(datetime?: string) {
+export function getDate(datetime?: string | Date) {
   if (!datetime) {
     return;
+  }
+  if (datetime instanceof Date) {
+    return datetime.toString();
   }
   let h = +datetime;
   let now = new Date();

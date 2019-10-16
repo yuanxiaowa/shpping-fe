@@ -55,6 +55,8 @@ ws.onmessage = e => {
       }
       datetime = date.toString(); */
       datetime = RegExp.$1;
+    } else if (text.includes("现在")) {
+      datetime = new Date();
     }
     handler(raw_message, datetime);
   }
@@ -93,7 +95,7 @@ var recorder = new Recorder();
 // @ts-ignore
 window.recorder = recorder;
 
-function handler(text: string, datetime?: string) {
+function handler(text: string, datetime?: string | Date) {
   if (
     text.includes("【苏宁】") ||
     text.includes("【盒马】" || text.includes("美团"))
