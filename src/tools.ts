@@ -34,7 +34,7 @@ const num_cn_map = "零一二三四五六七八九十".split("").reduce(
 );
 const NUM_CN_STR = Object.keys(num_cn_map).join("");
 
-export function resolveText(text: string, datetime?: string) {
+export function resolveText(text: string, datetime?: string | Date) {
   var type: string;
   var urls: string[] | null;
   var quantities: number[] | null;

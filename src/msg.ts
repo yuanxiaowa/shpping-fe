@@ -45,7 +45,7 @@ ws.onmessage = e => {
     if (raw_message.includes("同步时间")) {
       return bus.$emit("sys-time", raw_message);
     }
-    let datetime: string | undefined;
+    let datetime: string | undefined | Date;
     if (/(\d+)点/.test(text)) {
       /* let h = +RegExp.$1;
       let now = new Date();

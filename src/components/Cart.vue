@@ -112,6 +112,7 @@ export default class App extends Vue {
   jianlou = 0
 
   async pullCartData(data: any) {
+    this.tableData = []
     if (!data) {
       data = await cartList(this.platform, this.from_pc);
     }
