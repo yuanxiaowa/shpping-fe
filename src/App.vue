@@ -5,16 +5,22 @@
  * @LastEditTime: 2019-08-21 17:53:09
  -->
 <template>
-  <div>
+  <div class="page-component__scroll">
+    <config />
     <router-view />
+    <el-backtop target=".page-component__scroll"></el-backtop>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import bus from "./bus";
+import Config from "./components/Config.vue";
 
 @Component({
-  components: {}
+  components: {
+    Config
+  }
 })
 export default class App extends Vue {}
 </script>

@@ -8,6 +8,7 @@
   <div>
     <el-form>
       <el-form-item>
+        <el-checkbox v-model="from_pc">pc购买 &nbsp;</el-checkbox>
         <el-radio-group v-model="platform">
           <el-radio label="taobao">淘宝</el-radio>
           <el-radio label="jingdong">京东</el-radio>
@@ -31,6 +32,7 @@
             <el-tag type="danger" size="small">￥{{item.seckillPrice}}</el-tag>
             数量：{{item.quantity}}
             <el-button @click="seckill([item])">秒杀</el-button>
+            <el-button @click="addCart(item)">加入购物车</el-button>
           </div>
         </template>
       </el-table-column>
@@ -43,7 +45,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import DatePicker from "./DatePicker.vue";
 import SuggestionInput from "./SuggestionInput.vue";
 
-import { getSeckillList, buyDirect } from "../api";
+import { getSeckillList, buyDirect, cartAdd } from "../api";
 import bus from "../bus";
 import { storage } from "../decorators";
 import { setTimeout } from "timers";
@@ -59,6 +61,8 @@ export default class SeckillList extends Vue {
   platform = "taobao";
   list = [];
   url = "";
+  from_pc = false;
+
   pullData() {
     getSeckillList({
       platform: this.platform,
@@ -88,7 +92,7 @@ export default class SeckillList extends Vue {
           expectedPrice: +item.seckillPrice,
           forcePrice: true,
           jianlou: 30,
-          // from_pc: true,
+          from_pc: this.from_pc,
           other: {}
         },
         item.time,
@@ -101,6 +105,16 @@ export default class SeckillList extends Vue {
     item.items.forEach(item => {
       item.checked = checked;
     });
+  }
+
+  addCart(item) {
+    cartAdd(
+      {
+        url: item.url,
+        quantity: 1
+      },
+      this.platform
+    );
   }
 
   mounted() {

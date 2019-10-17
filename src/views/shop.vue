@@ -8,14 +8,7 @@
   <div>
     <el-collapse v-model="activeNames">
       <el-collapse-item title="状态" name="0">
-        <el-row>
-          <el-col :span="12">
-            <status-comp />
-          </el-col>
-          <el-col :span="12">
-            <config></config>
-          </el-col>
-        </el-row>
+        <status-comp />
       </el-collapse-item>
       <el-collapse-item title="领券下单" name="1">
         <buy></buy>
@@ -50,7 +43,6 @@ import JingdongCoupon from "../components/JingdongCoupon.vue";
 import StatusComp from "../components/StatusComp.vue";
 import Search from "../components/Search.vue";
 import SeckillList from "../components/SeckillList.vue";
-import Config from "../components/Config.vue";
 
 @Component({
   components: {
@@ -59,7 +51,6 @@ import Config from "../components/Config.vue";
     Cart,
     StatusComp,
     JingdongCoupon,
-    Config,
     Search,
     SeckillList
   }

@@ -13,16 +13,9 @@
             <el-radio label="taobao">淘宝</el-radio>
             <el-radio label="jingdong">京东</el-radio>
           </el-radio-group>
-          <el-button
-            style="margin-left:2em"
-            type="primary"
-            @click="pullCartData()"
-          >拉取</el-button>
+          <el-button style="margin-left:2em" type="primary" @click="pullCartData()">拉取</el-button>
         </el-col>
-        <el-col
-          :span="8"
-          label="日期"
-        >
+        <el-col :span="8" label="日期">
           <date-picker v-model="datetime"></date-picker>
         </el-col>
         <el-col :span="8">
@@ -42,14 +35,8 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="期望价格">
-            <el-input
-              v-model="expectedPrice"
-              :disabled="!forcePrice"
-            >
-              <el-checkbox
-                v-model="forcePrice"
-                slot="prepend"
-              ></el-checkbox>
+            <el-input v-model="expectedPrice" :disabled="!forcePrice">
+              <el-checkbox v-model="forcePrice" slot="prepend"></el-checkbox>
             </el-input>
           </el-form-item>
         </el-col>
@@ -60,11 +47,7 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="danger"
-          :disabled="checkedLength===0"
-          @click="submit"
-        >提交订单</el-button>
+        <el-button type="danger" :disabled="checkedLength===0" @click="submit">提交订单</el-button>
       </el-form-item>
     </el-form>
     <cart-table
@@ -109,10 +92,10 @@ export default class App extends Vue {
   expectedPrice = 0;
   forcePrice = false;
   from_browser = false;
-  jianlou = 0
+  jianlou = 30;
 
   async pullCartData(data: any) {
-    this.tableData = []
+    this.tableData = [];
     if (!data) {
       data = await cartList(this.platform, this.from_pc);
     }

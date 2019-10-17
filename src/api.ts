@@ -10,7 +10,14 @@ import bus from "./bus";
 import { sendMsg } from "./msg";
 
 var instance = axios.create({
-  baseURL: "http://localhost:7001"
+  baseURL: `http://localhost:${localStorage.getItem("server-port") || 7001}`
+});
+
+bus.$on("change-port", port => {
+  localStorage.setItem("server-port", port);
+  instance = axios.create({
+    baseURL: `http://localhost:${port}`
+  });
 });
 
 function handleResponse({ data: { code, data, msg } }: AxiosResponse<any>) {

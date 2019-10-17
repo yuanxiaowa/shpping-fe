@@ -1,33 +1,12 @@
 <template>
-  <el-drawer
-    :visible.sync="vv"
-    size="50%"
-    title="任务列表"
-    v-loading="loading"
-  >
+  <el-drawer :visible.sync="vv" size="50%" title="任务列表" v-loading="loading" direction="ltr">
     <el-card>
-      <el-button
-        style="padding: 3px 0"
-        type="text"
-        @click="getData"
-      >拉取</el-button>
-      <el-row
-        v-for="item in items"
-        :key="item.id"
-        style="margin-bottom:.5em"
-      >
+      <el-button style="padding: 3px 0" type="text" @click="getData">拉取</el-button>
+      <el-row v-for="item in items" :key="item.id" style="margin-bottom:.5em">
+        <el-col :span="8">{{item.platform}}-{{item.name}}-{{item.text}}</el-col>
+        <el-col :span="8">{{item.time}}</el-col>
         <el-col :span="8">
-          {{item.platform}}-{{item.name}}-{{item.text}}
-        </el-col>
-        <el-col :span="8">
-          {{item.time}}
-        </el-col>
-        <el-col :span="8">
-          <el-button
-            type="danger"
-            @click="cancel(item.id)"
-            size="small"
-          >取消</el-button>
+          <el-button type="danger" @click="cancel(item.id)" size="small">取消</el-button>
         </el-col>
       </el-row>
     </el-card>
