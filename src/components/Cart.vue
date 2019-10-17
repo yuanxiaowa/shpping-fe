@@ -6,43 +6,41 @@
  -->
 <template>
   <div>
-    <el-form>
+    <el-form size="small">
       <el-form-item>
         <el-col :span="8">
+          <el-checkbox v-model="from_pc" style="margin-right:1em">pc</el-checkbox>
+          <span>平台：</span>
           <el-radio-group v-model="platform">
             <el-radio label="taobao">淘宝</el-radio>
             <el-radio label="jingdong">京东</el-radio>
           </el-radio-group>
           <el-button style="margin-left:2em" type="primary" @click="pullCartData()">拉取</el-button>
         </el-col>
-        <el-col :span="8" label="日期">
-          <date-picker v-model="datetime"></date-picker>
+        <el-col :span="8">
+          <el-form-item label="日期">
+            <date-picker v-model="datetime"></date-picker>
+          </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="pc购买">
-            <el-checkbox v-model="from_pc"></el-checkbox>
-          </el-form-item>
-          <el-form-item label="捡漏">
-            <el-input v-model.number="jianlou"></el-input>
-          </el-form-item>
+          <el-input v-model.number="jianlou">
+            <span slot="prepend">捡漏</span>
+          </el-input>
         </el-col>
       </el-form-item>
       <el-form-item>
         <el-col :span="8">
-          <el-form-item label="存在失效商品不提交">
-            <el-checkbox v-model="noinvalid"></el-checkbox>
-          </el-form-item>
+          <el-checkbox v-model="noinvalid">存在失效商品不提交</el-checkbox>
+          <el-checkbox v-model="from_browser">浏览器提交</el-checkbox>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="期望价格">
+          <el-form-item>
             <el-input v-model="expectedPrice" :disabled="!forcePrice">
-              <el-checkbox v-model="forcePrice" slot="prepend"></el-checkbox>
+              <span slot="prepend">
+                期望价格
+                <el-checkbox v-model="forcePrice"></el-checkbox>
+              </span>
             </el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="浏览器提交">
-            <el-checkbox v-model="from_browser"></el-checkbox>
           </el-form-item>
         </el-col>
       </el-form-item>

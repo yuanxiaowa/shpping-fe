@@ -6,7 +6,7 @@
  -->
 <template>
   <div>
-    <el-form>
+    <el-form size="small">
       <el-form-item>
         <el-checkbox v-model="from_pc">pc购买 &nbsp;</el-checkbox>
         <el-radio-group v-model="platform">
@@ -24,15 +24,15 @@
       <el-table-column>
         <template slot-scope="{row}">
           <el-checkbox v-model="row.checked" @change="selectGroupAll(row,$event)">全选</el-checkbox>
-          <el-button @click="seckill(row.items,true)">秒杀</el-button>
+          <el-button @click="seckill(row.items,true)" size="small">秒杀</el-button>
           <div v-for="item of row.items" :key="item.id">
             <el-checkbox v-model="item.checked"></el-checkbox>
             <a :href="item.url" target="_blank">{{item.title}}</a>
             <i style="text-decoration:">￥{{item.price}}</i>
             <el-tag type="danger" size="small">￥{{item.seckillPrice}}</el-tag>
             数量：{{item.quantity}}
-            <el-button @click="seckill([item])">秒杀</el-button>
-            <el-button @click="addCart(item)">加入购物车</el-button>
+            <el-button @click="seckill([item])" size="small">秒杀</el-button>
+            <el-button @click="addCart(item)" size="small">加入购物车</el-button>
           </div>
         </template>
       </el-table-column>

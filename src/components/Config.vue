@@ -1,15 +1,19 @@
 <template>
-  <div>
-    <el-button @click="drawer=true">配置</el-button>
-    <el-button @click="show_task=true">任务列表</el-button>
+  <el-form size="small">
+    <el-form-item>
+      <el-button @click="drawer=true">配置</el-button>
+      <el-button @click="show_task=true">任务列表</el-button>
+    </el-form-item>
 
     <el-drawer title="配置" :visible.sync="drawer" direction="ltr">
-      <el-input-number v-model="port" @change="onPortChange" :min="80" :max="35000" label="端口号"></el-input-number>
+      <el-form-item>
+        <el-input-number v-model="port" @change="onPortChange" :min="80" :max="35000" label="端口号"></el-input-number>
+      </el-form-item>
       <el-checkbox v-model="config.isSubmitOrder" @input="setConfig" label="自动提交订单"></el-checkbox>
     </el-drawer>
 
     <task v-model="show_task"></task>
-  </div>
+  </el-form>
 </template>
 
 <script lang="ts">

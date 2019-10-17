@@ -6,7 +6,7 @@
  -->
 <template>
   <div>
-    <el-form>
+    <el-form size="small">
       <el-form-item label="平台">
         <el-radio-group v-model="form_data.platform">
           <el-radio label="taobao">淘宝</el-radio>
