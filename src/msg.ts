@@ -5,12 +5,10 @@
  * @LastEditTime: 2019-09-17 08:58:16
  */
 import bus from "./bus";
-import { groups } from "./config";
+import { groups, qq_users, super_user } from "./config";
 import { sendPrivateMsg } from "./api";
 import { resolveText } from "./tools";
 import "./order";
-
-const suser = 870092104;
 
 // http://doc.cleverqq.cn/479462
 // https://cqhttp.cc/docs/4.10/#/Post?id=%E4%B8%8A%E6%8A%A5%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F
@@ -29,36 +27,45 @@ ws.onmessage = e => {
         }
       }
     }
-  } else if (message_type === "private" && user_id === suser) {
-    if (raw_message === "cs" || raw_message === "检查状态") {
-      return bus.$emit("check-status");
-    }
-    if (raw_message === "任务列表") {
-      return bus.$emit("tasks");
-    }
-    if (raw_message === "秒杀") {
-      return bus.$emit("seckill");
-    }
-    if (raw_message === "取消任务列表") {
-      return bus.$emit("tasks-kill");
-    }
-    if (raw_message.includes("同步时间")) {
-      return bus.$emit("sys-time", raw_message);
-    }
-    let datetime: string | undefined | Date;
-    if (/(\d+)点/.test(text)) {
-      /* let h = +RegExp.$1;
+  } else if (message_type === "private") {
+    if (user_id === super_user) {
+      if (raw_message === "cs" || raw_message === "检查状态") {
+        return bus.$emit("check-status");
+      }
+      if (raw_message === "任务列表") {
+        return bus.$emit("tasks");
+      }
+      if (raw_message === "秒杀") {
+        return bus.$emit("seckill");
+      }
+      if (raw_message === "取消任务列表") {
+        return bus.$emit("tasks-kill");
+      }
+      if (raw_message.includes("同步时间")) {
+        return bus.$emit("sys-time", raw_message);
+      }
+      let datetime: string | undefined | Date;
+      if (/(\d+)点/.test(text)) {
+        /* let h = +RegExp.$1;
       let now = new Date();
       let date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
       if (h === 0 || now.getHours() > h) {
         date.setDate(date.getDate() + 1);
       }
       datetime = date.toString(); */
-      datetime = RegExp.$1;
-    } else if (text.includes("现在")) {
-      datetime = new Date();
+        datetime = RegExp.$1;
+      } else if (text.includes("现在")) {
+        datetime = new Date();
+      }
+      handler(raw_message, datetime);
+    } else if (qq_users[user_id]) {
+      if (raw_message === "cs" || raw_message === "检查状态") {
+        return bus.$emit("check-status", {
+          qq: user_id,
+          port: qq_users[user_id]
+        });
+      }
     }
-    handler(raw_message, datetime);
   }
 };
 
@@ -121,6 +128,6 @@ function handler(text: string, datetime?: string | Date) {
   }
 }
 
-export function sendMsg(msg: string) {
-  sendPrivateMsg(msg, suser);
+export function sendMsg(msg: string, qq = super_user) {
+  sendPrivateMsg(msg, qq);
 }

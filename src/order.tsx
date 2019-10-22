@@ -14,7 +14,9 @@ import {
   sysTime,
   getTasks,
   cancelTask,
-  checkStatus
+  checkStatus,
+  pushServer,
+  popServer
 } from "./api";
 import { Notification, MessageBox } from "element-ui";
 import { Platform } from "./handlers";
@@ -52,7 +54,7 @@ bus.$on("coudan", async (data: any) => {
         quantity: data.quantities[0],
         skus: data.skus,
         expectedPrice: data.expectedPrice,
-        // from_pc: true,
+        from_pc: true,
         other: {},
         diejia: data.diejia,
         jianlou: data.jianlou
@@ -67,7 +69,7 @@ bus.$on("coudan", async (data: any) => {
       coudan(
         Object.assign(
           {
-            // from_pc: true,
+            from_pc: true,
             other: {}
           },
           data
@@ -110,17 +112,24 @@ bus.$on("tasks-kill", () => {
     );
   });
 });
-bus.$on("check-status", () => {
+bus.$on("check-status", (data?: { port: number; qq: number }) => {
+  if (data) {
+    pushServer(data.port);
+  }
   checkStatus("taobao").then(url => {
+    console.log(data);
     if (!url) {
       Notification.success("状态正常");
-      sendMsg("登录状态正常");
+      sendMsg("登录状态正常", data && data.qq);
     } else {
-      sendMsg(url);
+      sendMsg(url, data && data.qq);
       MessageBox.alert(`<img src=${url} />`, {
         dangerouslyUseHTMLString: true,
         center: true
       });
     }
   });
+  if (data) {
+    popServer();
+  }
 });

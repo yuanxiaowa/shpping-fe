@@ -169,7 +169,7 @@ export default class Buy extends Vue {
   force_jianlou = false;
   jianlou = 15;
   from_cart = false;
-  from_pc = false;
+  from_pc = true;
 
   /* async execAction(
     fn: (url: string, item: InfoItemNoUrl) => any,

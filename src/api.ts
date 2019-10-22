@@ -4,14 +4,12 @@
  * @LastEditors: oudingy1in
  * @LastEditTime: 2019-09-06 17:12:55
  */
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosInstance } from "axios";
 import { Notification } from "element-ui";
 import bus from "./bus";
 import { sendMsg } from "./msg";
 
-var instance = axios.create({
-  baseURL: `http://localhost:${localStorage.getItem("server-port") || 7001}`
-});
+var instance: AxiosInstance;
 
 bus.$on("change-port", port => {
   localStorage.setItem("server-port", port);
@@ -19,6 +17,20 @@ bus.$on("change-port", port => {
     baseURL: `http://localhost:${port}`
   });
 });
+
+var stacks: any[] = [];
+export function pushServer(port) {
+  instance = axios.create({
+    baseURL: `http://localhost:${port}`
+  });
+  stacks.push(instance);
+}
+export function popServer() {
+  stacks.shift();
+  instance = stacks[stacks.length - 1];
+}
+
+pushServer(localStorage.getItem("server-port") || 7001);
 
 function handleResponse({ data: { code, data, msg } }: AxiosResponse<any>) {
   if (code !== 0) {

@@ -85,7 +85,7 @@ export default class App extends Vue {
   datetime = "";
   tableData: any[] = [];
   other!: any;
-  from_pc = false;
+  from_pc = true;
   noinvalid = false;
   expectedPrice = 0;
   forcePrice = false;
