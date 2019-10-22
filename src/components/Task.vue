@@ -3,10 +3,9 @@
     <el-card>
       <el-button style="padding: 3px 0" type="text" @click="getData">拉取</el-button>
       <el-row v-for="item in items" :key="item.id" style="margin-bottom:.5em">
-        <el-col :span="8">{{item.platform}}-{{item.name}}-{{item.text}}</el-col>
-        <el-col :span="8">{{item.time}}</el-col>
-        <el-col :span="8">
-          <el-button type="danger" @click="cancel(item.id)" size="small">取消</el-button>
+        <el-col>
+          {{item.time}}: {{item.text}}-{{item.platform}}{{item.name}}
+          <el-button size="small" type="danger" @click="cancel(item.id)">取消</el-button>
         </el-col>
       </el-row>
     </el-card>

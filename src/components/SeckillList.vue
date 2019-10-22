@@ -93,7 +93,8 @@ export default class SeckillList extends Vue {
           forcePrice: true,
           jianlou: 1,
           from_pc: this.from_pc,
-          other: {}
+          other: {},
+          _comment: item.title
         },
         item.time,
         this.platform
