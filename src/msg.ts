@@ -28,18 +28,27 @@ ws.onmessage = e => {
       }
     }
   } else if (message_type === "private") {
-    if (user_id === super_user) {
+    if (user_id === super_user || qq_users[user_id]) {
+      let data = super_user
+        ? undefined
+        : {
+            qq: user_id,
+            port: qq_users[user_id]
+          };
       if (raw_message === "cs" || raw_message === "检查状态") {
-        return bus.$emit("check-status");
+        return bus.$emit("check-status", data);
       }
       if (raw_message === "任务列表") {
-        return bus.$emit("tasks");
+        return bus.$emit("tasks", data);
       }
       if (raw_message === "秒杀") {
-        return bus.$emit("seckill");
+        return bus.$emit("seckill", data);
       }
       if (raw_message === "取消任务列表") {
-        return bus.$emit("tasks-kill");
+        return bus.$emit("tasks-kill", data);
+      }
+      if (user_id !== super_user) {
+        return;
       }
       if (raw_message.includes("同步时间")) {
         return bus.$emit("sys-time", raw_message);
@@ -58,31 +67,6 @@ ws.onmessage = e => {
         datetime = new Date();
       }
       handler(raw_message, datetime);
-    } else if (qq_users[user_id]) {
-      if (raw_message === "cs" || raw_message === "检查状态") {
-        return bus.$emit("check-status", {
-          qq: user_id,
-          port: qq_users[user_id]
-        });
-      }
-      if (raw_message === "任务列表") {
-        return bus.$emit("tasks", {
-          qq: user_id,
-          port: qq_users[user_id]
-        });
-      }
-      if (raw_message === "秒杀") {
-        return bus.$emit("seckill", {
-          qq: user_id,
-          port: qq_users[user_id]
-        });
-      }
-      if (raw_message === "取消任务列表") {
-        return bus.$emit("tasks-kill", {
-          qq: user_id,
-          port: qq_users[user_id]
-        });
-      }
     }
   }
 };

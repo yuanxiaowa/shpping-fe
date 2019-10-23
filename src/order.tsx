@@ -91,25 +91,41 @@ bus.$on("sys-time", (text: string) => {
   var platform = text.includes("京东") ? "jingdong" : "taobao";
   sysTime(platform);
 });
-bus.$on("tasks", () => {
+bus.$on("tasks", (data?: { port: number; qq: number }) => {
+  if (data) {
+    pushServer(data.port);
+  }
   getTasks().then(data => {
     sendMsg(
       data
         .map(item => [item.platform, item.type, item.text, item.time].join("-"))
-        .join("\n") || "暂无"
+        .join("\n") || "暂无",
+      data && data.qq
     );
   });
+  if (data) {
+    popServer();
+  }
 });
-bus.$on("tasks-kill", () => {
+bus.$on("tasks-kill", (data?: { port: number; qq: number }) => {
+  if (data) {
+    pushServer(data.port);
+  }
   getTasks().then(data => {
-    Promise.all(data.map(item => cancelTask(item.id))).then(
-      () => {
-        sendMsg("已取消");
-      },
-      () => {
-        sendMsg("取消失败");
-      }
-    );
+    Promise.all(data.map(item => cancelTask(item.id)))
+      .then(
+        () => {
+          sendMsg("已取消", data && data.qq);
+        },
+        () => {
+          sendMsg("取消失败", data && data.qq);
+        }
+      )
+      .finally(() => {
+        if (data) {
+          popServer();
+        }
+      });
   });
 });
 bus.$on("check-status", (data?: { port: number; qq: number }) => {

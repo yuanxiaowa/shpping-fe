@@ -13,26 +13,61 @@
           <el-radio label="taobao">淘宝</el-radio>
           <el-radio label="jingdong">京东</el-radio>
         </el-radio-group>
-        <el-button style="margin-left:2em" type="primary" @click="pullData()">拉取</el-button>
+        <el-button
+          style="margin-left:2em"
+          type="primary"
+          @click="pullData()"
+        >拉取</el-button>
       </el-form-item>
       <el-form-item>
-        <suggestion-input title="url" v-model="url" id="seckill-list" />
+        <suggestion-input
+          title="url"
+          v-model="url"
+          id="seckill-list"
+        />
       </el-form-item>
     </el-form>
-    <el-table :data="list" row-key="time">
-      <el-table-column prop="time" width="200"></el-table-column>
+    <el-table
+      :data="list"
+      row-key="time"
+    >
+      <el-table-column
+        prop="time"
+        width="200"
+      ></el-table-column>
       <el-table-column>
         <template slot-scope="{row}">
-          <el-checkbox v-model="row.checked" @change="selectGroupAll(row,$event)">全选</el-checkbox>
-          <el-button @click="seckill(row.items,true)" size="small">秒杀</el-button>
-          <div v-for="item of row.items" :key="item.id">
+          <el-checkbox
+            v-model="row.checked"
+            @change="selectGroupAll(row,$event)"
+          >全选</el-checkbox>
+          <el-button
+            @click="seckill(row.items,true)"
+            size="small"
+          >秒杀</el-button>
+          <div
+            v-for="item of row.items"
+            :key="item.id"
+          >
             <el-checkbox v-model="item.checked"></el-checkbox>
-            <a :href="item.url" target="_blank">{{item.title}}</a>
+            <a
+              :href="item.url"
+              target="_blank"
+            >{{item.title}}</a>
             <i style="text-decoration:">￥{{item.price}}</i>
-            <el-tag type="danger" size="small">￥{{item.seckillPrice}}</el-tag>
+            <el-tag
+              type="danger"
+              size="small"
+            >￥{{item.seckillPrice}}</el-tag>
             数量：{{item.quantity}}
-            <el-button @click="seckill([item])" size="small">秒杀</el-button>
-            <el-button @click="addCart(item)" size="small">加入购物车</el-button>
+            <el-button
+              @click="seckill([item])"
+              size="small"
+            >秒杀</el-button>
+            <el-button
+              @click="addCart(item)"
+              size="small"
+            >加入购物车</el-button>
           </div>
         </template>
       </el-table-column>
@@ -45,7 +80,13 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import DatePicker from "./DatePicker.vue";
 import SuggestionInput from "./SuggestionInput.vue";
 
-import { getSeckillList, buyDirect, cartAdd } from "../api";
+import {
+  getSeckillList,
+  buyDirect,
+  cartAdd,
+  pushServer,
+  popServer
+} from "../api";
 import bus from "../bus";
 import { storage } from "../decorators";
 import { setTimeout } from "timers";
@@ -119,7 +160,10 @@ export default class SeckillList extends Vue {
   }
 
   mounted() {
-    bus.$on("seckill", () => {
+    bus.$on("seckill", (data?: { port: number; qq: number }) => {
+      if (data) {
+        pushServer(data.port);
+      }
       getSeckillList({
         platform: this.platform,
         url: this.url
@@ -127,7 +171,10 @@ export default class SeckillList extends Vue {
         var t = new Date(time).getTime();
         items = items.sort((a, b) => a.quantity - b.quantity);
         this.seckill(items.slice(0, 3));
-        sendMsg(time + "开始秒杀");
+        sendMsg(time + "开始秒杀", data && data.qq);
+        if (data) {
+          popServer();
+        }
       });
     });
   }

@@ -48,17 +48,12 @@ export function resolveText(text: string, datetime?: string | Date) {
     urls = text.match(
       /https?:\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:\/~+#]*[\w\-@?^=%&\/~+#])?/g
     );
-    if (urls) {
-      type = "url";
-      if (urls[0] === text) {
-        return {
-          quantities: [1],
-          urls
-        };
-      }
-    }
   }
   if (urls) {
+    type = "url";
+    urls.forEach(url => {
+      text = text.replace(url, "");
+    });
     let quantities_arr = text.match(/(?<=(?<!拍)下|拍|买|加车|加购|选)\d+/g)!;
     if (!quantities_arr) {
       quantities_arr = text.match(/(?<!前\d*)\d+(?=件(?!套)|份)/g)!;
