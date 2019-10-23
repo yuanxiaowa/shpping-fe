@@ -50,6 +50,12 @@ export function resolveText(text: string, datetime?: string | Date) {
     );
     if (urls) {
       type = "url";
+      if (urls[0] === text) {
+        return {
+          quantities: [1],
+          urls
+        };
+      }
     }
   }
   if (urls) {

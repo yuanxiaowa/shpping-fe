@@ -65,6 +65,24 @@ ws.onmessage = e => {
           port: qq_users[user_id]
         });
       }
+      if (raw_message === "任务列表") {
+        return bus.$emit("tasks", {
+          qq: user_id,
+          port: qq_users[user_id]
+        });
+      }
+      if (raw_message === "秒杀") {
+        return bus.$emit("seckill", {
+          qq: user_id,
+          port: qq_users[user_id]
+        });
+      }
+      if (raw_message === "取消任务列表") {
+        return bus.$emit("tasks-kill", {
+          qq: user_id,
+          port: qq_users[user_id]
+        });
+      }
     }
   }
 };
