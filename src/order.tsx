@@ -95,9 +95,9 @@ bus.$on("tasks", (data?: { port: number; qq: number }) => {
   if (data) {
     pushServer(data.port);
   }
-  getTasks().then(data => {
+  getTasks().then(items => {
     sendMsg(
-      data
+      items
         .map(item => [item.platform, item.type, item.text, item.time].join("-"))
         .join("\n") || "暂无",
       data && data.qq
@@ -111,8 +111,8 @@ bus.$on("tasks-kill", (data?: { port: number; qq: number }) => {
   if (data) {
     pushServer(data.port);
   }
-  getTasks().then(data => {
-    Promise.all(data.map(item => cancelTask(item.id)))
+  getTasks().then(items => {
+    Promise.all(items.map(item => cancelTask(item.id)))
       .then(
         () => {
           sendMsg("已取消", data && data.qq);

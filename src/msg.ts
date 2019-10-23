@@ -29,12 +29,13 @@ ws.onmessage = e => {
     }
   } else if (message_type === "private") {
     if (user_id === super_user || qq_users[user_id]) {
-      let data = super_user
-        ? undefined
-        : {
-            qq: user_id,
-            port: qq_users[user_id]
-          };
+      let data =
+        user_id === super_user
+          ? undefined
+          : {
+              qq: user_id,
+              port: qq_users[user_id]
+            };
       if (raw_message === "cs" || raw_message === "检查状态") {
         return bus.$emit("check-status", data);
       }
