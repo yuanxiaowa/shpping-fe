@@ -39,13 +39,13 @@ ws.onmessage = e => {
       if (raw_message === "cs" || raw_message === "检查状态") {
         return bus.$emit("check-status", data);
       }
-      if (raw_message === "任务列表") {
+      if (raw_message === "任务列表" || raw_message === "rwlb") {
         return bus.$emit("tasks", data);
       }
-      if (raw_message === "秒杀") {
+      if (raw_message === "秒杀" || raw_message === "ms") {
         return bus.$emit("seckill", data);
       }
-      if (raw_message === "取消任务列表") {
+      if (raw_message === "取消任务列表" || raw_message === "qxrwlb") {
         return bus.$emit("tasks-kill", data);
       }
       if (user_id !== super_user) {
