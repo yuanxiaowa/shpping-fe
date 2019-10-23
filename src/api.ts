@@ -14,14 +14,14 @@ var instance: AxiosInstance;
 bus.$on("change-port", port => {
   localStorage.setItem("server-port", port);
   instance = axios.create({
-    baseURL: `http://localhost:${port}`
+    baseURL: `http://172.16.40.38:${port}`
   });
 });
 
 var stacks: any[] = [];
 export function pushServer(port) {
   instance = axios.create({
-    baseURL: `http://localhost:${port}`
+    baseURL: `http://172.16.40.38:${port}`
   });
   stacks.push(instance);
 }

@@ -126,12 +126,7 @@ export default class SeckillList extends Vue {
       }).then(([{ items, time }]) => {
         var t = new Date(time).getTime();
         items = items.sort((a, b) => a.quantity - b.quantity);
-        setTimeout(() => {
-          bus.$emit("sys-time", "淘宝同步时间");
-          setTimeout(() => {
-            this.seckill(items);
-          }, 1000 * 60);
-        }, t - 8 * 1000 * 60 - Date.now());
+        this.seckill(items.slice(0, 3));
         sendMsg(time + "开始秒杀");
       });
     });
