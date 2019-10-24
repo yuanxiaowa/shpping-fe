@@ -16,6 +16,7 @@ bus.$on("change-port", port => {
   instance = axios.create({
     baseURL: `http://172.16.40.38:${port}`
   });
+  stacks[0] = instance;
 });
 
 var stacks: any[] = [];

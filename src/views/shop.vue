@@ -7,9 +7,9 @@
 <template>
   <div>
     <el-collapse v-model="activeNames">
-      <el-collapse-item title="状态" name="0">
+      <!-- <el-collapse-item title="状态" name="0">
         <status-comp />
-      </el-collapse-item>
+      </el-collapse-item>-->
       <el-collapse-item title="领券下单" name="1">
         <buy></buy>
       </el-collapse-item>
