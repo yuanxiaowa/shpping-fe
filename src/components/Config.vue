@@ -16,6 +16,9 @@
       <el-form-item label="自动提交订单">
         <el-checkbox v-model="config.isSubmitOrder" @input="setConfig"></el-checkbox>
       </el-form-item>
+      <el-form-item label="延迟">
+        <el-input-number v-model="config.delay_all" @input="setConfig"></el-input-number>
+      </el-form-item>
       <el-form-item label="下单间隔">
         <el-input-number v-model="config.interval_submit" @input="setConfig"></el-input-number>
       </el-form-item>
