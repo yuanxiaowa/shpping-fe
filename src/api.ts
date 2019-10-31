@@ -10,11 +10,12 @@ import bus from "./bus";
 import { sendMsg } from "./msg";
 
 var instance: AxiosInstance;
+var host = 'localhost'
 
 bus.$on("change-port", port => {
   localStorage.setItem("server-port", port);
   instance = axios.create({
-    baseURL: `http://172.16.40.38:${port}`
+    baseURL: `http://${host}:${port}`
   });
   stacks[0] = instance;
 });
@@ -22,7 +23,7 @@ bus.$on("change-port", port => {
 var stacks: any[] = [];
 export function pushServer(port) {
   instance = axios.create({
-    baseURL: `http://172.16.40.38:${port}`
+    baseURL: `http://${host}:${port}`
   });
   stacks.push(instance);
 }
