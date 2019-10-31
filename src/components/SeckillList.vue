@@ -42,7 +42,7 @@
             @change="selectGroupAll(row,$event)"
           >全选</el-checkbox>
           <el-button
-            @click="seckill(row.items,true)"
+            @click="seckill({items:row.items},true)"
             size="small"
           >秒杀</el-button>
           <div
@@ -61,7 +61,7 @@
             >￥{{item.seckillPrice}}</el-tag>
             数量：{{item.quantity}}
             <el-button
-              @click="seckill([item])"
+              @click="seckill({items:[item]})"
               size="small"
             >秒杀</el-button>
             <el-button
@@ -119,7 +119,7 @@ export default class SeckillList extends Vue {
       this.list = data;
     });
   }
-  seckill(items, isChecked = false) {
+  seckill({ items, qq }, isChecked = false) {
     items.forEach(item => {
       if (isChecked) {
         if (!item.checked) {
@@ -135,7 +135,8 @@ export default class SeckillList extends Vue {
           jianlou: 1,
           from_pc: this.from_pc,
           other: {},
-          _comment: item.title
+          _comment: item.title,
+          qq
         },
         item.time,
         this.platform
@@ -167,15 +168,25 @@ export default class SeckillList extends Vue {
       getSeckillList({
         platform: this.platform,
         url: this.url
-      }).then(([{ items, time }]) => {
-        var t = new Date(time).getTime();
-        items = items.sort((a, b) => a.quantity - b.quantity);
-        this.seckill(items.slice(0, 3));
-        sendMsg(time + "开始秒杀", data && data.qq);
-        if (data) {
-          popServer();
+      }).then(
+        ([{ items, time }]) => {
+          var t = new Date(time).getTime();
+          items = items.sort((a, b) => a.price - b.price);
+          this.seckill({
+            items: items.slice(0, 3),
+            qq: data && data.qq
+          });
+          sendMsg(time + "开始秒杀", data && data.qq);
+          if (data) {
+            popServer();
+          }
+        },
+        () => {
+          if (data) {
+            popServer();
+          }
         }
-      });
+      );
     });
   }
   beforeDestroy() {

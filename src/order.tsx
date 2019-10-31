@@ -112,31 +112,31 @@ bus.$on("tasks-kill", (data?: { port: number; qq: number }) => {
     pushServer(data.port);
   }
   getTasks().then(items => {
-    Promise.all(items.map(item => cancelTask(item.id)))
-      .then(
-        () => {
-          sendMsg("已取消", data && data.qq);
-        },
-        () => {
-          sendMsg("取消失败", data && data.qq);
-        }
-      )
-      .finally(() => {
+    Promise.all(items.map(item => cancelTask(item.id))).then(
+      () => {
+        sendMsg("已取消", data && data.qq);
         if (data) {
           popServer();
         }
-      });
+      },
+      () => {
+        sendMsg("取消失败", data && data.qq);
+        if (data) {
+          popServer();
+        }
+      }
+    );
   });
 });
 bus.$on("check-status", (data?: { port: number; qq: number }) => {
   if (data) {
     pushServer(data.port);
   }
-  checkStatus("taobao").then(url => {
+  checkStatus("taobao", data && data.qq).then(url => {
     console.log(data);
-    if (!url) {
+    if (!url || !url.startsWith("http")) {
       Notification.success("状态正常");
-      sendMsg("登录状态正常", data && data.qq);
+      sendMsg(`(${url})登录状态正常`, data && data.qq);
     } else {
       sendMsg(url, data && data.qq);
       MessageBox.alert(`<img src=${url} />`, {

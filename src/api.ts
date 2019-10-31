@@ -11,7 +11,7 @@ import { sendMsg } from "./msg";
 import { super_user } from "./config";
 
 var instance: AxiosInstance;
-var host = 'localhost'
+var host = location.hostname
 
 bus.$on("change-port", port => {
   localStorage.setItem("server-port", port);
@@ -241,11 +241,12 @@ export function replyixtyCourse(params: any) {
     .catch(handleError);
 }
 
-export function checkStatus(platform: string) {
+export function checkStatus(platform: string, qq = super_user) {
   return instance
     .get("/check/status", {
       params: {
-        platform
+        platform,
+        qq
       }
     })
     .then(handleResponse)
