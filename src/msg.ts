@@ -80,6 +80,7 @@ function getTidyText(text: string) {
   return text
     .replace(r_taobao, "")
     .replace(/.*复制.*/, "")
+    .replace(/.*点击链接.*/, "")
     .replace(r_url, "")
     .replace(r_symbol, "")
     .replace(/\[CQ:imagefile=[^\]]+\]/g, "")
