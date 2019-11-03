@@ -29,7 +29,7 @@ export function pushServer(port) {
   stacks.push(instance);
 }
 export function popServer() {
-  stacks.shift();
+  stacks.pop();
   instance = stacks[stacks.length - 1];
 }
 
