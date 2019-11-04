@@ -11,7 +11,7 @@ import { sendMsg } from "./msg";
 import { super_user } from "./config";
 
 var instance: AxiosInstance;
-var host = location.hostname
+var host = location.hostname;
 
 bus.$on("change-port", port => {
   localStorage.setItem("server-port", port);
@@ -209,15 +209,16 @@ export function getQrcode(url: string) {
     .catch(handleError);
 }
 
+export function sendGroupMsg(message: string, group_id = 124866249) {
+  return axios.get("http://localhost:5700/send_group_msg", {
+    params: {
+      group_id,
+      message
+    }
+  });
+}
+
 export function sendPrivateMsg(message: string, user_id: number) {
-  if (user_id === super_user) {
-    axios.get("http://localhost:5700/send_private_msg", {
-      params: {
-        user_id: 279557608,
-        message
-      }
-    });
-  }
   return axios.get("http://localhost:5700/send_private_msg", {
     params: {
       user_id,

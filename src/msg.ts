@@ -6,7 +6,7 @@
  */
 import bus from "./bus";
 import { groups, qq_users, super_user } from "./config";
-import { sendPrivateMsg } from "./api";
+import { sendPrivateMsg, sendGroupMsg } from "./api";
 import { resolveText } from "./tools";
 import "./order";
 
@@ -22,8 +22,12 @@ ws.onmessage = e => {
       if (handler(raw_message)) {
         console.log(text);
         // sendMsg("你好呀，" + text);
-        if (/(\d+)点|锁单|0\.\d|速度|红包|抽奖|试试/.test(text)) {
-          sendMsg(text);
+        if (
+          /(\d+)点|锁单|先锁|0\.\d|速度|红包|抽奖|试试|手慢无|好价|神价/.test(
+            text
+          )
+        ) {
+          sendGroupMsg(text);
         }
       }
     }
