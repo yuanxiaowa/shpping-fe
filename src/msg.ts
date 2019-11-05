@@ -22,13 +22,14 @@ ws.onmessage = e => {
       if (handler(raw_message)) {
         console.log(text);
         // sendMsg("你好呀，" + text);
-        if (
+        /* if (
           /(\d+)点|锁单|先锁|0\.\d|速度|红包|抽奖|试试|手慢无|好价|神价/.test(
             text
           )
         ) {
           sendGroupMsg(text);
-        }
+        } */
+        sendGroupMsg(text);
       }
     }
   } else if (message_type === "private") {
@@ -78,7 +79,7 @@ ws.onmessage = e => {
 
 const r_taobao = /(?<!\w)\w{11}(?!\w)/g;
 const r_url = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
-const r_symbol = /[&%【】,，，\s￥(（¢)）\-~!/$​]/g;
+const r_symbol = /[&%【】,，，\s￥(（¢)）\-~!/$​：。]/g;
 
 function getTidyText(text: string) {
   return text

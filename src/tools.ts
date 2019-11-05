@@ -145,6 +145,8 @@ export function resolveText(text: string, datetime?: string | Date) {
         } else {
           expectedPrice = Math.min(expectedPrice, 50);
         }
+      } else if (text.includes("洗衣") || text.includes("洗发")) {
+        expectedPrice = Math.min(expectedPrice, 30);
       } else {
         if (text.includes("婴") || text.includes("孕")) {
           expectedPrice = Math.min(expectedPrice, 5);
