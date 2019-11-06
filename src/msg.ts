@@ -79,7 +79,7 @@ ws.onmessage = e => {
 
 const r_taobao = /(?<!\w)\w{11}(?!\w)/g;
 const r_url = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
-const r_symbol = /[&%【】,，，\s￥(（¢)）\-~!/$​：。]/g;
+const r_symbol = /[&%【】,，，\s￥(（¢)）\-~!/$​：。€]/g;
 
 function getTidyText(text: string) {
   return text
@@ -88,6 +88,7 @@ function getTidyText(text: string) {
     .replace(/.*点击链接.*/, "")
     .replace(r_url, "")
     .replace(r_symbol, "")
+    .replace(/群有反馈|领取|速度|无门槛|京东|红包|先?领券|防身/g, "")
     .replace(/\[CQ:imagefile=[^\]]+\]/g, "")
     .trim();
 }
@@ -130,6 +131,9 @@ function handler(text: string, datetime?: string | Date) {
   var data = resolveText(text, datetime);
   if (data && data.action) {
     if (data.action === "notice") {
+      return true;
+    }
+    if (!data.datetime && data.action === "coudan" && /\d点/.test(text)) {
       return true;
     }
     bus.$emit(data.action, data);

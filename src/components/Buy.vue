@@ -36,10 +36,15 @@
       </el-col>
     </el-form-item>
     <el-form-item>
-      <el-col :span="12">
+      <el-col :span="10">
         <el-form-item label="文本">
           <el-input type="textarea" v-model="text"></el-input>
         </el-form-item>
+      </el-col>
+      <el-col :span="2">
+        <el-button @click="saveRecorder" @disabled="!text">保存</el-button>
+        <el-button @click="show_recorder=true">记录</el-button>
+        <text-recorder v-model="show_recorder" @data="text=$event" ref="recorder" />
       </el-col>
       <el-col :span="12">
         <el-form-item label="备注">
@@ -98,6 +103,7 @@
 <script lang="tsx">
 import { Component, Vue } from "vue-property-decorator";
 import DatePicker from "./DatePicker.vue";
+import TextRecorder from "./TextRecorder.vue";
 import { Platform } from "../handlers";
 import {
   buyDirect,
@@ -152,7 +158,8 @@ function getPlatform(text: string) {
 
 @Component({
   components: {
-    DatePicker
+    DatePicker,
+    TextRecorder
   }
 })
 export default class Buy extends Vue {
@@ -170,6 +177,13 @@ export default class Buy extends Vue {
   jianlou = 15;
   from_cart = false;
   from_pc = true;
+
+  show_recorder = false;
+
+  saveRecorder() {
+    (this.$refs.recorder as TextRecorder).addText(this.text);
+    this.$notify.success("保存成功");
+  }
 
   /* async execAction(
     fn: (url: string, item: InfoItemNoUrl) => any,
