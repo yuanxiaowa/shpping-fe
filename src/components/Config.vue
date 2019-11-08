@@ -6,9 +6,9 @@
     </el-form-item>
     <el-drawer title="配置" :visible.sync="drawer" direction="ltr">
       <el-divider></el-divider>
-      <el-form-item label="端口号">
+      <!-- <el-form-item label="端口号">
         <el-input-number v-model="port" @change="onPortChange" :min="80" :max="35000"></el-input-number>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <status-comp />
       </el-form-item>
@@ -64,10 +64,10 @@ export default class Config extends Vue {
   }
 
   drawer = false;
-  port = Number(localStorage.getItem("server-port")) || 7001;
+  /* port = Number(localStorage.getItem("server-port")) || 7001;
   onPortChange() {
     bus.$emit("change-port", this.port);
-  }
+  } */
   show_task = false;
 }
 </script>

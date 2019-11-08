@@ -14,3 +14,5 @@ export const qq_users = {
 };
 
 export const super_user = 870092104;
+
+export const my_data: Record<string, any> = {};
