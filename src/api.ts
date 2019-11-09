@@ -76,6 +76,10 @@ export function popServer() {
   });
 }
 
+export function setUserId(id) {
+  user.id = id;
+}
+
 function fillInfo() {
   MessageBox.prompt("请输入用户名").then((arg: any) => {
     var id = arg.value;
@@ -97,6 +101,18 @@ if (!user.id) {
   fillInfo();
 } else {
   authorize();
+}
+
+export function getUsers(params?: any) {
+  return instance.get("/user", {
+    params
+  });
+}
+
+export function delUser(params?: any) {
+  return instance.get("/user/del", {
+    params
+  });
 }
 
 export function authorize(params?: any) {

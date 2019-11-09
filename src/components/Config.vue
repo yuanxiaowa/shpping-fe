@@ -6,6 +6,7 @@
     </el-form-item>
     <el-drawer title="配置" :visible.sync="drawer" direction="ltr">
       <el-divider></el-divider>
+      <account />
       <!-- <el-form-item label="端口号">
         <el-input-number v-model="port" @change="onPortChange" :min="80" :max="35000"></el-input-number>
       </el-form-item>-->
@@ -40,11 +41,13 @@ import { getConfig, setConfig } from "../api";
 import bus from "../bus";
 import Task from "./Task.vue";
 import StatusComp from "./StatusComp.vue";
+import Account from "./Account.vue";
 
 @Component({
   components: {
     Task,
-    StatusComp
+    StatusComp,
+    Account
   }
 })
 export default class Config extends Vue {

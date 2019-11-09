@@ -33,13 +33,12 @@ ws.onmessage = e => {
       }
     }
   } else if (message_type === "private") {
-    if (user_id === super_user || qq_users[user_id]) {
+    if (user_id === super_user || qq_users.includes(user_id)) {
       let data =
         user_id === super_user
           ? undefined
           : {
-              qq: user_id,
-              port: qq_users[user_id]
+              qq: user_id
             };
       if (raw_message === "cs" || raw_message === "检查状态") {
         return bus.$emit("check-status", data);
@@ -79,7 +78,7 @@ ws.onmessage = e => {
 
 const r_taobao = /(?<!\w)\w{11}(?!\w)/g;
 const r_url = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
-const r_symbol = /[&%【】,，，\s￥(（¢)）\-~!/$​：。€₤]/g;
+const r_symbol = /[&%【】,，，\s￥(（¢)）\-~!/$​：。€₤₴]/g;
 
 function getTidyText(text: string) {
   return text
@@ -88,7 +87,7 @@ function getTidyText(text: string) {
     .replace(/.*点击链接.*/, "")
     .replace(r_url, "")
     .replace(r_symbol, "")
-    .replace(/群有反馈|领取|速度|无门槛|京东|红包|先?领券|防身/g, "")
+    .replace(/群有反馈|领取|速度|无门槛|京东|红包|先?领券|防身|需要可以蹲/g, "")
     .replace(/\[CQ:imagefile=[^\]]+\]/g, "")
     .trim();
 }
