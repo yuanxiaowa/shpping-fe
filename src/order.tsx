@@ -139,7 +139,7 @@ bus.$on("check-status", (data?: { qq: number }) => {
   }
   checkStatus("taobao", data && data.qq).then((url: string) => {
     if (!url || !url.startsWith("http")) {
-      Notification.success("状态正常");
+      Notification.success("(" + url + ")状态正常");
       sendMsg(`(${url})登录状态正常`, data && data.qq);
     } else {
       // sendMsg(url, data && data.qq);
