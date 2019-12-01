@@ -176,7 +176,7 @@ export default class Buy extends Vue {
   force_jianlou = false;
   jianlou = 15;
   from_cart = false;
-  from_pc = true;
+  from_pc = false;
 
   show_recorder = false;
 

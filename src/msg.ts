@@ -136,6 +136,7 @@ function handler(text: string, datetime?: string | Date) {
     if (!data.datetime && data.action === "coudan" && /\d点/.test(text)) {
       return true;
     }
+    data.from_pc = text.includes("电脑");
     bus.$emit(data.action, data);
     return true;
   }
