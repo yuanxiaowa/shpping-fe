@@ -255,6 +255,7 @@ export default class Buy extends Vue {
             memo: this.memo
           }
         },
+        // @ts-ignore
         this.datetime || data.datetime,
         data.platform
       );
