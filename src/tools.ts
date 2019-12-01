@@ -18,6 +18,7 @@ interface Ret {
   platform: Platform;
   datetime?: string;
   jianlou?: number;
+  from_pc?: boolean;
 }
 
 const blacklist = require("./text/blacklist.json");
@@ -97,7 +98,7 @@ export function resolveText(text: string, datetime?: string | Date) {
       action = "coudan";
       forcePrice = true;
     } else if (
-      /(?<!\d|第..)0元|0撸|零撸|免单|不是(0|零)不要买|实付0|直接(够)买就是0|到手0/.test(
+      /(?<!\d|第..)0(?=元|[!\d])|0撸|零撸|免单|不是(0|零)不要买|实付0|直接(够)买就是0|到手0/.test(
         text
       )
     ) {
@@ -136,7 +137,7 @@ export function resolveText(text: string, datetime?: string | Date) {
         quote = Math.max(+RegExp.$1, quote);
         discount = Math.max(+RegExp.$2, discount);
       }
-      if (text.includes("大米")) {
+      if (text.includes("米") || /[^酱]油/.test(text)) {
         if (expectedPrice !== 10) {
           let _p = expectedPrice / quantities[0];
           if (_p > 1.75) {

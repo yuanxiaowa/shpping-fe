@@ -54,7 +54,7 @@ bus.$on("coudan", async (data: any) => {
         quantity: data.quantities[0],
         skus: data.skus,
         expectedPrice: data.expectedPrice,
-        from_pc: true,
+        from_pc: data.from_pc,
         other: {},
         diejia: data.diejia,
         jianlou: data.jianlou
@@ -93,11 +93,12 @@ bus.$on("sys-time", (text: string) => {
 });
 bus.$on("tasks", (data?: { port: number; qq: number }) => {
   if (data) {
-    pushServer(data.port);
+    pushServer(data.qq);
   }
   getTasks().then(items => {
     sendMsg(
       items
+        // @ts-ignore
         .map(item => [item.platform, item.type, item.text, item.time].join("-"))
         .join("\n") || "暂无",
       data && data.qq
@@ -109,9 +110,10 @@ bus.$on("tasks", (data?: { port: number; qq: number }) => {
 });
 bus.$on("tasks-kill", (data?: { port: number; qq: number }) => {
   if (data) {
-    pushServer(data.port);
+    pushServer(data.qq);
   }
   getTasks().then(items => {
+    // @ts-ignore
     Promise.all(items.map(item => cancelTask(item.id))).then(
       () => {
         sendMsg("已取消", data && data.qq);
@@ -128,17 +130,22 @@ bus.$on("tasks-kill", (data?: { port: number; qq: number }) => {
     );
   });
 });
-bus.$on("check-status", (data?: { port: number; qq: number }) => {
+/* window.sendMsg = () => {
+  bus.$emit("check-status", {
+    qq: 727694556
+  });
+}; */
+bus.$on("check-status", (data?: { qq: number }) => {
   if (data) {
-    pushServer(data.port);
+    pushServer(data.qq);
   }
-  checkStatus("taobao", data && data.qq).then(url => {
-    console.log(data);
+  // @ts-ignore
+  checkStatus("taobao", data && data.qq).then((url: string) => {
     if (!url || !url.startsWith("http")) {
-      Notification.success("状态正常");
+      Notification.success(`(${url})状态正常`);
       sendMsg(`(${url})登录状态正常`, data && data.qq);
     } else {
-      sendMsg(url, data && data.qq);
+      // sendMsg(url, data && data.qq);
       MessageBox.alert(`<img src=${url} />`, {
         dangerouslyUseHTMLString: true,
         center: true
