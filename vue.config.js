@@ -7,6 +7,7 @@
 const VueAutoRoutingPlugin = require("vue-auto-routing/lib/webpack-plugin");
 
 module.exports = {
+  publicPath: process.env.NODE_ENV !== "production" ? "/" : "/public",
   configureWebpack: {
     module: {
       rules: [
