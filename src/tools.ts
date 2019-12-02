@@ -34,15 +34,21 @@ const num_cn_map = "零一二三四五六七八九十".split("").reduce(
   }
 );
 const NUM_CN_STR = Object.keys(num_cn_map).join("");
+const r_url = /https?:\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:\/~+#]*[\w\-@?^=%&\/~+#])?/g;
 
 export function resolveText(text: string, datetime?: string | Date) {
   var type: string;
   var urls: string[] | null;
   var quantities: number[] | null;
   var forcePrice = false;
-  urls = text.match(
-    /(?<![a-zA-Z0-9&=./?])[a-zA-Z0-9]{11}(?![a-zA-Z0-9&=./?])/g
-  );
+  text = text.trim();
+  if (r_url.test(text)) {
+    urls = [text];
+  } else {
+    urls = text.match(
+      /(?<![a-zA-Z0-9&=./?])[a-zA-Z0-9]{11}(?![a-zA-Z0-9&=./?])/g
+    );
+  }
   if (urls) {
     type = "taokouling";
   } else {
