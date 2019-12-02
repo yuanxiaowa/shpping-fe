@@ -274,6 +274,15 @@ export function goodsList(params: any) {
     .catch(handleError);
 }
 
+export function goodsDetail(params: any) {
+  return instance
+    .get("/goods/detail", {
+      params
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 export function getConfig() {
   return instance
     .get("/config")

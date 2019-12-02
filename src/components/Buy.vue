@@ -38,7 +38,7 @@
     <el-form-item>
       <el-col :span="10">
         <el-form-item label="文本">
-          <el-input type="textarea" v-model="text"></el-input>
+          <el-input type="textarea" v-model="text" autosize></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="2">
@@ -68,7 +68,10 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="规格">
-          <el-input v-model="skus"></el-input>
+          <el-input v-model="skus">
+            <el-button small slot="append" @click="chooseSku">选择</el-button>
+          </el-input>
+          <sku-picker v-model="show_sku_picker" :url="goods_url" @change="onSkuChange"></sku-picker>
         </el-form-item>
       </el-col>
     </el-form-item>
@@ -101,9 +104,10 @@
 </template>
 
 <script lang="tsx">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import DatePicker from "./DatePicker.vue";
 import TextRecorder from "./TextRecorder.vue";
+import SkuPicker from "./SkuPicker.vue";
 import { Platform } from "../handlers";
 import {
   buyDirect,
@@ -132,6 +136,7 @@ interface InfoItem {
   from_cart?: boolean;
   from_pc?: boolean;
   t?: string;
+  skuId?: string;
 }
 
 type InfoItemNoUrl = Pick<
@@ -159,7 +164,8 @@ function getPlatform(text: string) {
 @Component({
   components: {
     DatePicker,
-    TextRecorder
+    TextRecorder,
+    SkuPicker
   }
 })
 export default class Buy extends Vue {
@@ -179,10 +185,29 @@ export default class Buy extends Vue {
   from_pc = false;
 
   show_recorder = false;
+  skuId = "";
 
   saveRecorder() {
     (this.$refs.recorder as TextRecorder).addText(this.text);
     this.$notify.success("保存成功");
+  }
+
+  goods_url = "";
+  show_sku_picker = false;
+  async chooseSku() {
+    var data = await this.doQiangquan(false);
+    this.show_sku_picker = true;
+    var [url] = data.urls;
+    this.goods_url = url;
+  }
+  onSkuChange(skuId: string) {
+    this.skuId = skuId;
+    this.show_sku_picker = false;
+  }
+  @Watch("text")
+  onTextChanged() {
+    this.goods_url = "";
+    this.skuId = "";
   }
 
   /* async execAction(
@@ -222,7 +247,8 @@ export default class Buy extends Vue {
           {
             url,
             quantity: this.num > 1 ? Number(this.num) : data.quantities[i],
-            skus: this.getSkus()
+            skus: this.getSkus(),
+            skuId: this.skuId
           },
           data.platform
         )
@@ -253,7 +279,8 @@ export default class Buy extends Vue {
           ignoreRepeat: true,
           other: {
             memo: this.memo
-          }
+          },
+          skuId: this.skuId
         },
         // @ts-ignore
         this.datetime || data.datetime,
@@ -276,9 +303,9 @@ export default class Buy extends Vue {
 
   prevUrl!: string;
 
-  async doQiangquan() {
+  async doQiangquan(has_tip = true) {
     var data = await getDealedDataFromText(this.text);
-    if (this.prevUrl === data.urls[0]) {
+    if (has_tip && this.prevUrl === data.urls[0]) {
       if (!(await this.$confirm("与上次链接相同，要继续操作吗？"))) {
         throw new Error("重复领取");
       }
