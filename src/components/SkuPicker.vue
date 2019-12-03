@@ -31,6 +31,7 @@ export default class SkuPicker extends Vue {
   @Watch("url")
   onUrlChange(url: string) {
     this.title = "";
+    this.data = []
     if (url) {
       this.fetchData();
     }
