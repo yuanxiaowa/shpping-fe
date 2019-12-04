@@ -20,8 +20,8 @@ import { goodsDetail } from "../api";
   components: {}
 })
 export default class SkuPicker extends Vue {
-  @Prop() url: string;
-  @Prop(Boolean) value: boolean;
+  @Prop() url!: string;
+  @Prop(Boolean) value!: boolean;
 
   title = "";
   data = [];
@@ -31,7 +31,7 @@ export default class SkuPicker extends Vue {
   @Watch("url")
   onUrlChange(url: string) {
     this.title = "";
-    this.data = []
+    this.data = [];
     if (url) {
       this.fetchData();
     }

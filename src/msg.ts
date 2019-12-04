@@ -69,7 +69,7 @@ ws.onmessage = e => {
       }
       datetime = date.toString(); */
         datetime = RegExp.$1;
-      } else if (text.includes("现在")) {
+      } else if (text.includes("现在") || text.includes("捡漏")) {
         datetime = new Date();
       }
       handler(raw_message, datetime);
@@ -84,11 +84,12 @@ const r_symbol = /[&%【】,，，\s￥(（¢)）\-~!/$​：。€]/g;
 function getTidyText(text: string) {
   return text
     .replace(r_taobao, "")
-    .replace(/.*复制.*/, "")
+    .replace(/.*复制.*/g, "")
     .replace(/.*点击链接.*/, "")
+    .replace(/【.*?】|[.*?]/g, "")
     .replace(r_url, "")
     .replace(r_symbol, "")
-    .replace(/群有反馈|领取|速度|无门槛|京东|红包|先?领券|防身/g, "")
+    .replace(/群有反馈|领取|速度|无门槛|京东|红包|先?领券|防身|不减则无/g, "")
     .replace(/\[CQ:imagefile=[^\]]+\]/g, "")
     .trim();
 }
