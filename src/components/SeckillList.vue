@@ -68,6 +68,7 @@ export default class SeckillList extends Vue {
   list = [];
   url = "";
   from_pc = true;
+  no_interaction = true;
 
   pullData() {
     getSeckillList({
@@ -102,7 +103,8 @@ export default class SeckillList extends Vue {
             from_pc: this.from_pc,
             other: {},
             _comment: item.title,
-            qq
+            qq,
+            no_interaction: this.no_interaction
           },
           item.time,
           this.platform
