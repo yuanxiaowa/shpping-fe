@@ -67,7 +67,7 @@ export default class SeckillList extends Vue {
   platform = "taobao";
   list = [];
   url = "";
-  from_pc = true;
+  from_pc = false;
   no_interaction = true;
 
   pullData() {
