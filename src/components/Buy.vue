@@ -33,9 +33,14 @@
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="3">
         <el-form-item label="加车购买">
           <el-checkbox v-model="from_cart"></el-checkbox>
+        </el-form-item>
+      </el-col>
+      <el-col :span="3">
+        <el-form-item label="互助">
+          <el-checkbox :value="!no_interaction" @input="no_interaction=!$event"></el-checkbox>
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -233,6 +238,7 @@ export default class Buy extends Vue {
   jianlou = 15;
   from_cart = false;
   from_pc = false;
+  no_interaction = false
 
   show_recorder = false;
   skuId = "";
@@ -327,6 +333,7 @@ export default class Buy extends Vue {
           from_cart: this.from_cart,
           from_pc: this.from_pc,
           ignoreRepeat: true,
+          no_interaction: this.no_interaction,
           other: {
             memo: this.memo
           },
