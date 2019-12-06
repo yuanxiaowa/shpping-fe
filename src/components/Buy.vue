@@ -5,10 +5,7 @@
  * @LastEditTime: 2019-09-07 11:39:48
  -->
 <template>
-  <el-form
-    label-width="80px"
-    size="small"
-  >
+  <el-form label-width="80px" size="small">
     <el-form-item>
       <el-col :span="6">
         <el-form-item label="平台">
@@ -21,14 +18,8 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="捡漏">
-          <el-input
-            :disabled="!force_jianlou"
-            v-model="jianlou"
-          >
-            <el-checkbox
-              slot="prepend"
-              v-model="force_jianlou"
-            ></el-checkbox>
+          <el-input :disabled="!force_jianlou" v-model="jianlou">
+            <el-checkbox slot="prepend" v-model="force_jianlou"></el-checkbox>
             <span slot="append">分钟</span>
           </el-input>
         </el-form-item>
@@ -52,46 +43,25 @@
     <el-form-item>
       <el-col :span="10">
         <el-form-item label="文本">
-          <el-input
-            type="textarea"
-            v-model="text"
-            autosize
-          ></el-input>
+          <el-input type="textarea" v-model="text" autosize></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="2">
-        <el-button
-          @click="saveRecorder"
-          @disabled="!text"
-        >保存</el-button>
+        <el-button @click="saveRecorder" @disabled="!text">保存</el-button>
         <el-button @click="show_recorder=true">记录</el-button>
-        <text-recorder
-          v-model="show_recorder"
-          @data="text=$event"
-          ref="recorder"
-        />
+        <text-recorder v-model="show_recorder" @data="text=$event" ref="recorder" />
       </el-col>
       <el-col :span="12">
         <el-form-item label="备注">
-          <el-input
-            type="textarea"
-            v-model="memo"
-          ></el-input>
+          <el-input type="textarea" v-model="memo"></el-input>
         </el-form-item>
       </el-col>
     </el-form-item>
     <el-form-item>
       <el-col :span="12">
         <el-form-item label="期望价格">
-          <el-input
-            :disabled="!forcePrice"
-            v-model="expectedPrice"
-          >
-            <el-checkbox
-              slot="prepend"
-              v-model="forcePrice"
-              label
-            ></el-checkbox>
+          <el-input :disabled="!forcePrice" v-model="expectedPrice">
+            <el-checkbox slot="prepend" v-model="forcePrice" label></el-checkbox>
             <el-checkbox
               v-if="realPlatform==='taobao'"
               slot="append"
@@ -104,17 +74,9 @@
       <el-col :span="12">
         <el-form-item label="规格">
           <el-input v-model="skus">
-            <el-button
-              small
-              slot="append"
-              @click="chooseSku"
-            >选择</el-button>
+            <el-button small slot="append" @click="chooseSku">选择</el-button>
           </el-input>
-          <sku-picker
-            v-model="show_sku_picker"
-            :url="goods_url"
-            @change="onSkuChange"
-          ></sku-picker>
+          <sku-picker v-model="show_sku_picker" :url="goods_url" @change="onSkuChange"></sku-picker>
         </el-form-item>
       </el-col>
     </el-form-item>
@@ -129,10 +91,7 @@
           <date-picker v-model="datetime"></date-picker>
         </el-form-item>
       </el-col>
-      <el-col
-        :span="8"
-        v-if="realPlatform==='taobao'"
-      >
+      <el-col :span="8" v-if="realPlatform==='taobao'">
         <el-form-item label="猫超凑单">
           <el-input v-model="price_coudan">
             <span slot="append">元</span>
@@ -141,18 +100,9 @@
       </el-col>
     </el-form-item>
     <el-form-item>
-      <el-button
-        type="primary"
-        @click="doQiangdan"
-      >抢单</el-button>
-      <el-button
-        type="warning"
-        @click="doQiangquan"
-      >抢券</el-button>
-      <el-button
-        @click="doAddCart"
-        type="warning"
-      >加入购物车</el-button>
+      <el-button type="primary" @click="doQiangdan">抢单</el-button>
+      <el-button type="warning" @click="doQiangquan">抢券</el-button>
+      <el-button @click="doAddCart" type="warning">加入购物车</el-button>
       <el-button @click="reset">重置</el-button>
     </el-form-item>
   </el-form>
@@ -238,7 +188,7 @@ export default class Buy extends Vue {
   jianlou = 15;
   from_cart = false;
   from_pc = false;
-  no_interaction = false
+  no_interaction = false;
 
   show_recorder = false;
   skuId = "";
@@ -368,13 +318,12 @@ export default class Buy extends Vue {
       }
     }
     this.prevUrl = data.urls[0];
-    if (!has_tip) {
-      if (data.datetime) {
-        delete data.datetime;
-      }
-    }
     this.$notify.success("开始抢券");
-    var urls = await qiangquan(data.urls, this.datetime, data.platform);
+    var urls = await qiangquan(
+      data.urls,
+      has_tip ? this.datetime : "",
+      data.platform
+    );
     data.urls = urls
       .filter(Boolean)
       .map(item => item.url)
