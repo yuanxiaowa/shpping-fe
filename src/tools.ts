@@ -38,25 +38,27 @@ const r_url = /https?:\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:\/~+#]*[\w\-@?^=%&\/
 
 export function resolveText(text: string, datetime?: string | Date) {
   var type: string;
-  var urls: string[] | null;
+  var urls: string[] = [];
   var quantities: number[] | null;
   var forcePrice = false;
   text = text.trim();
-  if (r_url.test(text)) {
-    urls = [text];
-  } else {
-    urls = text.match(
-      /(?<![a-zA-Z0-9&=./?])[a-zA-Z0-9]{11}(?![a-zA-Z0-9&=./?])/g
-    );
+  while (r_url.test(text)) {
+    urls.push(RegExp["$&"]);
   }
-  if (urls) {
+  if (urls.length === 0) {
+    urls =
+      text.match(/(?<![a-zA-Z0-9&=./?])[a-zA-Z0-9]{11}(?![a-zA-Z0-9&=./?])/g) ||
+      [];
+  }
+  if (urls.length > 0) {
     type = "taokouling";
   } else {
-    urls = text.match(
-      /https?:\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:\/~+#]*[\w\-@?^=%&\/~+#])?/g
-    );
+    urls =
+      text.match(
+        /https?:\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:\/~+#]*[\w\-@?^=%&\/~+#])?/g
+      ) || [];
   }
-  if (urls) {
+  if (urls.length > 0) {
     type = "url";
     urls.forEach(url => {
       text = text.replace(url, "");
@@ -174,7 +176,7 @@ export function resolveText(text: string, datetime?: string | Date) {
         action = "qiangquan";
       }
     } else if (
-      /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|领金豆|淘宝搜|(?<!可用|消灭|叠加)(小|聚划算)?红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
+      /前\d+(?!分钟)|(?<!\d)0\.\d+|速度|抽奖|淘礼金|领金豆|淘宝搜|(?<!可用|消灭|叠加)(小|聚划算)?红包|虹包|神价|秒杀|神车|手慢无|手快有|好价|神价/.test(
         text
       )
     ) {

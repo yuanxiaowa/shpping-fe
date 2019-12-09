@@ -24,15 +24,9 @@
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="3">
-        <el-form-item label="加车购买">
-          <el-checkbox v-model="from_cart"></el-checkbox>
-        </el-form-item>
-      </el-col>
-      <el-col :span="3">
-        <el-form-item label="互助">
-          <el-checkbox :value="!no_interaction" @input="no_interaction=!$event"></el-checkbox>
-        </el-form-item>
+      <el-col :span="6">
+        <el-checkbox v-model="from_cart">加车购买</el-checkbox>
+        <el-checkbox :value="!no_interaction" @input="no_interaction=!$event">互助</el-checkbox>
       </el-col>
       <el-col :span="6">
         <el-form-item label="pc购买">

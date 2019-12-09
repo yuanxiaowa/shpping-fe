@@ -89,7 +89,10 @@ function getTidyText(text: string) {
     .replace(/【.*?】|[.*?]/g, "")
     .replace(r_url, "")
     .replace(r_symbol, "")
-    .replace(/群有反馈|领取|速度|无门槛|京东|红包|先?领券|防身|不减则无/g, "")
+    .replace(
+      /群有反馈|领取|速度|无门槛|京东|红包|先?领券|防身|不减则无|领了|可用|首单|红包|虹包|分享|大额|福利|中心|练手速?|预计|商品券|抽奖|试试|无视页面|预告|券|速度|限量/g,
+      ""
+    )
     .replace(/\[CQ:imagefile=[^\]]+\]/g, "")
     .trim();
 }

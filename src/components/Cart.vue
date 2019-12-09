@@ -32,6 +32,7 @@
         <el-col :span="8">
           <el-checkbox v-model="noinvalid">存在失效商品不提交</el-checkbox>
           <el-checkbox v-model="from_browser">浏览器提交</el-checkbox>
+          <el-checkbox :value="!no_interaction" @input="no_interaction=!$event">互助</el-checkbox>
         </el-col>
         <el-col :span="8">
           <el-form-item>
@@ -91,6 +92,7 @@ export default class App extends Vue {
   forcePrice = false;
   from_browser = false;
   jianlou = 30;
+  no_interaction = false;
 
   async pullCartData(data: any) {
     this.tableData = [];
