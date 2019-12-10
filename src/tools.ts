@@ -123,13 +123,6 @@ export function resolveText(text: string, datetime?: string | Date) {
       expectedPrice = Number(RegExp.$1);
       action = "coudan";
       forcePrice = true;
-    } else if (text.includes("试试")) {
-      if (!/\d+点/.test(text)) {
-        expectedPrice = 10;
-        action = "coudan";
-      } else {
-        action = "qiangquan";
-      }
     } else if (
       text.includes("锁单") ||
       text.includes("先锁") ||
@@ -138,6 +131,13 @@ export function resolveText(text: string, datetime?: string | Date) {
       action = "coudan";
       if (expectedPrice > 500) {
         expectedPrice = 500;
+      }
+    } else if (text.includes("试试")) {
+      if (!/\d+点/.test(text)) {
+        expectedPrice = 10;
+        action = "coudan";
+      } else {
+        action = "qiangquan";
       }
     } else if (text.includes("叠加")) {
       let r = /(\d+)-(\d+)/g;

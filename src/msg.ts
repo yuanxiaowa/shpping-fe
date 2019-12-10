@@ -56,6 +56,10 @@ ws.onmessage = e => {
       if (user_id !== super_user) {
         return;
       }
+      if (/^切换(\d)$/.test(raw_message)) {
+        bus.$emit("switch-port", Number(RegExp.$1) + 7000);
+        return;
+      }
       if (raw_message.includes("同步时间")) {
         return bus.$emit("sys-time", raw_message);
       }

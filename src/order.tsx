@@ -108,6 +108,9 @@ bus.$on("tasks", (data?: { port: number; qq: number }) => {
     popServer();
   }
 });
+bus.$on("switch-port", (port: number) => {
+  pushServer(port);
+});
 bus.$on("tasks-kill", (data?: { port: number; qq: number }) => {
   if (data) {
     pushServer(data.qq);
