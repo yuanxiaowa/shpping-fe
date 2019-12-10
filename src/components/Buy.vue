@@ -178,8 +178,8 @@ export default class Buy extends Vue {
   forcePrice = false;
   mc_dot1 = false;
   price_coudan = 0;
-  force_jianlou = false;
-  jianlou = 15;
+  force_jianlou = true;
+  jianlou = 30;
   from_cart = false;
   from_pc = false;
   no_interaction = false;

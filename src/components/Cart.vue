@@ -190,7 +190,8 @@ export default class App extends Vue {
       from_pc: this.from_pc,
       from_browser: this.from_browser,
       noinvalid: this.noinvalid,
-      jianlou: this.jianlou
+      jianlou: this.jianlou,
+      no_interaction: this.no_interaction
     };
     if (this.forcePrice) {
       data.expectedPrice = +this.expectedPrice;
