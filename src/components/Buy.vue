@@ -33,6 +33,11 @@
           <el-checkbox v-model="from_pc"></el-checkbox>
         </el-form-item>
       </el-col>
+      <el-col :span="6">
+        <el-form-item label="地址">
+          <address-picker v-model="addressId"></address-picker>
+        </el-form-item>
+      </el-col>
     </el-form-item>
     <el-form-item>
       <el-col :span="10">
@@ -107,6 +112,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import DatePicker from "./DatePicker.vue";
 import TextRecorder from "./TextRecorder.vue";
 import SkuPicker from "./SkuPicker.vue";
+import AddressPicker from "./AddressPicker.vue";
 import { Platform } from "../handlers";
 import {
   buyDirect,
@@ -164,11 +170,12 @@ function getPlatform(text: string) {
   components: {
     DatePicker,
     TextRecorder,
-    SkuPicker
+    SkuPicker,
+    AddressPicker
   }
 })
 export default class Buy extends Vue {
-  text = ``;
+  text = `https://detail.tmall.com/item.htm?id=610029174681&ali_trackid=2:mm_454170057_1079000292_109764100139:1576217870_153_1614253827&spm=a2e3n.12024655.1.1`;
   datetime = "";
   num = 1;
   platform: "auto" | Platform = "auto";
@@ -186,6 +193,7 @@ export default class Buy extends Vue {
 
   show_recorder = false;
   skuId = "";
+  addressId = "";
 
   saveRecorder() {
     (this.$refs.recorder as TextRecorder).addText(this.text);
@@ -281,7 +289,8 @@ export default class Buy extends Vue {
           other: {
             memo: this.memo
           },
-          skuId: this.skuId
+          skuId: this.skuId,
+          addressId: this.addressId
         },
         // @ts-ignore
         this.datetime || data.datetime,

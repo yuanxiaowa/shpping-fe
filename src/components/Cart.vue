@@ -44,6 +44,11 @@
             </el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+          <el-form-item label="地址">
+            <address-picker v-model="addressId"></address-picker>
+          </el-form-item>
+        </el-col>
       </el-form-item>
       <el-form-item>
         <el-button type="danger" :disabled="checkedLength===0" @click="submit">提交订单</el-button>
@@ -74,7 +79,6 @@ import {
   cartToggleAll
 } from "../api";
 import bus from "../bus";
-
 @Component({
   components: {
     CartTable,
@@ -93,6 +97,7 @@ export default class App extends Vue {
   from_browser = false;
   jianlou = 30;
   no_interaction = false;
+  addressId = "";
 
   async pullCartData(data: any) {
     this.tableData = [];
@@ -191,7 +196,8 @@ export default class App extends Vue {
       from_browser: this.from_browser,
       noinvalid: this.noinvalid,
       jianlou: this.jianlou,
-      no_interaction: this.no_interaction
+      no_interaction: this.no_interaction,
+      addressId: this.addressId
     };
     if (this.forcePrice) {
       data.expectedPrice = +this.expectedPrice;

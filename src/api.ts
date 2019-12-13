@@ -151,6 +151,16 @@ export function coudan(data: any, platform: string): Promise<any> {
     .then(handleResponse)
     .catch(handleError);
 }
+export function getAddresses(platform: string) {
+  return instance
+    .get("/coudan", {
+      params: {
+        platform
+      }
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
 export function qiangquan(
   data: any,
   t: string,
