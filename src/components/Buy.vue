@@ -175,7 +175,7 @@ function getPlatform(text: string) {
   }
 })
 export default class Buy extends Vue {
-  text = `https://detail.tmall.com/item.htm?id=610029174681&ali_trackid=2:mm_454170057_1079000292_109764100139:1576217870_153_1614253827&spm=a2e3n.12024655.1.1`;
+  text = ``;
   datetime = "";
   num = 1;
   platform: "auto" | Platform = "auto";

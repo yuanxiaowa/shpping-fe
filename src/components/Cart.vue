@@ -69,6 +69,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import CartTable from "./CartTable.vue";
 import DatePicker from "./DatePicker.vue";
+import AddressPicker from "./AddressPicker.vue";
 import { Platform } from "../handlers";
 import {
   cartList,
@@ -82,7 +83,8 @@ import bus from "../bus";
 @Component({
   components: {
     CartTable,
-    DatePicker
+    DatePicker,
+    AddressPicker
   }
 })
 export default class App extends Vue {

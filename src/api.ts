@@ -153,7 +153,7 @@ export function coudan(data: any, platform: string): Promise<any> {
 }
 export function getAddresses(platform: string) {
   return instance
-    .get("/coudan", {
+    .get("/addresses", {
       params: {
         platform
       }
